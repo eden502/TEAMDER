@@ -12,7 +12,7 @@ public class DemoController {
 		method = RequestMethod.GET,
 		produces = MediaType.APPLICATION_JSON_VALUE)
 	public Message hello () {
-		return new Message("Hello World!!!! :)");
+		return new Message("Hello World!!!!:)");
 	}
 
 }
