@@ -56,6 +56,31 @@ public class DemoController {
 		
 		return userBoundary;
 		}
+	
+	
+	@RequestMapping(
+			path = "/iob/users/{userDomain}/{userEmail}",
+			method = RequestMethod.PUT,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+		public void PUTUser (@RequestBody UserBoundary userBoundary) {
+			//update users details
+		
+		}
+	
+	
+	
+	@RequestMapping(
+			path = "/iob/admin/users",
+			method = RequestMethod.DELETE
+			)
+		public void DELETEUser () {
+			//delete all users
+		}
+	
+	
+	
+			
+		
 
 
 }
