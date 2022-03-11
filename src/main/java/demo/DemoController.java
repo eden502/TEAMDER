@@ -222,15 +222,15 @@ public class DemoController {
 	@RequestMapping(
 			path = "/iob/admin/activities",
 			method = RequestMethod.DELETE)
-	public void DeleteAllActivites () {
-		
+	public void DELETEAllActivites () {
+		//delete all activities
 		}
 
 	@RequestMapping(
 			path = "/iob/admin/instances",
 			method = RequestMethod.DELETE)
-	public void DeleteAllInstances() {
-
+	public void DELETEAllInstances() {
+		//delete all instances
 		}
 	
 }
