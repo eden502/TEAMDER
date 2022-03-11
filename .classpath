@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/accessors-smart-2.4.7.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/android-json-0.0.20131108.vaadin1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/asm-9.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/assertj-core-3.21.0.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/byte-buddy-1.11.22.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/byte-buddy-agent-1.11.22.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/hamcrest-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jackson-annotations-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jackson-core-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jackson-databind-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jackson-datatype-jdk8-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jackson-datatype-jsr310-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jackson-module-parameter-names-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jakarta.activation-api-1.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jakarta.annotation-api-1.3.5.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jakarta.xml.bind-api-2.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jsonassert-1.5.0.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/json-path-2.6.0.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/json-smart-2.4.7.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/jul-to-slf4j-1.7.33.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/junit-jupiter-5.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/junit-jupiter-api-5.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/junit-jupiter-engine-5.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/junit-jupiter-params-5.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/junit-platform-commons-1.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/junit-platform-engine-1.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/log4j-api-2.17.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/log4j-to-slf4j-2.17.1.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/logback-classic-1.2.10.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/logback-core-1.2.10.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/mockito-core-4.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/mockito-junit-jupiter-4.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/objenesis-3.2.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/opentest4j-1.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/slf4j-api-1.7.33.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/snakeyaml-1.29.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-aop-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-beans-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-boot-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-boot-autoconfigure-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-boot-jarmode-layertools-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-boot-test-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-boot-test-autoconfigure-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-context-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-core-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-expression-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-jcl-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-test-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-web-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/spring-webmvc-5.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/tomcat-embed-core-9.0.56.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/tomcat-embed-el-9.0.56.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/tomcat-embed-websocket-9.0.56.jar"/>
+	<classpathentry kind="lib" path="C:/javaenv2022b/javaenv2022b/lib/ioc-web-lib/xmlunit-core-2.8.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
