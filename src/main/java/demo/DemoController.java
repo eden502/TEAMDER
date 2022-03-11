@@ -1,7 +1,5 @@
 package demo;
 
-
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
@@ -289,17 +287,16 @@ public class DemoController {
 			path = "/iob/instances",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public ArrayList<InstanceBoundary> GETAllInstances (@PathVariable("allInstances") ArrayList<InstanceBoundary> allInstances) {
+		public InstanceBoundary[] GETAllInstances (@PathVariable("allInstances") InstanceBoundary[] allInstances) {
 		
-			ArrayList<InstanceBoundary> instanceArr = new ArrayList<>();
-			
-		
-			for (int i = 0; i < allInstances.size(); i++) {
+			InstanceBoundary[] instanceArr = new InstanceBoundary[allInstances.length];
+
+			for (int i = 0; i < allInstances.length; i++) {
 				
-				String currInstanceDomain = allInstances.get(i).getInstanceId().getDomain();
-				String currInstanceId = allInstances.get(i).getInstanceId().getId();		
+				String currInstanceDomain = allInstances[i].getInstanceId().getDomain();
+				String currInstanceId = allInstances[i].getInstanceId().getId();		
 				
-				instanceArr.add(GETInstance(currInstanceDomain,currInstanceId));
+				instanceArr[i] = (GETInstance(currInstanceDomain,currInstanceId));
 			}
 			
 			return instanceArr;
