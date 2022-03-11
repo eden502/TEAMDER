@@ -2,27 +2,27 @@ package bounderies;
 
 public class Location {
 
-	private float lat;
-	private float lng;
+	private double lat;
+	private double lng;
 	
-	private Location() {
+	public Location() {
 		
 	}
 
-	public float getLat() {
+	public double getLat() {
 		return lat;
 	}
 
-	public Location setLat(float lat) {
+	public Location setLat(double lat) {
 		this.lat = lat;
 		return this;
 	}
 
-	public float getLng() {
+	public double getLng() {
 		return lng;
 	}
 
-	public Location setLng(float lng) {
+	public Location setLng(double lng) {
 		this.lng = lng;
 		return this;
 	}
