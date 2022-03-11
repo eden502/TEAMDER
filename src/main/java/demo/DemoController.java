@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bounderies.ActivityBoundary;
 import bounderies.ActivityId;
 import bounderies.Instance;
+import bounderies.InstanceBoundary;
 import bounderies.InstanceId;
 import bounderies.InvokedBy;
 import bounderies.NewUserBoundary;
@@ -65,7 +66,40 @@ public class DemoController {
 			
 			return userBoundary;
 		}
+	@RequestMapping(
+			path = "/iob/instances",
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+		public InstanceBoundary POSTInstance(@RequestBody InstanceBoundary ib) {
+			InstanceId instanceId = new InstanceId()
+					.setDomain("2022b.demo")
+					.setId("42");
+			
+			InstanceBoundary instanceBoundary = new InstanceBoundary()
+					.setInstanceId(instanceId)
+					.setType(ib.getType())
+					.setName(ib.getName())
+					.setActive(ib.getActive())
+					.setCreatedTimeStamp(ib.getCreatedTimeStamp())
+					.setCreatedBy(ib.getCreatedBy())
+					.setLocation(ib.getLocation())
+					.setInstanceAttributes(ib.getInstanceAttributes());
+			
+			return instanceBoundary;
+			
+		}
 	
+	@RequestMapping(
+			path = "/iob/instances/{instanceDomain}/{instanceId}",
+			method = RequestMethod.PUT,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+		public String PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id ) {
+		
+		
+			return "Searching for Domain:"+domain+"\nId: "+id;
+		
+	}
 	@RequestMapping(
 			path = "/iob/activities",
 			method = RequestMethod.POST,
