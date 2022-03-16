@@ -107,21 +107,21 @@ public class DemoController {
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-		public UserBoundary postInstanceActivity (@RequestBody ActivityBoundary newUserBoundary) {
+		public InstanceBoundary postInstanceActivity (@RequestBody ActivityBoundary activityBoundary) {
 			
-			UserId userId = new UserId()
-					.setDomain("2022b.demo")
-					.setEmail("keren1997rachev@gmail.com");
+			ActivityId activityId = new ActivityId()
+					.setDomain("2022b.diana.ukrainsky")
+					.setId("RandomID");
 			
-			
-			UserBoundary userBoundary = new UserBoundary()
-					.setUserId(userId)
-					.setRole("Manager")
-					.setUsername("Demo User")
-					.setAvatar("J");
+			//received ActivityBoundary Object and created new activityId for this object.
+			activityBoundary.setActivityId(activityId);
 			
 			
-			return userBoundary;
+			InstanceBoundary instanceBoundary = new InstanceBoundary().
+					setInstanceId(activityBoundary.getInstance().getInstanceId());
+			
+			// return the InstanceBoundary the activity was used on.
+			return instanceBoundary;
 		}
 	
 	
@@ -192,8 +192,21 @@ public class DemoController {
 			path = "/iob/users/{userDomain}/{userEmail}",
 			method = RequestMethod.PUT,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-		public void PUTUser (@RequestBody UserBoundary userBoundary) {
-			//update users details
+		public void PUTUser (@PathVariable("userDomain") String domain ,@PathVariable("userEmail") String userEmail , @RequestBody UserBoundary userBoundary) {
+			//update user details
+			
+			//user to Update  - will be retrieved from the database 
+			UserBoundary userBoundaryToUpdate  = new UserBoundary()
+					.setUserId(new UserId().setDomain(domain).setEmail(userEmail));
+			
+			// check if path variables are valid if they are than update the relevant userBoundary.
+			if(userBoundaryToUpdate.getUserId().getDomain().equals(domain) && 
+					userBoundaryToUpdate.getUserId().getEmail().equals(userEmail)){
+						userBoundaryToUpdate
+							.setAvatar(userBoundary.getAvatar())
+							.setUsername(userBoundary.getUsername())
+							.setRole(userBoundary.getRole());
+					}
 		
 		}
 	
