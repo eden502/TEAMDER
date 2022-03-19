@@ -96,10 +96,8 @@ public class DemoController {
 			path = "/iob/instances/{instanceDomain}/{instanceId}",
 			method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public String PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id ) {
+		public void PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id ) {
 		
-		
-			return "Searching for Domain:"+domain+"\nId: "+id;
 		
 	}
 	@RequestMapping(
@@ -216,14 +214,9 @@ public class DemoController {
 			path = "/iob/admin/users",
 			method = RequestMethod.DELETE
 			)
-		public void DELETEUser () {
+		public void DELETEALLUser () {
 			//delete all users
 		}
-	
-	
-	
-			
-		
 
 	@RequestMapping(
 			path = "/iob/admin/users",
