@@ -293,17 +293,54 @@ public class DemoController {
 			path = "/iob/instances",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public InstanceBoundary[] GETAllInstances (@PathVariable("allInstances") InstanceBoundary[] allInstances) {
+		public InstanceBoundary[] GETAllInstances () {
 		
-			InstanceBoundary[] instanceArr = new InstanceBoundary[allInstances.length];
+			InstanceBoundary[] instanceArr = new InstanceBoundary[2];
 
-			for (int i = 0; i < allInstances.length; i++) {
-				
-				String currInstanceDomain = allInstances[i].getInstanceId().getDomain();
-				String currInstanceId = allInstances[i].getInstanceId().getId();		
-				
-				instanceArr[i] = (GETInstance(currInstanceDomain,currInstanceId));
-			}
+			Map<String, Object> map = new HashMap<>();
+			map.put("key1", "can be set to any value you wish");
+			map.put("key2", "you can also name the attributes any name you loke");
+			map.put("key3", 4.2);
+			map.put("key4", false);
+			
+			InstanceId instanceId0 = new InstanceId()
+					.setDomain("2022b.demo0")
+					.setId("40");
+		
+			Location location0 = new Location()
+					.setLat(32.015139)
+					.setLng(34.017804);
+		
+			
+			InstanceBoundary instanceBoundary0 = new InstanceBoundary()
+					.setInstanceId(instanceId0)
+					.setType("dummyType")
+					.setName("demo instance")
+					.setActive(true)
+					.setCreatedTimeStamp("2022-02-27T07:55:05.248+0000")
+					.setLocation(location0)
+					.setInstanceAttributes(map);
+			
+			InstanceId instanceId1 = new InstanceId()
+					.setDomain("2022b.demo1")
+					.setId("41");
+		
+			Location location1 = new Location()
+					.setLat(32.115139)
+					.setLng(34.117804);
+		
+			
+			InstanceBoundary instanceBoundary1 = new InstanceBoundary()
+					.setInstanceId(instanceId1)
+					.setType("dummyType")
+					.setName("demo instance")
+					.setActive(true)
+					.setCreatedTimeStamp("2022-02-27T07:55:05.248+0000")
+					.setLocation(location1)
+					.setInstanceAttributes(map);
+			
+			instanceArr[0] = instanceBoundary0;
+			instanceArr[1] = instanceBoundary1;
 			
 			return instanceArr;
 		
