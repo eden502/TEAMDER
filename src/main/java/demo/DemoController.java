@@ -100,7 +100,7 @@ public class DemoController {
 		
 		
 	}
-	@RequestMapping(
+	@RequestMapping( 
 			path = "/iob/activities",
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
