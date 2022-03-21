@@ -1,5 +1,6 @@
 package bounderies;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class InstanceBoundary {
@@ -8,7 +9,7 @@ public class InstanceBoundary {
 	private String type;
 	private String name;
 	private Boolean active;
-	private String createdTimeStamp;
+	private String createdTimestamp;
 	private CreatedBy createdBy;
 	private Location location;
 	private Map<String, Object> instanceAttributes;
@@ -55,11 +56,11 @@ public class InstanceBoundary {
 	}
 
 	public String getCreatedTimeStamp() {
-		return createdTimeStamp;
+		return createdTimestamp;
 	}
 
-	public InstanceBoundary setCreatedTimeStamp(String createdTimeStamp) {
-		this.createdTimeStamp = createdTimeStamp;
+	public InstanceBoundary setCreatedTimeStamp(String createdTimestamp) {
+		this.createdTimestamp = createdTimestamp;
 		return this;
 	}
 

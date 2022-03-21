@@ -96,7 +96,7 @@ public class DemoController {
 			path = "/iob/instances/{instanceDomain}/{instanceId}",
 			method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public void PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id ) {
+		public void PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id ,@RequestBody InstanceBoundary ib) {
 		
 		
 	}
@@ -157,7 +157,7 @@ public class DemoController {
 					.setActivityId(activityId)
 					.setType("demoActivityType")
 					.setInstance(instance)
-					.setCreatedTimestamp("11-3-2022")
+					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
 					.setInvokeId(invokeBy)
 					.setActivityAttributes(activityAttributes);
 			
@@ -165,7 +165,7 @@ public class DemoController {
 					.setActivityId(activityId)
 					.setType("demoActivityType")
 					.setInstance(instance)
-					.setCreatedTimestamp("11-3-2022")
+					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
 					.setInvokeId(invokeBy)
 					.setActivityAttributes(activityAttributes);
 			
@@ -173,7 +173,7 @@ public class DemoController {
 					.setActivityId(activityId)
 					.setType("demoActivityType")
 					.setInstance(instance)
-					.setCreatedTimestamp("11-3-2022")
+					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
 					.setInvokeId(invokeBy)
 					.setActivityAttributes(activityAttributes);
 			
@@ -278,7 +278,7 @@ public class DemoController {
 					.setType("dummyType")
 					.setName("demo instance")
 					.setActive(true)
-					.setCreatedTimeStamp("2022-02-27T07:55:05.248+0000")
+					.setCreatedTimeStamp(java.time.LocalDateTime.now().toString())
 					.setLocation(location)
 					.setInstanceAttributes(map);
 			
@@ -317,7 +317,7 @@ public class DemoController {
 					.setType("dummyType")
 					.setName("demo instance")
 					.setActive(true)
-					.setCreatedTimeStamp("2022-02-27T07:55:05.248+0000")
+					.setCreatedTimeStamp(java.time.LocalDateTime.now().toString())
 					.setLocation(location0)
 					.setInstanceAttributes(map);
 			
@@ -335,7 +335,7 @@ public class DemoController {
 					.setType("dummyType")
 					.setName("demo instance")
 					.setActive(true)
-					.setCreatedTimeStamp("2022-02-27T07:55:05.248+0000")
+					.setCreatedTimeStamp(java.time.LocalDateTime.now().toString())
 					.setLocation(location1)
 					.setInstanceAttributes(map);
 			
