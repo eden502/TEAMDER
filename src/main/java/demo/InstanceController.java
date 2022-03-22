@@ -1,6 +1,6 @@
 package demo;
 
-import java.util.Iterator;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,19 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import bounderies.Location;
-
-import bounderies.ActivityBoundary;
-import bounderies.ActivityId;
-import bounderies.Instance;
+import bounderies.UserId;
+import bounderies.CreatedBy;
 import bounderies.InstanceBoundary;
 import bounderies.InstanceId;
-import bounderies.InvokedBy;
-import bounderies.NewUserBoundary;
-import bounderies.UserBoundary;
-import bounderies.UserId;
+
  
 @RestController
 public class InstanceController {
+	private long idGenerator =  0;
+	
+	//Create an instance
 	@RequestMapping(
 			path = "/iob/instances",		
 			method = RequestMethod.POST,
@@ -33,15 +31,15 @@ public class InstanceController {
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 		public InstanceBoundary POSTInstance(@RequestBody InstanceBoundary ib) {
 			InstanceId instanceId = new InstanceId()
-					.setDomain("2022b.demo")
-					.setId("42");
+					.setDomain("2022b.diana.ukrainsky")
+					.setId("" + (++idGenerator));
 			
 			InstanceBoundary instanceBoundary = new InstanceBoundary()
 					.setInstanceId(instanceId)
 					.setType(ib.getType())
 					.setName(ib.getName())
 					.setActive(ib.getActive())
-					.setCreatedTimeStamp(ib.getCreatedTimeStamp())
+					.setCreatedTimestamp(ib.getCreatedTimestamp())
 					.setCreatedBy(ib.getCreatedBy())
 					.setLocation(ib.getLocation())
 					.setInstanceAttributes(ib.getInstanceAttributes());
@@ -50,15 +48,19 @@ public class InstanceController {
 			
 		}
 	
+	//Update an instance
 	@RequestMapping(
 			path = "/iob/instances/{instanceDomain}/{instanceId}",
 			method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 		public void PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id,@RequestBody InstanceBoundary ib) {
 		
+		//Update instance fields.
 		
 	}
 	
+	
+	//Retrieve instance
 	@RequestMapping( 
 			path = "/iob/instances/{instanceDomain}/{instanceId}",
 			method = RequestMethod.GET,
@@ -85,7 +87,8 @@ public class InstanceController {
 					.setType("dummyType")
 					.setName("demo instance")
 					.setActive(true)
-					.setCreatedTimeStamp(java.time.LocalDateTime.now().toString())
+					.setCreatedBy(new CreatedBy().setUserId(new UserId().setDomain("2022b").setEmail("userEmail")))
+					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
 					.setLocation(location)
 					.setInstanceAttributes(map);
 			
@@ -95,6 +98,7 @@ public class InstanceController {
 
 		}
 
+	//Get all instances
 	@RequestMapping(
 
 			path = "/iob/instances",
@@ -124,7 +128,8 @@ public class InstanceController {
 					.setType("dummyType")
 					.setName("demo instance")
 					.setActive(true)
-					.setCreatedTimeStamp(java.time.LocalDateTime.now().toString())
+					.setCreatedBy(new CreatedBy().setUserId(new UserId().setDomain("2022b").setEmail("userEmail")))
+					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
 					.setLocation(location0)
 					.setInstanceAttributes(map);
 			
@@ -142,7 +147,8 @@ public class InstanceController {
 					.setType("dummyType")
 					.setName("demo instance")
 					.setActive(true)
-					.setCreatedTimeStamp(java.time.LocalDateTime.now().toString())
+					.setCreatedBy(new CreatedBy().setUserId(new UserId().setDomain("2022b").setEmail("userEmail")))
+					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
 					.setLocation(location1)
 					.setInstanceAttributes(map);
 			

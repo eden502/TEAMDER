@@ -1,8 +1,6 @@
 package demo;
 
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,22 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-
-import bounderies.Location;
-
-import bounderies.ActivityBoundary;
-import bounderies.ActivityId;
-import bounderies.Instance;
-import bounderies.InstanceBoundary;
-import bounderies.InstanceId;
-import bounderies.InvokedBy;
 import bounderies.NewUserBoundary;
 import bounderies.UserBoundary;
 import bounderies.UserId;
  
 @RestController
 public class UserController {
+	
+	//Create a new user
 	@RequestMapping(
 			path = "/iob/users",
 			method = RequestMethod.POST,
@@ -34,7 +24,7 @@ public class UserController {
 		public UserBoundary POSTUser (@RequestBody NewUserBoundary newUserBoundary) {
 			
 			UserId userId = new UserId()
-					.setDomain("2022b.demo")
+					.setDomain("2022b.diana.ukrainsky")
 					.setEmail(newUserBoundary.getEmail());
 			
 			UserBoundary userBoundary = new UserBoundary()
@@ -47,6 +37,7 @@ public class UserController {
 			return userBoundary;
 		}
 	
+	//Login valid user and retrieve user details
 	@RequestMapping(
 			path = "/iob/users/login/{userDomain}/{userEmail}",
 			method = RequestMethod.GET,
@@ -68,13 +59,15 @@ public class UserController {
 			return userBoundary;
 		}
 	
+	
+	//Update user details
 	@RequestMapping(
 			path = "/iob/users/{userDomain}/{userEmail}",
 			method = RequestMethod.PUT,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 		public void PUTUser (@PathVariable("userDomain") String domain ,@PathVariable("userEmail") String userEmail , @RequestBody UserBoundary userBoundary) {
-			//update user details
 			
+
 			//user to Update  - will be retrieved from the database 
 			UserBoundary userBoundaryToUpdate  = new UserBoundary()
 					.setUserId(new UserId().setDomain(domain).setEmail(userEmail));

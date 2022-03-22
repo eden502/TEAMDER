@@ -1,31 +1,25 @@
 package demo;
 
-import java.util.Iterator;
+
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-
-import bounderies.Location;
-
 import bounderies.ActivityBoundary;
 import bounderies.ActivityId;
 import bounderies.Instance;
-import bounderies.InstanceBoundary;
 import bounderies.InstanceId;
 import bounderies.InvokedBy;
-import bounderies.NewUserBoundary;
 import bounderies.UserBoundary;
 import bounderies.UserId;
  
 @RestController
 public class AdminController {
+	
+	
+	//Delete all users in the domain
 	@RequestMapping(
 			path = "/iob/admin/users",
 			method = RequestMethod.DELETE
@@ -34,6 +28,8 @@ public class AdminController {
 			//delete all users
 		}
 	
+	
+	//Delete all activities in the domain
 	@RequestMapping(
 			path = "/iob/admin/activities",
 			method = RequestMethod.DELETE)
@@ -41,6 +37,8 @@ public class AdminController {
 		//delete all activities
 		}
 
+	
+	//Delete all instances in the domain
 	@RequestMapping(
 			path = "/iob/admin/instances",
 			method = RequestMethod.DELETE)
@@ -48,6 +46,8 @@ public class AdminController {
 		//delete all instances
 		}
 	
+	
+	//Export all users
 	@RequestMapping(
 			path = "/iob/admin/users",
 			method = RequestMethod.GET,
@@ -82,6 +82,7 @@ public class AdminController {
 			return usersList;
 		}
 	
+	//Export all activities
 	@RequestMapping(
 			path = "/iob/admin/activities",
 			method = RequestMethod.GET,
