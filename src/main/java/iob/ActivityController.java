@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import bounderies.ActivityBoundary;
 import bounderies.ActivityId;
 import bounderies.InstanceBoundary;
-import demo.Autowired;
 import iob.logic.ActivitiesService;
 
  

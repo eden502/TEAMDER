@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import bounderies.NewUserBoundary;
 import bounderies.UserBoundary;
 import bounderies.UserId;
-import demo.Autowired;
 import iob.logic.UsersService;
  
 @RestController
