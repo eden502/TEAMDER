@@ -71,37 +71,8 @@ public class InstanceController {
 			path = "/iob/instances/{instanceDomain}/{instanceId}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public InstanceBoundary GETInstance (@PathVariable("instanceDomain") String instanceDomain ,@PathVariable("instanceId") String instanceID ) {
-			
-			InstanceId instanceId = new InstanceId()
-						.setDomain(instanceDomain)
-						.setId(instanceID);
-		
-			Location location = new Location()
-					.setLat(32.115139)
-					.setLng(34.817804);
-		
-			Map<String, Object> map = new HashMap<>();
-			map.put("key1", "can be set to any value you wish");
-			map.put("key2", "you can also name the attributes any name you loke");
-			map.put("key3", 4.2);
-			map.put("key4", false);
-				
-		
-			InstanceBoundary instanceBoundary = new InstanceBoundary()
-					.setInstanceId(instanceId)
-					.setType("dummyType")
-					.setName("demo instance")
-					.setActive(true)
-					.setCreatedBy(new CreatedBy().setUserId(new UserId().setDomain("2022b").setEmail("userEmail")))
-					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
-					.setLocation(location)
-					.setInstanceAttributes(map);
-			
-			
-			return instanceBoundary;
-
-
+		public InstanceBoundary GETInstance (@PathVariable("instanceDomain") String instanceDomain ,@PathVariable("instanceId") String instanceID ) {		
+			return instancesService.getSpecificInstance(instanceDomain, instanceID);
 		}
 
 	//Get all instances
@@ -112,56 +83,7 @@ public class InstanceController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 		public InstanceBoundary[] GETAllInstances () {
 		
-			InstanceBoundary[] instanceArr = new InstanceBoundary[2];
-
-			Map<String, Object> map = new HashMap<>();
-			map.put("key1", "can be set to any value you wish");
-			map.put("key2", "you can also name the attributes any name you loke");
-			map.put("key3", 4.2);
-			map.put("key4", false);
-			
-			InstanceId instanceId0 = new InstanceId()
-					.setDomain("2022b.demo0")
-					.setId("40");
-		
-			Location location0 = new Location()
-					.setLat(32.015139)
-					.setLng(34.017804);
-		
-			
-			InstanceBoundary instanceBoundary0 = new InstanceBoundary()
-					.setInstanceId(instanceId0)
-					.setType("dummyType")
-					.setName("demo instance")
-					.setActive(true)
-					.setCreatedBy(new CreatedBy().setUserId(new UserId().setDomain("2022b").setEmail("userEmail")))
-					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
-					.setLocation(location0)
-					.setInstanceAttributes(map);
-			
-			InstanceId instanceId1 = new InstanceId()
-					.setDomain("2022b.demo1")
-					.setId("41");
-		
-			Location location1 = new Location()
-					.setLat(32.115139)
-					.setLng(34.117804);
-		
-			
-			InstanceBoundary instanceBoundary1 = new InstanceBoundary()
-					.setInstanceId(instanceId1)
-					.setType("dummyType")
-					.setName("demo instance")
-					.setActive(true)
-					.setCreatedBy(new CreatedBy().setUserId(new UserId().setDomain("2022b").setEmail("userEmail")))
-					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
-					.setLocation(location1)
-					.setInstanceAttributes(map);
-			
-			instanceArr[0] = instanceBoundary0;
-			instanceArr[1] = instanceBoundary1;
-			
-			return instanceArr;
+			return instancesService.getAllInstances().toArray(new InstanceBoundary[0]);
 		
 		}
 }
