@@ -2,6 +2,7 @@ package iob;
 
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,12 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import bounderies.ActivityBoundary;
 import bounderies.ActivityId;
 import bounderies.InstanceBoundary;
+import demo.Autowired;
+import iob.logic.ActivitiesService;
 
  
 @RestController
 public class ActivityController {
 	//private long idGenerator =  0;   ---> Please implement inside Service! :)
+	private ActivitiesService activitiesService;
 	
+	@Autowired
+	public ActivityController(ActivitiesService activitiesService) {
+		this.activitiesService = activitiesService;
+	}
 	//Invoke an instance activity
 	@RequestMapping( 
 			path = "/iob/activities",

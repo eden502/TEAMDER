@@ -14,11 +14,22 @@ import bounderies.InstanceId;
 import bounderies.InvokedBy;
 import bounderies.UserBoundary;
 import bounderies.UserId;
+import iob.logic.ActivitiesService;
+import iob.logic.InstancesService;
+import iob.logic.UsersService;
  
 @RestController
 public class AdminController {
 	
+	private UsersService userService;
+	private InstancesService instancesService;
+	private ActivitiesService activitiesService;
 	
+	public AdminController(UsersService usersService,InstancesService instancesService,ActivitiesService activitiesService) {
+		this.userService = usersService;
+		this.instancesService = instancesService;
+		this.activitiesService = activitiesService;
+	}
 	//Delete all users in the domain
 	@RequestMapping(
 			path = "/iob/admin/users",

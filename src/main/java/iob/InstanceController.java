@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bounderies.Location;
 import bounderies.UserId;
+import iob.logic.InstancesService;
 import bounderies.CreatedBy;
 import bounderies.InstanceBoundary;
 import bounderies.InstanceId;
@@ -22,7 +23,12 @@ import bounderies.InstanceId;
 @RestController
 public class InstanceController {
 	// private long idGenerator =  0;   --> Please implement inside the service!
+	private InstancesService instancesService;
 	
+	@org.springframework.beans.factory.annotation.Autowired
+	public InstanceController(InstancesService instancesService) {
+		this.instancesService = instancesService;
+	}
 	//Create an instance
 	@RequestMapping(
 			path = "/iob/instances",		

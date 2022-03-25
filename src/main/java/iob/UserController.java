@@ -11,10 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 import bounderies.NewUserBoundary;
 import bounderies.UserBoundary;
 import bounderies.UserId;
+import demo.Autowired;
+import iob.logic.UsersService;
  
 @RestController
 public class UserController {
 	
+	private UsersService userService;
+	
+	@org.springframework.beans.factory.annotation.Autowired
+	public UserController(UsersService userService) {
+		this.userService = userService;
+	}
 	//Create a new user
 	@RequestMapping(
 			path = "/iob/users",
