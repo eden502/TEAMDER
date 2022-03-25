@@ -1,4 +1,4 @@
-package demo;
+package iob;
 
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import bounderies.InstanceId;
  
 @RestController
 public class InstanceController {
-	private long idGenerator =  0;
+	// private long idGenerator =  0;   --> Please implement inside the service!
 	
 	//Create an instance
 	@RequestMapping(
@@ -32,7 +32,7 @@ public class InstanceController {
 		public InstanceBoundary POSTInstance(@RequestBody InstanceBoundary ib) {
 			InstanceId instanceId = new InstanceId()
 					.setDomain("2022b.diana.ukrainsky")
-					.setId("" + (++idGenerator));
+					.setId("" + (0));
 			
 			InstanceBoundary instanceBoundary = new InstanceBoundary()
 					.setInstanceId(instanceId)

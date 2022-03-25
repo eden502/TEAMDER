@@ -1,4 +1,4 @@
-package demo;
+package iob;
 
 
 
@@ -15,7 +15,7 @@ import bounderies.InstanceBoundary;
  
 @RestController
 public class ActivityController {
-	private long idGenerator =  0;
+	//private long idGenerator =  0;   ---> Please implement inside Service! :)
 	
 	//Invoke an instance activity
 	@RequestMapping( 
@@ -27,7 +27,7 @@ public class ActivityController {
 			
 			ActivityId activityId = new ActivityId()
 					.setDomain("2022b.diana.ukrainsky")
-					.setId("" + (++idGenerator));
+					.setId("" + (0));
 			
 			//received ActivityBoundary Object and created new activityId for this object.
 			activityBoundary.setActivityId(activityId);
