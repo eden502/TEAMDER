@@ -60,7 +60,7 @@ public class InstancesServiceMockup implements InstancesService {
 
 	@Override
 	public void deleteAllInstances() {
-		// TODO Auto-generated method stub
+		instanceEntityVector.clear();
 
 	}
 

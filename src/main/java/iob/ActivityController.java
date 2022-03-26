@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import bounderies.ActivityBoundary;
-import bounderies.ActivityId;
+
 import bounderies.InstanceBoundary;
 import iob.logic.ActivitiesService;
 
@@ -30,20 +30,8 @@ public class ActivityController {
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-		public InstanceBoundary postInstanceActivity (@RequestBody ActivityBoundary activityBoundary) {
+		public Object postInstanceActivity (@RequestBody ActivityBoundary activityBoundary) {
 			
-			ActivityId activityId = new ActivityId()
-					.setDomain("2022b.diana.ukrainsky")
-					.setId("" + (0));
-			
-			//received ActivityBoundary Object and created new activityId for this object.
-			activityBoundary.setActivityId(activityId);
-			
-			
-			InstanceBoundary instanceBoundary = new InstanceBoundary().
-					setInstanceId(activityBoundary.getInstance().getInstanceId());
-			
-			// return the InstanceBoundary the activity was used on.
-			return instanceBoundary;
+			return activitiesService.invokeActivity(activityBoundary);
 		}
 }

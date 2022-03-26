@@ -22,8 +22,8 @@ public class ActivityConverter {
 				.setInstanceDomain(boundary.getInstance().getInstanceId().getDomain())
 				.setInstanceId(boundary.getInstance().getInstanceId().getId())
 				.setCreatedTimestamp(boundary.getCreatedTimestamp())
-				.setInvokedUserDomain(boundary.getInvokeId().getUserId().getDomain())
-				.setInvokedUserEmail(boundary.getInvokeId().getUserId().getEmail())
+				.setInvokedUserDomain(boundary.getInvokedBy().getUserId().getDomain())
+				.setInvokedUserEmail(boundary.getInvokedBy().getUserId().getEmail())
 				.setActivityAttributes(boundary.getActivityAttributes());
 		
 		return activityEntity;
@@ -46,7 +46,7 @@ public class ActivityConverter {
 				.setType(entity.getType())
 				.setInstance(instance)
 				.setCreatedTimestamp(entity.getCreatedTimestamp())
-				.setInvokeId(invokedBy)
+				.setInvokedBy(invokedBy)
 				.setActivityAttributes(entity.getActivityAttributes());
 		
 		return activityBoundary;

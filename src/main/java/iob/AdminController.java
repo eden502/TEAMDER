@@ -3,6 +3,8 @@ package iob;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +27,7 @@ public class AdminController {
 	private InstancesService instancesService;
 	private ActivitiesService activitiesService;
 	
+	@Autowired
 	public AdminController(UsersService usersService,InstancesService instancesService,ActivitiesService activitiesService) {
 		this.userService = usersService;
 		this.instancesService = instancesService;
@@ -54,7 +57,7 @@ public class AdminController {
 			path = "/iob/admin/instances",
 			method = RequestMethod.DELETE)
 	public void DELETEAllInstances() {
-		//delete all instances
+			instancesService.deleteAllInstances();
 		}
 	
 	
@@ -129,7 +132,7 @@ public class AdminController {
 					.setType("demoActivityType")
 					.setInstance(instance)
 					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
-					.setInvokeId(invokeBy)
+					.setInvokedBy(invokeBy)
 					.setActivityAttributes(activityAttributes);
 			
 			ActivityBoundary activityBounday2 = new ActivityBoundary()
@@ -137,7 +140,7 @@ public class AdminController {
 					.setType("demoActivityType")
 					.setInstance(instance)
 					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
-					.setInvokeId(invokeBy)
+					.setInvokedBy(invokeBy)
 					.setActivityAttributes(activityAttributes);
 			
 			ActivityBoundary activityBounday3 = new ActivityBoundary()
@@ -145,7 +148,7 @@ public class AdminController {
 					.setType("demoActivityType")
 					.setInstance(instance)
 					.setCreatedTimestamp(java.time.LocalDateTime.now().toString())
-					.setInvokeId(invokeBy)
+					.setInvokedBy(invokeBy)
 					.setActivityAttributes(activityAttributes);
 			
 			ActivityBoundary [] activityBoundaryArray  = new ActivityBoundary[3];

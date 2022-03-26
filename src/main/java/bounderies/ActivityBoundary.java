@@ -8,7 +8,7 @@ public class ActivityBoundary {
 	private String type;
 	private Instance instance;
 	private String createdTimestamp;
-	private InvokedBy invokeId;
+	private InvokedBy invokedBy;
 	private Map<String, Object> activityAttributes;
 	
 	public ActivityBoundary() {
@@ -51,12 +51,12 @@ public class ActivityBoundary {
 		return this;
 	}
 	
-	public InvokedBy getInvokeId() {
-		return invokeId;
+	public InvokedBy getInvokedBy() {
+		return invokedBy;
 	}
 
-	public ActivityBoundary setInvokeId(InvokedBy invokeId) {
-		this.invokeId = invokeId;
+	public ActivityBoundary setInvokedBy(InvokedBy invokedBy) {
+		this.invokedBy = invokedBy;
 		return this;
 	}
 
