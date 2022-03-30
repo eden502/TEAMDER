@@ -2,16 +2,20 @@ package iob.service.mockups;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import bounderies.UserBoundary;
 import iob.data.UserEntity;
+import iob.logic.UserConverter;
 import iob.logic.UsersService;
 
 @Service
 public class UsersServiceMockup implements UsersService{
 
+	private UserConverter userConverter;
+	
 	Vector<UserEntity> v = new Vector<UserEntity>();
 	
 	@Autowired
@@ -39,8 +43,10 @@ public class UsersServiceMockup implements UsersService{
 
 	@Override
 	public List<UserBoundary> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		return v // Vector<UserEntity>
+				.stream() // Stream <UserEntity>
+				.map(userConverter::toBoundary) // Stream <UserBoundary> using Method Reference
+				.collect(Collectors.toList()); // List<UserBoundary>
 	}
 
 	@Override

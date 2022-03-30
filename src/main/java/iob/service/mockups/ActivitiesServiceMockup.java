@@ -48,8 +48,7 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 
 	@Override
 	public void deleteAllAcitivities() {
-		// TODO Auto-generated method stub
-		
+		this.activitiesEntityVector.clear();
 	}
 	
 	private void validateActivityBoundary(ActivityBoundary activity) {
