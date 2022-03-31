@@ -3,6 +3,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
@@ -41,8 +44,11 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 	
 	@Override
 	public List<ActivityBoundary> getAllActivities() {
-		// TODO Auto-generated method stub
-		return null;
+		return activitiesEntityVector //Vector<ActivityEntity>
+				.stream() // Stream<ActivityEntity>
+				.map(activityConverter::toBoundary) // Stream<ActivityBoundary>
+				.collect(Collectors.toList()); // List<ActivityBoundary>
+	
 	}
 
 	@Override

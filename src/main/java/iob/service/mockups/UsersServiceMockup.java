@@ -53,6 +53,7 @@ public class UsersServiceMockup implements UsersService{
 	@Override
 	public void deleteAllUsers() {
 		// TODO Auto-generated method stub
+		v.clear();
 		
 	}
 

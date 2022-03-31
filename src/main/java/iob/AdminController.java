@@ -2,6 +2,7 @@ package iob;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class AdminController {
 			)
 		public void DELETEALLUser () {
 			//delete all users
+		userService.deleteAllUsers();
 		}
 	
 	
@@ -102,6 +104,7 @@ public class AdminController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	
 		public ActivityBoundary[] exportAllActivities () {
+			List<ActivityBoundary> allActivities = activitiesService.getAllActivities();
 			
 //		GeneralId activityId = new GeneralId()
 //					.setDomain("2022b.demo")
@@ -154,7 +157,6 @@ public class AdminController {
 //			activityBoundaryArray[0] = activityBounday1;
 //			activityBoundaryArray[1] = activityBounday2;
 //			activityBoundaryArray[2] = activityBounday3;
-			
-			return null;
+			return  allActivities.toArray(new ActivityBoundary[0]);
 		}
 }
