@@ -35,7 +35,7 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 		activityId.setId("" + idGenerator.incrementAndGet());
 		
 		activity.setActivityId(activityId);
-		activity .setCreatedTimestamp(java.time.LocalDateTime.now().toString());
+		activity.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 		
 		activitiesEntityVector.add(activityConverter.toEntity(activity));
 		return activity;

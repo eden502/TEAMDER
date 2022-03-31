@@ -1,5 +1,7 @@
 package iob.service.mockups;
 
+
+
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import iob.bounderies.GeneralId;
 import iob.bounderies.InstanceBoundary;
+import iob.bounderies.Location;
 import iob.data.InstanceEntity;
 import iob.logic.InstanceConverter;
 import iob.logic.InstancesService;
@@ -18,13 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class InstancesServiceMockup implements InstancesService {
 	
-	Vector<InstanceEntity> instanceEntityVector = new Vector<InstanceEntity>();
+	Vector<InstanceEntity> instanceEntityVector; 
 	private InstanceConverter instanceConverter;
 	private AtomicLong idGenerator; 
 
 	@Autowired
 	public InstancesServiceMockup(InstanceConverter instanceConverter) {
 		this.instanceConverter = instanceConverter;
+		this.idGenerator = new AtomicLong();
+		instanceEntityVector = new Vector<InstanceEntity>(); 
 	}
 	
 	@Override
@@ -33,9 +38,9 @@ public class InstancesServiceMockup implements InstancesService {
 		GeneralId instanceId = new GeneralId();
 		instanceId.setDomain("2022b.diana.ukrainsky");
 		instanceId.setId("" + idGenerator.incrementAndGet());
-
 		instance.setInstanceId(instanceId);
 		instance.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
+		
 
 		instanceEntityVector.add(instanceConverter.toEntity(instance));
 
@@ -68,6 +73,9 @@ public class InstancesServiceMockup implements InstancesService {
 		if(update.getType()!=null)
 			instanceForUpdate.setType(update.getType());
 		
+		if(update.getName()!=null)
+			instanceForUpdate.setName(update.getName());
+		
 		if(update.getActive()!=null)
 			instanceForUpdate.setActive(update.getActive());
 		
@@ -86,7 +94,7 @@ public class InstancesServiceMockup implements InstancesService {
 		for(int i =0 ; i< instanceEntityVector.size() ;i++) {
 			String currdomain = instanceEntityVector.get(i).getInstanceDomain();
 			String currId = instanceEntityVector.get(i).getInstanceId();
-			if(currdomain.equals(instanceDomain) && currId.equals(currId)) {
+			if(currdomain.equals(instanceDomain) && currId.equals(instanceId)) {
 				return instanceEntityVector.get(i);
 			}
 		}
@@ -95,6 +103,7 @@ public class InstancesServiceMockup implements InstancesService {
 
 	@Override
 	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId) {
+
 		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));
 	}
 
