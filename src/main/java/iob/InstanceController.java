@@ -35,22 +35,7 @@ public class InstanceController {
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 		public InstanceBoundary POSTInstance(@RequestBody InstanceBoundary ib) {
-			GeneralId instanceId = new GeneralId();
-			instanceId.setDomain("2022b.diana.ukrainsky");
-			instanceId.setId("" + (0));
-			
-			InstanceBoundary instanceBoundary = new InstanceBoundary();
-			instanceBoundary.setInstanceId(instanceId);
-			instanceBoundary.setType(ib.getType());
-			instanceBoundary.setName(ib.getName());
-			instanceBoundary.setActive(ib.getActive());
-			instanceBoundary.setCreatedTimestamp(ib.getCreatedTimestamp());
-			instanceBoundary.setCreatedBy(ib.getCreatedBy());
-			instanceBoundary.setLocation(ib.getLocation());
-			instanceBoundary.setInstanceAttributes(ib.getInstanceAttributes());
-			
-			return instanceBoundary;
-			
+			return this.instancesService.createInstance(ib);
 		}
 	
 	//Update an instance
@@ -59,9 +44,7 @@ public class InstanceController {
 			method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 		public void PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id,@RequestBody InstanceBoundary ib) {
-		
-		//Update instance fields.
-		
+			this.instancesService.updateInstance(domain, id, ib);
 	}
 	
 	

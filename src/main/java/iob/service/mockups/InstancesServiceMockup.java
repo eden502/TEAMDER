@@ -22,8 +22,6 @@ public class InstancesServiceMockup implements InstancesService {
 	private InstanceConverter instanceConverter;
 	private AtomicLong idGenerator; 
 
-	
-	
 	@Autowired
 	public InstancesServiceMockup(InstanceConverter instanceConverter) {
 		this.instanceConverter = instanceConverter;
@@ -36,87 +34,68 @@ public class InstancesServiceMockup implements InstancesService {
 		instanceId.setDomain("2022b.diana.ukrainsky");
 		instanceId.setId("" + idGenerator.incrementAndGet());
 
-		InstanceBoundary instanceBoundary = new InstanceBoundary();
-		instanceBoundary.setInstanceId(instanceId);
-		instanceBoundary.setType(instance.getType());
-;
-		instanceBoundary.setName(instance.getName());
-		instanceBoundary.setActive(instance.getActive());
-
-		instanceBoundary.setCreatedTimestamp(instance.getCreatedTimestamp());
-		instanceBoundary.setCreatedBy(instance.getCreatedBy());
-		instanceBoundary.setLocation(instance.getLocation());
-		instanceBoundary.setInstanceAttributes(instance.getInstanceAttributes());
+		instance.setInstanceId(instanceId);
+		instance.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 
 		instanceEntityVector.add(instanceConverter.toEntity(instance));
 
-		return instanceBoundary;
+		return instance;
 	}
 
 	private void validateInstanceBoundary(InstanceBoundary instance) {
-		if(instance.getType()==null)
-			throw new RuntimeException("InstanceBoundary must have a valid type");
+//		if(instance.getType()==null)
+//			throw new RuntimeException("InstanceBoundary must have a valid type");
+//		
+//		if(instance.getActive()==null)
+//			throw new RuntimeException("InstanceBoundary must have a active value");
 		
-		if(instance.getActive()==null)
-			throw new RuntimeException("InstanceBoundary must have a active value");
-		
-		if(instance.getCreatedTimestamp()==null)
-			throw new RuntimeException("InstanceBoundary must have a valid timestamp");
-	
+//		if(instance.getCreatedTimestamp()==null)
+//			throw new RuntimeException("InstanceBoundary must have a valid timestamp");
+//	
 		if(instance.getCreatedBy().getUserId().getDomain()==null ||
 			instance.getCreatedBy().getUserId().getDomain().trim().isEmpty()) 
 			throw new RuntimeException("InstanceBoundary's UserId must have a valid domain");
 
-			
 		if(instance.getCreatedBy().getUserId().getEmail()==null ||
 			instance.getCreatedBy().getUserId().getEmail().trim().isEmpty()) 
 			throw new RuntimeException("InstanceBoundary's UserId must have a valid email");
-		
-		
-		if(instance.getLocation()==null)
-			throw new RuntimeException("InstanceBoundary must have a valid location");
-		
-		if(instance.getInstanceAttributes().get(instance)==null)
-			throw new RuntimeException("InstanceBoundary must have valid attributes");
 	}
 
 	@Override
 	public InstanceBoundary updateInstance(String instanceDomain, String instanceId, InstanceBoundary update) {
-		InstanceBoundary instanceForUpdate = this.getSpecificInstance(instanceDomain, instanceId);
-
+		InstanceEntity instanceForUpdate = this.getSpecificEntityInstance(instanceDomain, instanceId);
+		
 		if(update.getType()!=null)
 			instanceForUpdate.setType(update.getType());
 		
 		if(update.getActive()!=null)
 			instanceForUpdate.setActive(update.getActive());
 		
-		if(update.getCreatedTimestamp()!=null)
-			instanceForUpdate.setCreatedTimestamp(update.getCreatedTimestamp());
-	
-		if(update.getCreatedBy()!=null)
-			instanceForUpdate.setCreatedBy(update.getCreatedBy());
-		
 		if(update.getLocation()!=null)
-			instanceForUpdate.setLocation(update.getLocation());
-		
+		{
+			instanceForUpdate.setLocationLat(update.getLocation().getLat());
+			instanceForUpdate.setLocationLng(update.getLocation().getLng());
+		}
 		if(update.getInstanceAttributes()!=null)
 			instanceForUpdate.setInstanceAttributes(update.getInstanceAttributes());
 		
-		return instanceForUpdate;
+		return this.instanceConverter.toBoundary(instanceForUpdate);
 	}
 
-	@Override
-	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId) {
-		
-		
+	private InstanceEntity getSpecificEntityInstance(String instanceDomain, String instanceId) {
 		for(int i =0 ; i< instanceEntityVector.size() ;i++) {
 			String currdomain = instanceEntityVector.get(i).getInstanceDomain();
 			String currId = instanceEntityVector.get(i).getInstanceId();
 			if(currdomain.equals(instanceDomain) && currId.equals(currId)) {
-				return instanceConverter.toBoundary(instanceEntityVector.get(i));
+				return instanceEntityVector.get(i);
 			}
 		}
-		throw new RuntimeException("Could not found the specific activity.");
+		throw new RuntimeException("Could not found the specific instance.");
+	}
+
+	@Override
+	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId) {
+		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));
 	}
 
 	@Override
@@ -132,5 +111,7 @@ public class InstancesServiceMockup implements InstancesService {
 		instanceEntityVector.clear();
 
 	}
+
+
 
 }
