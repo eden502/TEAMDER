@@ -1,10 +1,10 @@
-package bounderies;
+package iob.bounderies;
 
 import java.util.Map;
 
 public class ActivityBoundary {
 
-	private ActivityId activityId;
+	private GeneralId activityId;
 	private String type;
 	private Instance instance;
 	private String createdTimestamp;
@@ -15,58 +15,58 @@ public class ActivityBoundary {
 		
 	}
 
-	public ActivityId getActivityId() {
+	public GeneralId getActivityId() {
 		return activityId;
 	}
 
-	public ActivityBoundary setActivityId(ActivityId activityId) {
+	public void setActivityId(GeneralId activityId) {
 		this.activityId = activityId;
-		return this;
+		
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public ActivityBoundary setType(String type) {
+	public void setType(String type) {
 		this.type = type;
-		return this;
+		
 	}
 
 	public Instance getInstance() {
 		return instance;
 	}
 
-	public ActivityBoundary setInstance(Instance instance) {
+	public void setInstance(Instance instance) {
 		this.instance = instance;
-		return this;
+		
 	}
 	
 	public String getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
-	public ActivityBoundary setCreatedTimestamp(String createdTimestamp) {
+	public void setCreatedTimestamp(String createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
-		return this;
+		
 	}
 	
 	public InvokedBy getInvokedBy() {
 		return invokedBy;
 	}
 
-	public ActivityBoundary setInvokedBy(InvokedBy invokedBy) {
+	public void setInvokedBy(InvokedBy invokedBy) {
 		this.invokedBy = invokedBy;
-		return this;
+		
 	}
 
 	public Map<String, Object> getActivityAttributes() {
 		return activityAttributes;
 	}
 
-	public ActivityBoundary setActivityAttributes(Map<String, Object> activityAttributes) {
+	public void setActivityAttributes(Map<String, Object> activityAttributes) {
 		this.activityAttributes = activityAttributes;
-		return this;
+		
 	}
 	
 }

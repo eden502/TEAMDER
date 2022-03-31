@@ -1,4 +1,4 @@
-package bounderies;
+package iob.bounderies;
 
 public class InvokedBy {
 
@@ -12,9 +12,9 @@ public class InvokedBy {
 		return userId;
 	}
 
-	public InvokedBy setUserId(UserId userId) {
+	public void setUserId(UserId userId) {
 		this.userId = userId;
-		return this;
+		
 	}
 	
 	

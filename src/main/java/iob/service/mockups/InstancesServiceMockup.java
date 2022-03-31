@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import bounderies.InstanceBoundary;
-import bounderies.InstanceId;
-import iob.Application;
+
+import iob.bounderies.GeneralId;
+import iob.bounderies.InstanceBoundary;
 import iob.data.InstanceEntity;
 import iob.logic.InstanceConverter;
 import iob.logic.InstancesService;
@@ -32,19 +32,22 @@ public class InstancesServiceMockup implements InstancesService {
 	@Override
 	public InstanceBoundary createInstance(InstanceBoundary instance) {
 		validateInstanceBoundary(instance);
-		InstanceId instanceId = new InstanceId()
-				.setDomain("2022b.diana.ukrainsky")
-				.setId(""+idGenerator.incrementAndGet());
-		
-		InstanceBoundary instanceBoundary = new InstanceBoundary()
-				.setInstanceId(instanceId)
-				.setType(instance.getType())
-				.setName(instance.getName())
-				.setActive(instance.getActive())
-				.setCreatedTimestamp(instance.getCreatedTimestamp())
-				.setCreatedBy(instance.getCreatedBy())
-				.setLocation(instance.getLocation())
-				.setInstanceAttributes(instance.getInstanceAttributes());
+		GeneralId instanceId = new GeneralId();
+		instanceId.setDomain("2022b.diana.ukrainsky");
+		instanceId.setId("" + idGenerator.incrementAndGet());
+
+		InstanceBoundary instanceBoundary = new InstanceBoundary();
+		instanceBoundary.setInstanceId(instanceId);
+		instanceBoundary.setType(instance.getType());
+;
+		instanceBoundary.setName(instance.getName());
+		instanceBoundary.setActive(instance.getActive());
+
+		instanceBoundary.setCreatedTimestamp(instance.getCreatedTimestamp());
+		instanceBoundary.setCreatedBy(instance.getCreatedBy());
+		instanceBoundary.setLocation(instance.getLocation());
+		instanceBoundary.setInstanceAttributes(instance.getInstanceAttributes());
+
 		instanceEntityVector.add(instanceConverter.toEntity(instance));
 
 		return instanceBoundary;
@@ -105,7 +108,7 @@ public class InstancesServiceMockup implements InstancesService {
 	@Override
 	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId) {
 		
-		boolean found;
+		
 		for(int i =0 ; i< instanceEntityVector.size() ;i++) {
 			String currdomain = instanceEntityVector.get(i).getInstanceDomain();
 			String currId = instanceEntityVector.get(i).getInstanceId();

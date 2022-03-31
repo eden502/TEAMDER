@@ -22,81 +22,81 @@ public class ActivityEntity {
 		return activityDomain;
 	}
 
-	public ActivityEntity setActivityDomain(String activityDomain) {
+	public void setActivityDomain(String activityDomain) {
 		this.activityDomain = activityDomain;
-		return this;
+		
 	}
 
 	public String getActivityId() {
 		return activityId;
 	}
 
-	public ActivityEntity setActivityId(String activityId) {
+	public void setActivityId(String activityId) {
 		this.activityId = activityId;
-		return this;
+		
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public ActivityEntity setType(String type) {
+	public void setType(String type) {
 		this.type = type;
-		return this;
+		
 	}
 
 	public String getInstanceDomain() {
 		return instanceDomain;
 	}
 
-	public ActivityEntity setInstanceDomain(String instanceDomain) {
+	public void setInstanceDomain(String instanceDomain) {
 		this.instanceDomain = instanceDomain;
-		return this;
+		
 	}
 
 	public String getInstanceId() {
 		return instanceId;
 	}
 
-	public ActivityEntity setInstanceId(String instanceId) {
+	public void setInstanceId(String instanceId) {
 		this.instanceId = instanceId;
-		return this;
+		
 	}
 
 	public String getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
-	public ActivityEntity setCreatedTimestamp(String createdTimestamp) {
+	public void setCreatedTimestamp(String createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
-		return this;
+		
 	}
 
 	public String getInvokedUserDomain() {
 		return invokedUserDomain;
 	}
 
-	public ActivityEntity setInvokedUserDomain(String invokedUserDomain) {
+	public void setInvokedUserDomain(String invokedUserDomain) {
 		this.invokedUserDomain = invokedUserDomain;
-		return this;
+		
 	}
 
 	public String getInvokedUserEmail() {
 		return invokedUserEmail;
 	}
 
-	public ActivityEntity setInvokedUserEmail(String invokedUserEmail) {
+	public void setInvokedUserEmail(String invokedUserEmail) {
 		this.invokedUserEmail = invokedUserEmail;
-		return this;
+		
 	}
 
 	public Map<String, Object> getActivityAttributes() {
 		return activityAttributes;
 	}
 
-	public ActivityEntity setActivityAttributes(Map<String, Object> activityAttributes) {
+	public void setActivityAttributes(Map<String, Object> activityAttributes) {
 		this.activityAttributes = activityAttributes;
-		return this;
+		
 	}
 	
 	

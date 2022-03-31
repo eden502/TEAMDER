@@ -2,7 +2,7 @@ package iob.logic;
 
 import java.util.List;
 
-import bounderies.ActivityBoundary;
+import iob.bounderies.ActivityBoundary;
 
 public interface ActivitiesService {
 

@@ -25,99 +25,99 @@ public class InstanceEntity {
 		return instanceDomain;
 	}
 
-	public InstanceEntity setInstanceDomain(String instanceDomain) {
+	public void setInstanceDomain(String instanceDomain) {
 		this.instanceDomain = instanceDomain;
-		return this;
+		
 	}
 
 	public String getInstanceId() {
 		return instanceId;
 	}
 
-	public InstanceEntity setInstanceId(String instanceId) {
+	public void setInstanceId(String instanceId) {
 		this.instanceId = instanceId;
-		return this;
+		
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public InstanceEntity setType(String type) {
+	public void setType(String type) {
 		this.type = type;
-		return this;
+		
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public InstanceEntity setName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
+		
 	}
 
 	public boolean isActive() {
 		return active;
 	}
 
-	public InstanceEntity setActive(boolean active) {
+	public void setActive(boolean active) {
 		this.active = active;
-		return this;
+		
 	}
 
 	public String getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
-	public InstanceEntity setCreatedTimestamp(String createdTimestamp) {
+	public void setCreatedTimestamp(String createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
-		return this;
+		
 	}
 
 	public String getCreatedByUserDomain() {
 		return createdByUserDomain;
 	}
 
-	public InstanceEntity setCreatedByUserDomain(String createdByUserDomain) {
+	public void setCreatedByUserDomain(String createdByUserDomain) {
 		this.createdByUserDomain = createdByUserDomain;
-		return this;
+		
 	}
 
 	public String getCreatedByUserEmail() {
 		return createdByUserEmail;
 	}
 
-	public InstanceEntity setCreatedByUserEmail(String createdByUserEmail) {
+	public void setCreatedByUserEmail(String createdByUserEmail) {
 		this.createdByUserEmail = createdByUserEmail;
-		return this;
+		
 	}
 
 	public double getLocationLat() {
 		return locationLat;
 	}
 
-	public InstanceEntity setLocationLat(double locationLat) {
+	public void setLocationLat(double locationLat) {
 		this.locationLat = locationLat;
-		return this;
+		
 	}
 
 	public double getLocationLng() {
 		return locationLng;
 	}
 
-	public InstanceEntity setLocationLng(double locationLng) {
+	public void setLocationLng(double locationLng) {
 		this.locationLng = locationLng;
-		return this;
+		
 	}
 
 	public Map<String, Object> getInstanceAttributes() {
 		return instanceAttributes;
 	}
 
-	public InstanceEntity setInstanceAttributes(Map<String, Object> instanceAttributes) {
+	public void setInstanceAttributes(Map<String, Object> instanceAttributes) {
 		this.instanceAttributes = instanceAttributes;
-		return this;
+		
 	}
 	
 }

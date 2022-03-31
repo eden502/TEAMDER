@@ -3,10 +3,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import bounderies.ActivityBoundary;
-import bounderies.ActivityId;
+import iob.bounderies.ActivityBoundary;
+import iob.bounderies.GeneralId;
 import iob.data.ActivityEntity;
 import iob.logic.ActivitiesService;
 import iob.logic.ActivityConverter;
@@ -28,12 +27,12 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 	public Object invokeActivity(ActivityBoundary activity) {
 		validateActivityBoundary(activity);
 		
-		ActivityId activityId = new ActivityId()
-				.setDomain("2022b.diana.ukrainsky")
-				.setId("" + idGenerator.incrementAndGet());
+		GeneralId activityId = new GeneralId();
+		activityId.setDomain("2022b.diana.ukrainsky");
+		activityId.setId("" + idGenerator.incrementAndGet());
 		
-		activity.setActivityId(activityId)
-			    .setCreatedTimestamp(java.time.LocalDateTime.now().toString());
+		activity.setActivityId(activityId);
+		activity .setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 		
 		activitiesEntityVector.add(activityConverter.toEntity(activity));
 		return activity;

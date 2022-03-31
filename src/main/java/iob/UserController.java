@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import bounderies.NewUserBoundary;
-import bounderies.UserBoundary;
-import bounderies.UserId;
+
+import iob.bounderies.NewUserBoundary;
+import iob.bounderies.UserBoundary;
+import iob.bounderies.UserId;
 import iob.logic.UsersService;
  
 @RestController
@@ -30,15 +31,15 @@ public class UserController {
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 		public UserBoundary POSTUser (@RequestBody NewUserBoundary newUserBoundary) {
 			
-			UserId userId = new UserId()
-					.setDomain("2022b.diana.ukrainsky")
-					.setEmail(newUserBoundary.getEmail());
+			UserId userId = new UserId();
+			userId.setDomain("2022b.diana.ukrainsky");
+			userId.setEmail(newUserBoundary.getEmail());
 			
-			UserBoundary userBoundary = new UserBoundary()
-					.setUserId(userId)
-					.setRole(newUserBoundary.getRole())
-					.setUsername(newUserBoundary.getUsername())
-					.setAvatar(newUserBoundary.getAvatar());
+			UserBoundary userBoundary = new UserBoundary();
+			userBoundary.setUserId(userId);
+			userBoundary.setRole(newUserBoundary.getRole());
+			userBoundary.setUsername(newUserBoundary.getUsername());
+			userBoundary.setAvatar(newUserBoundary.getAvatar());
 			
 			
 			return userBoundary;
@@ -51,16 +52,16 @@ public class UserController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 		public UserBoundary GETUser (@PathVariable("userDomain") String userDomain ,@PathVariable("userEmail") String userEmail ) {
 			
-			UserId userId = new UserId()
-					.setDomain(userDomain)
-					.setEmail(userEmail);
+			UserId userId = new UserId();
+			userId.setDomain(userDomain);
+			userId.setEmail(userEmail);
 			
 			
-			UserBoundary userBoundary = new UserBoundary()
-					.setUserId(userId)
-					.setRole("Manager")
-					.setUsername("Demo User")
-					.setAvatar("J");
+			UserBoundary userBoundary = new UserBoundary();
+			userBoundary.setUserId(userId);
+			userBoundary.setRole("Manager");
+			userBoundary.setUsername("Demo User");
+			userBoundary.setAvatar("J");
 			
 			
 			return userBoundary;
@@ -75,18 +76,18 @@ public class UserController {
 		public void PUTUser (@PathVariable("userDomain") String domain ,@PathVariable("userEmail") String userEmail , @RequestBody UserBoundary userBoundary) {
 			
 
-			//user to Update  - will be retrieved from the database 
-			UserBoundary userBoundaryToUpdate  = new UserBoundary()
-					.setUserId(new UserId().setDomain(domain).setEmail(userEmail));
-			
-			// check if path variables are valid if they are than update the relevant userBoundary.
-			if(userBoundaryToUpdate.getUserId().getDomain().equals(domain) && 
-					userBoundaryToUpdate.getUserId().getEmail().equals(userEmail)){
-						userBoundaryToUpdate
-							.setAvatar(userBoundary.getAvatar())
-							.setUsername(userBoundary.getUsername())
-							.setRole(userBoundary.getRole());
-					}
+//			//user to Update  - will be retrieved from the database 
+//			UserBoundary userBoundaryToUpdate  = new UserBoundary()
+//					.setUserId(new UserId().setDomain(domain).setEmail(userEmail));
+//			
+//			// check if path variables are valid if they are than update the relevant userBoundary.
+//			if(userBoundaryToUpdate.getUserId().getDomain().equals(domain) && 
+//					userBoundaryToUpdate.getUserId().getEmail().equals(userEmail)){
+//						userBoundaryToUpdate
+//							.setAvatar(userBoundary.getAvatar())
+//							.setUsername(userBoundary.getUsername())
+//							.setRole(userBoundary.getRole());
+//					}
 		
 		}
 }

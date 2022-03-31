@@ -2,7 +2,7 @@ package iob.logic;
 
 import java.util.List;
 
-import bounderies.UserBoundary;
+import iob.bounderies.UserBoundary;
 
 public interface UsersService {
 

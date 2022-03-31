@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import bounderies.UserBoundary;
+
+import iob.bounderies.UserBoundary;
 import iob.data.UserEntity;
 import iob.logic.UserConverter;
 import iob.logic.UsersService;
