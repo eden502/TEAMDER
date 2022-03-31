@@ -2,10 +2,13 @@ package iob.service.mockups;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import bounderies.InstanceBoundary;
+import bounderies.InstanceId;
+import iob.Application;
 import iob.data.InstanceEntity;
 import iob.logic.InstanceConverter;
 import iob.logic.InstancesService;
@@ -16,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class InstancesServiceMockup implements InstancesService {
 	
 	Vector<InstanceEntity> instanceEntityVector = new Vector<InstanceEntity>();
-	InstanceConverter instanceConverter;
+	private InstanceConverter instanceConverter;
+	private AtomicLong idGenerator; 
+
 	
 	
 	@Autowired
@@ -26,14 +31,75 @@ public class InstancesServiceMockup implements InstancesService {
 	
 	@Override
 	public InstanceBoundary createInstance(InstanceBoundary instance) {
-		// TODO Auto-generated method stub
-		return null;
+		validateInstanceBoundary(instance);
+		InstanceId instanceId = new InstanceId()
+				.setDomain("2022b.diana.ukrainsky")
+				.setId(""+idGenerator.incrementAndGet());
+		
+		InstanceBoundary instanceBoundary = new InstanceBoundary()
+				.setInstanceId(instanceId)
+				.setType(instance.getType())
+				.setName(instance.getName())
+				.setActive(instance.getActive())
+				.setCreatedTimestamp(instance.getCreatedTimestamp())
+				.setCreatedBy(instance.getCreatedBy())
+				.setLocation(instance.getLocation())
+				.setInstanceAttributes(instance.getInstanceAttributes());
+		instanceEntityVector.add(instanceConverter.toEntity(instance));
+
+		return instanceBoundary;
+	}
+
+	private void validateInstanceBoundary(InstanceBoundary instance) {
+		if(instance.getType()==null)
+			throw new RuntimeException("InstanceBoundary must have a valid type");
+		
+		if(instance.getActive()==null)
+			throw new RuntimeException("InstanceBoundary must have a active value");
+		
+		if(instance.getCreatedTimestamp()==null)
+			throw new RuntimeException("InstanceBoundary must have a valid timestamp");
+	
+		if(instance.getCreatedBy().getUserId().getDomain()==null ||
+			instance.getCreatedBy().getUserId().getDomain().trim().isEmpty()) 
+			throw new RuntimeException("InstanceBoundary's UserId must have a valid domain");
+
+			
+		if(instance.getCreatedBy().getUserId().getEmail()==null ||
+			instance.getCreatedBy().getUserId().getEmail().trim().isEmpty()) 
+			throw new RuntimeException("InstanceBoundary's UserId must have a valid email");
+		
+		
+		if(instance.getLocation()==null)
+			throw new RuntimeException("InstanceBoundary must have a valid location");
+		
+		if(instance.getInstanceAttributes().get(instance)==null)
+			throw new RuntimeException("InstanceBoundary must have valid attributes");
 	}
 
 	@Override
 	public InstanceBoundary updateInstance(String instanceDomain, String instanceId, InstanceBoundary update) {
-		// TODO Auto-generated method stub
-		return null;
+		InstanceBoundary instanceForUpdate = this.getSpecificInstance(instanceDomain, instanceId);
+
+		if(update.getType()!=null)
+			instanceForUpdate.setType(update.getType());
+		
+		if(update.getActive()!=null)
+			instanceForUpdate.setActive(update.getActive());
+		
+		if(update.getCreatedTimestamp()!=null)
+			instanceForUpdate.setCreatedTimestamp(update.getCreatedTimestamp());
+	
+		if(update.getCreatedBy()!=null)
+			instanceForUpdate.setCreatedBy(update.getCreatedBy());
+		
+		if(update.getLocation()!=null)
+			instanceForUpdate.setLocation(update.getLocation());
+		
+		if(update.getInstanceAttributes()!=null)
+			instanceForUpdate.setInstanceAttributes(update.getInstanceAttributes());
+		
+		return instanceForUpdate;
 	}
 
 	@Override
