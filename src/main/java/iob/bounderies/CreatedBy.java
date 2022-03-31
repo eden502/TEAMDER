@@ -1,4 +1,4 @@
-package bounderies;
+package iob.bounderies;
 
 public class CreatedBy {
 
@@ -13,9 +13,9 @@ public class CreatedBy {
 		return userId;
 	}
 
-	public CreatedBy setUserId(UserId userId) {
+	public void setUserId(UserId userId) {
 		this.userId = userId;
-		return this;
+		
 	}
 	
 	

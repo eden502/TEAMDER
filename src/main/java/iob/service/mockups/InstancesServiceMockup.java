@@ -5,7 +5,8 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import bounderies.InstanceBoundary;
+
+import iob.bounderies.InstanceBoundary;
 import iob.data.InstanceEntity;
 import iob.logic.InstanceConverter;
 import iob.logic.InstancesService;
@@ -39,7 +40,7 @@ public class InstancesServiceMockup implements InstancesService {
 	@Override
 	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId) {
 		
-		boolean found;
+		
 		for(int i =0 ; i< instanceEntityVector.size() ;i++) {
 			String currdomain = instanceEntityVector.get(i).getInstanceDomain();
 			String currId = instanceEntityVector.get(i).getInstanceId();

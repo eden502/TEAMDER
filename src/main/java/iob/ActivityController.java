@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import bounderies.ActivityBoundary;
 
-import bounderies.InstanceBoundary;
+import iob.bounderies.ActivityBoundary;
 import iob.logic.ActivitiesService;
 
  
 @RestController
 public class ActivityController {
-	//private long idGenerator =  0;   ---> Please implement inside Service! :)
+	
 	private ActivitiesService activitiesService;
 	
 	@Autowired

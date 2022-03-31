@@ -1,4 +1,4 @@
-package bounderies;
+package iob.bounderies;
 
 public class NewUserBoundary {
 
@@ -16,31 +16,31 @@ public class NewUserBoundary {
 		return email;
 	}
 
-	public NewUserBoundary setEmail(String email) {
+	public void setEmail(String email) {
 		this.email = email;
-		return this;
+		
 	}
 
 	public String getRole() {
 		return role;
 	}
-	public NewUserBoundary setRole(String role) {
+	public void setRole(String role) {
 		this.role = role;
-		return this;
+		
 	}
 	public String getUsername() {
 		return username;
 	}
-	public NewUserBoundary setUsername(String username) {
+	public void setUsername(String username) {
 		this.username = username;
-		return this;
+		
 	}
 	public String getAvatar() {
 		return avatar;
 	}
-	public NewUserBoundary setAvatar(String avatar) {
+	public void setAvatar(String avatar) {
 		this.avatar = avatar;
-		return this;
+		
 	}
 	
 	

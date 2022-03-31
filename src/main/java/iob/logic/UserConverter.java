@@ -1,8 +1,8 @@
 package iob.logic;
 import org.springframework.stereotype.Component;
 
-import bounderies.UserBoundary;
-import bounderies.UserId;
+import iob.bounderies.UserBoundary;
+import iob.bounderies.UserId;
 import iob.data.UserEntity;
 import iob.data.UserRole;
 
@@ -11,25 +11,28 @@ public class UserConverter {
 
 	public UserBoundary toBoundary(UserEntity entity) {
 		
-		UserId userId = new UserId()
-				.setDomain(entity.getUserDomain())
-				.setEmail(entity.getUserEmail());
-		UserBoundary userBoundary = new UserBoundary()
-				.setUserId(userId)
-				.setAvatar(entity.getAvatar())
-				.setRole(entity.getRole().name())
-				.setUsername(entity.getUsername());
+		UserId userId = new UserId();
+		userId.setDomain(entity.getUserDomain());
+		userId.setEmail(entity.getUserEmail());
+		
+		UserBoundary userBoundary = new UserBoundary();
+		userBoundary.setUserId(userId);
+		userBoundary.setAvatar(entity.getAvatar());
+		userBoundary.setRole(entity.getRole().name());
+		userBoundary.setUsername(entity.getUsername());
+		
 		return userBoundary;
 	}
 	
 	public UserEntity toEntity(UserBoundary boundary) {
 		
-		UserEntity userEntity = new UserEntity()
-				.setUserDomain(boundary.getUserId().getDomain())
-				.setUserEmail(boundary.getUserId().getEmail())
-				.setUsername(boundary.getUsername())
-				.setRole(UserRole.valueOf(boundary.getRole()))
-				.setAvatar(boundary.getAvatar());
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUserDomain(boundary.getUserId().getDomain());
+		userEntity.setUserEmail(boundary.getUserId().getEmail());
+		userEntity.setUsername(boundary.getUsername());
+		userEntity.setRole(UserRole.valueOf(boundary.getRole()));
+		userEntity.setAvatar(boundary.getAvatar());
+		
 		return userEntity;
 		
 	}

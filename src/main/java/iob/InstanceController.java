@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import bounderies.Location;
-import bounderies.UserId;
+import iob.bounderies.CreatedBy;
+import iob.bounderies.GeneralId;
+import iob.bounderies.InstanceBoundary;
+import iob.bounderies.Location;
+import iob.bounderies.UserId;
 import iob.logic.InstancesService;
-import bounderies.CreatedBy;
-import bounderies.InstanceBoundary;
-import bounderies.InstanceId;
 
  
 @RestController
@@ -36,19 +35,19 @@ public class InstanceController {
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 		public InstanceBoundary POSTInstance(@RequestBody InstanceBoundary ib) {
-			InstanceId instanceId = new InstanceId()
-					.setDomain("2022b.diana.ukrainsky")
-					.setId("" + (0));
+			GeneralId instanceId = new GeneralId();
+			instanceId.setDomain("2022b.diana.ukrainsky");
+			instanceId.setId("" + (0));
 			
-			InstanceBoundary instanceBoundary = new InstanceBoundary()
-					.setInstanceId(instanceId)
-					.setType(ib.getType())
-					.setName(ib.getName())
-					.setActive(ib.getActive())
-					.setCreatedTimestamp(ib.getCreatedTimestamp())
-					.setCreatedBy(ib.getCreatedBy())
-					.setLocation(ib.getLocation())
-					.setInstanceAttributes(ib.getInstanceAttributes());
+			InstanceBoundary instanceBoundary = new InstanceBoundary();
+			instanceBoundary.setInstanceId(instanceId);
+			instanceBoundary.setType(ib.getType());
+			instanceBoundary.setName(ib.getName());
+			instanceBoundary.setActive(ib.getActive());
+			instanceBoundary.setCreatedTimestamp(ib.getCreatedTimestamp());
+			instanceBoundary.setCreatedBy(ib.getCreatedBy());
+			instanceBoundary.setLocation(ib.getLocation());
+			instanceBoundary.setInstanceAttributes(ib.getInstanceAttributes());
 			
 			return instanceBoundary;
 			

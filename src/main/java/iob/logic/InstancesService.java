@@ -2,7 +2,7 @@ package iob.logic;
 
 import java.util.List;
 
-import bounderies.InstanceBoundary;
+import iob.bounderies.InstanceBoundary;
 
 public interface InstancesService {
 

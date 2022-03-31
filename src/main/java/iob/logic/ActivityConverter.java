@@ -2,12 +2,11 @@ package iob.logic;
 
 import org.springframework.stereotype.Component;
 
-import bounderies.ActivityBoundary;
-import bounderies.ActivityId;
-import bounderies.Instance;
-import bounderies.InstanceId;
-import bounderies.InvokedBy;
-import bounderies.UserId;
+import iob.bounderies.ActivityBoundary;
+import iob.bounderies.GeneralId;
+import iob.bounderies.Instance;
+import iob.bounderies.InvokedBy;
+import iob.bounderies.UserId;
 import iob.data.ActivityEntity;
 
 @Component
@@ -15,39 +14,48 @@ public class ActivityConverter {
 
 	public ActivityEntity toEntity(ActivityBoundary boundary) {
 		
-		ActivityEntity activityEntity = new ActivityEntity()
-				.setActivityId(boundary.getActivityId().getId())
-				.setActivityDomain(boundary.getActivityId().getDomain())
-				.setType(boundary.getType())
-				.setInstanceDomain(boundary.getInstance().getInstanceId().getDomain())
-				.setInstanceId(boundary.getInstance().getInstanceId().getId())
-				.setCreatedTimestamp(boundary.getCreatedTimestamp())
-				.setInvokedUserDomain(boundary.getInvokedBy().getUserId().getDomain())
-				.setInvokedUserEmail(boundary.getInvokedBy().getUserId().getEmail())
-				.setActivityAttributes(boundary.getActivityAttributes());
+		ActivityEntity activityEntity = new ActivityEntity();
+		activityEntity.setActivityId(boundary.getActivityId().getId());
+		activityEntity.setActivityDomain(boundary.getActivityId().getDomain());
+		activityEntity.setType(boundary.getType());
+		activityEntity.setInstanceDomain(boundary.getInstance().getInstanceId().getDomain());
+		activityEntity.setInstanceId(boundary.getInstance().getInstanceId().getId());
+		activityEntity.setCreatedTimestamp(boundary.getCreatedTimestamp());
+		activityEntity.setInvokedUserDomain(boundary.getInvokedBy().getUserId().getDomain());
+		activityEntity.setInvokedUserEmail(boundary.getInvokedBy().getUserId().getEmail());
+		activityEntity.setActivityAttributes(boundary.getActivityAttributes());
 		
 		return activityEntity;
 	}
 	
 	public ActivityBoundary toBoundary (ActivityEntity entity) {
 		
-		ActivityId activityId = new ActivityId()
-				.setDomain(entity.getActivityDomain())
-				.setId(entity.getActivityId());
+		GeneralId activityId = new GeneralId();
+		activityId.setDomain(entity.getActivityDomain());
+		activityId.setId(entity.getActivityId());
 		
-		Instance instance = new Instance()
-				.setInstanceId(new InstanceId().setId(entity.getInstanceId()).setDomain(entity.getInstanceDomain()));
+		GeneralId instanceId = new GeneralId();
+		instanceId.setId(entity.getInstanceId());
+		instanceId.setDomain(entity.getInstanceDomain());
 		
-		InvokedBy invokedBy = new InvokedBy()
-				.setUserId(new UserId().setDomain(entity.getInvokedUserDomain()).setEmail(entity.getInvokedUserEmail()));
+		UserId userId = new UserId();
+		userId.setEmail(entity.getInvokedUserEmail());
+		userId.setDomain(entity.getInvokedUserDomain());
+
 		
-		ActivityBoundary activityBoundary = new ActivityBoundary()
-				.setActivityId(activityId)
-				.setType(entity.getType())
-				.setInstance(instance)
-				.setCreatedTimestamp(entity.getCreatedTimestamp())
-				.setInvokedBy(invokedBy)
-				.setActivityAttributes(entity.getActivityAttributes());
+		Instance instance = new Instance();
+		instance.setInstanceId(instanceId);
+		
+		InvokedBy invokedBy = new InvokedBy();
+		invokedBy.setUserId(userId);
+		
+		ActivityBoundary activityBoundary = new ActivityBoundary();
+		activityBoundary.setActivityId(activityId);
+		activityBoundary.setType(entity.getType());
+		activityBoundary.setInstance(instance);
+		activityBoundary.setCreatedTimestamp(entity.getCreatedTimestamp());
+		activityBoundary.setInvokedBy(invokedBy);
+		activityBoundary.setActivityAttributes(entity.getActivityAttributes());
 		
 		return activityBoundary;
 	}

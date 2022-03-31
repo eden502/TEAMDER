@@ -21,9 +21,9 @@ public class UserEntity {
 
 
 
-	public UserEntity setUserDomain(String userDomain) {
+	public void setUserDomain(String userDomain) {
 		this.userDomain = userDomain;
-		return this;
+		
 	}
 
 
@@ -34,9 +34,9 @@ public class UserEntity {
 
 
 
-	public UserEntity setUserEmail(String userEmail) {
+	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
-		return this;
+		
 	}
 
 	
@@ -48,9 +48,9 @@ public class UserEntity {
 
 
 
-	public UserEntity setRole(UserRole role) {
+	public void setRole(UserRole role) {
 		this.role = role;
-		return this;
+		
 	}
 
 
@@ -60,9 +60,9 @@ public class UserEntity {
 	}
 
 
-	public UserEntity setUsername(String username) {
+	public void setUsername(String username) {
 		this.username = username;
-		return this;
+		
 	}
 
 
@@ -71,9 +71,9 @@ public class UserEntity {
 	}
 
 
-	public UserEntity setAvatar(String avatar) {
+	public void setAvatar(String avatar) {
 		this.avatar = avatar;
-		return this;
+		
 	}
 	
 }

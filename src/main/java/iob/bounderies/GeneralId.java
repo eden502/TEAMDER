@@ -1,13 +1,12 @@
-package bounderies;
+package iob.bounderies;
 
-public class InstanceId {
-
+public class GeneralId {
 	private String domain;
 	private String id;
 	
 	
-	public InstanceId() {
-		super();
+	public GeneralId() {
+		
 	}
 
 
@@ -16,9 +15,9 @@ public class InstanceId {
 	}
 
 
-	public InstanceId setDomain(String domain) {
+	public void setDomain(String domain) {
 		this.domain = domain;
-		return this;
+		
 	}
 
 
@@ -27,9 +26,8 @@ public class InstanceId {
 	}
 
 
-	public InstanceId setId(String id) {
+	public void setId(String id) {
 		this.id = id;
-		return this;
+		
 	}
-	
 }

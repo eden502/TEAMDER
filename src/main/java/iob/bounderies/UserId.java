@@ -1,4 +1,4 @@
-package bounderies;
+package iob.bounderies;
 
 public class UserId {
 
@@ -7,7 +7,7 @@ public class UserId {
 	
 	
 	public UserId() {
-		super();
+		
 	}
 
 
@@ -16,9 +16,9 @@ public class UserId {
 	}
 
 
-	public UserId setDomain(String domain) {
+	public void setDomain(String domain) {
 		this.domain = domain;
-		return this;
+		
 	}
 
 
@@ -27,9 +27,9 @@ public class UserId {
 	}
 
 
-	public UserId setEmail(String email) {
+	public void setEmail(String email) {
 		this.email = email;
-		return this;
+		
 	}
 	
 	
