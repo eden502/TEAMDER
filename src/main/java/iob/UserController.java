@@ -8,20 +8,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import iob.bounderies.NewUserBoundary;
 import iob.bounderies.UserBoundary;
 import iob.bounderies.UserId;
+import iob.logic.UserConverter;
 import iob.logic.UsersService;
  
 @RestController
 public class UserController {
 	
 	private UsersService userService;
+	private UserConverter userConverter;
 	
 	@org.springframework.beans.factory.annotation.Autowired
 	public UserController(UsersService userService) {
 		this.userService = userService;
+		this.userConverter = new UserConverter();
 	}
 	//Create a new user
 	@RequestMapping(
@@ -30,19 +32,8 @@ public class UserController {
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 		public UserBoundary POSTUser (@RequestBody NewUserBoundary newUserBoundary) {
-			
-			UserId userId = new UserId();
-			userId.setDomain("2022b.diana.ukrainsky");
-			userId.setEmail(newUserBoundary.getEmail());
-			
-			UserBoundary userBoundary = new UserBoundary();
-			userBoundary.setUserId(userId);
-			userBoundary.setRole(newUserBoundary.getRole());
-			userBoundary.setUsername(newUserBoundary.getUsername());
-			userBoundary.setAvatar(newUserBoundary.getAvatar());
-			
-			
-			return userBoundary;
+		
+			return userService.createUser(userConverter.newUserbToUserb(newUserBoundary));
 		}
 	
 	//Login valid user and retrieve user details
@@ -51,20 +42,8 @@ public class UserController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 		public UserBoundary GETUser (@PathVariable("userDomain") String userDomain ,@PathVariable("userEmail") String userEmail ) {
-			
-			UserId userId = new UserId();
-			userId.setDomain(userDomain);
-			userId.setEmail(userEmail);
-			
-			
-			UserBoundary userBoundary = new UserBoundary();
-			userBoundary.setUserId(userId);
-			userBoundary.setRole("Manager");
-			userBoundary.setUsername("Demo User");
-			userBoundary.setAvatar("J");
-			
-			
-			return userBoundary;
+
+			return userService.login(userDomain, userEmail);
 		}
 	
 	
@@ -75,19 +54,9 @@ public class UserController {
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 		public void PUTUser (@PathVariable("userDomain") String domain ,@PathVariable("userEmail") String userEmail , @RequestBody UserBoundary userBoundary) {
 			
-
-//			//user to Update  - will be retrieved from the database 
-//			UserBoundary userBoundaryToUpdate  = new UserBoundary()
-//					.setUserId(new UserId().setDomain(domain).setEmail(userEmail));
-//			
-//			// check if path variables are valid if they are than update the relevant userBoundary.
-//			if(userBoundaryToUpdate.getUserId().getDomain().equals(domain) && 
-//					userBoundaryToUpdate.getUserId().getEmail().equals(userEmail)){
-//						userBoundaryToUpdate
-//							.setAvatar(userBoundary.getAvatar())
-//							.setUsername(userBoundary.getUsername())
-//							.setRole(userBoundary.getRole());
-//					}
-		
+			userService.updateUser(domain, userEmail, userBoundary);
 		}
 }
+
+
+
