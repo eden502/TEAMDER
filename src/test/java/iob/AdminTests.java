@@ -1,32 +1,29 @@
 package iob;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.client.RestTemplate;
-
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
 import iob.bounderies.Instance;
-import iob.bounderies.InstanceBoundary;
 import iob.bounderies.InvokedBy;
 import iob.bounderies.UserBoundary;
 import iob.bounderies.UserId;
+import iob.bounderies.NewUserBoundary;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AdminTests {
 	private int port;
 	private String activitiesUrl;
 	private String usersUrl;
+	private String postUsersUrl;
 	private String instancesUrl;
 	private String getInstancesUrl;
 	private RestTemplate restTemplate;
@@ -40,6 +37,7 @@ public class AdminTests {
 	public void testsInit() {
 		this.activitiesUrl = "http://localhost:" + this.port + "/iob/admin/activities";
 		this.usersUrl = "http://localhost:" + this.port + "/iob/admin/users";
+		this.postUsersUrl ="http://localhost:" + this.port + "/iob/users";
 		this.instancesUrl = "http://localhost:" + this.port + "/iob/admin/instances";
 		this.getInstancesUrl = "http://localhost:" + this.port + "/iob/instances";
 		this.restTemplate = new RestTemplate();
@@ -64,42 +62,43 @@ public class AdminTests {
 	public void testDeleteAllUsersActuallyDeletesAllUsers() throws Exception {
 		// GIVEN the server is up
 		// AND the server contains 3 Users
-		// TODO initialize 3 newUserBoundary
 		
-		//TODO initialize newUserBoundary 1
-
+		NewUserBoundary newUserBoundary1 = new NewUserBoundary();
+		newUserBoundary1.setAvatar("");
+		newUserBoundary1.setEmail("newUserBoundary1@gmail.com");
+		newUserBoundary1.setRole("");
+		newUserBoundary1.setUsername("newUserBoundary1");
 		
+		NewUserBoundary newUserBoundary2 = new NewUserBoundary();
+		newUserBoundary2.setAvatar("");
+		newUserBoundary2.setEmail("newUserBoundary2@gmail.com");
+		newUserBoundary2.setRole("");
+		newUserBoundary2.setUsername("newUserBoundary2");
 		
-		//TODO initialize newUserBoundary 2
-
+		NewUserBoundary newUserBoundary3 = new NewUserBoundary();
+		newUserBoundary2.setAvatar("");
+		newUserBoundary2.setEmail("newUserBoundary3@gmail.com");
+		newUserBoundary2.setRole("");
+		newUserBoundary2.setUsername("newUserBoundary3");
 		
-		//TODO initialize newUserBoundary 3
+		UserBoundary postReturnedUserBoundary1 = this.restTemplate
+				.postForObject(this.postUsersUrl, newUserBoundary1, UserBoundary.class);
 		
+		UserBoundary postReturnedUserBoundary2 = this.restTemplate
+				.postForObject(this.postUsersUrl, newUserBoundary2, UserBoundary.class);
 		
-		
-		//TODO HTTP POST newUserBoundary 1
-
-		
-		//TODO HTTP POST newUserBoundary 2
-
-		
-		//TODO HTTP POST newUserBoundary 3
-
-		
+		UserBoundary postReturnedUserBoundary3 = this.restTemplate
+				.postForObject(this.postUsersUrl, newUserBoundary3, UserBoundary.class);
 		
 		// WHEN I DELETE all users
+		this.restTemplate.delete(this.usersUrl);
 		
-
-		
-		//TODO HTTP GET All users
-
-		
+		UserBoundary[] usersOnServer=this.restTemplate	
+				.getForObject(this.usersUrl, UserBoundary[].class );
 		
 		// THEN the server returns status 2xx
 		// AND there are no users in the domain
-		// TODO check users array retrieved is empty
-
-
+		assertThat(usersOnServer).isEmpty();
 	}
 	
 	
