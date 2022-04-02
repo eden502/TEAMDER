@@ -1,8 +1,6 @@
 package iob;
 
 
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,11 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import iob.bounderies.CreatedBy;
-import iob.bounderies.GeneralId;
 import iob.bounderies.InstanceBoundary;
-import iob.bounderies.Location;
-import iob.bounderies.UserId;
 import iob.logic.InstancesService;
 
  
