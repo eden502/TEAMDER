@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import iob.bounderies.GeneralId;
 import iob.bounderies.InstanceBoundary;
-import iob.bounderies.Location;
 import iob.data.InstanceEntity;
 import iob.logic.InstanceConverter;
 import iob.logic.InstancesService;
