@@ -2,10 +2,13 @@ package iob.service.mockups;
 
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class InstancesServiceMockup implements InstancesService {
 	
-	Vector<InstanceEntity> instanceEntityVector; 
+	private List<InstanceEntity> instanceEntityList; 
 	private InstanceConverter instanceConverter;
 	private AtomicLong idGenerator; 
 
@@ -28,7 +31,12 @@ public class InstancesServiceMockup implements InstancesService {
 	public InstancesServiceMockup(InstanceConverter instanceConverter) {
 		this.instanceConverter = instanceConverter;
 		this.idGenerator = new AtomicLong();
-		instanceEntityVector = new Vector<InstanceEntity>(); 
+	}
+	
+	@PostConstruct
+	public void init () {
+		// create a thread safe list
+		this.instanceEntityList = Collections.synchronizedList(new ArrayList<>()); 
 	}
 	
 	@Override
@@ -41,7 +49,7 @@ public class InstancesServiceMockup implements InstancesService {
 		instance.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 		
 
-		instanceEntityVector.add(instanceConverter.toEntity(instance));
+		instanceEntityList.add(instanceConverter.toEntity(instance));
 
 		return instance;
 	}
@@ -90,11 +98,11 @@ public class InstancesServiceMockup implements InstancesService {
 	}
 
 	private InstanceEntity getSpecificEntityInstance(String instanceDomain, String instanceId) {
-		for(int i =0 ; i< instanceEntityVector.size() ;i++) {
-			String currdomain = instanceEntityVector.get(i).getInstanceDomain();
-			String currId = instanceEntityVector.get(i).getInstanceId();
+		for(int i =0 ; i< instanceEntityList.size() ;i++) {
+			String currdomain = instanceEntityList.get(i).getInstanceDomain();
+			String currId = instanceEntityList.get(i).getInstanceId();
 			if(currdomain.equals(instanceDomain) && currId.equals(instanceId)) {
-				return instanceEntityVector.get(i);
+				return instanceEntityList.get(i);
 			}
 		}
 		throw new RuntimeException("Could not found the specific instance.");
@@ -108,7 +116,7 @@ public class InstancesServiceMockup implements InstancesService {
 
 	@Override
 	public List<InstanceBoundary> getAllInstances() {
-		return instanceEntityVector 
+		return instanceEntityList 
 				.stream()
 				.map(instanceConverter::toBoundary) 
 				.collect(Collectors.toList()); 
@@ -116,7 +124,7 @@ public class InstancesServiceMockup implements InstancesService {
 
 	@Override
 	public void deleteAllInstances() {
-		instanceEntityVector.clear();
+		instanceEntityList.clear();
 
 	}
 

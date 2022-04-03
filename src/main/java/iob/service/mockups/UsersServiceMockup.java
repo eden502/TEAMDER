@@ -1,9 +1,11 @@
 package iob.service.mockups;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,18 @@ import iob.logic.UsersService;
 @Service
 public class UsersServiceMockup implements UsersService{
 
-	Vector<UserEntity> userEntitiesVector; 
+	private List<UserEntity> userEntiiesList;  
 	private UserConverter userConverter;
 	
 	@Autowired
 	public UsersServiceMockup() {
-		userEntitiesVector = new Vector<>();
 		userConverter= new UserConverter();
+	}
+	
+	@PostConstruct
+	public void init () {
+		// create a thread safe list
+		this.userEntiiesList = Collections.synchronizedList(new ArrayList<>()); 
 	}
 	
 	@Override
@@ -53,7 +60,7 @@ public class UsersServiceMockup implements UsersService{
 		}
 		
 		UserEntity userEntity = userConverter.toEntity(user);
-		userEntitiesVector.add(userEntity);
+		userEntiiesList.add(userEntity);
 		
 		return user;
 	}
@@ -68,18 +75,15 @@ public class UsersServiceMockup implements UsersService{
 			throw new RuntimeException("User Email is NULL or empty.");
 		}
 		
-		UserId userId = new UserId();
-				userId.setDomain(userDomain);
-				userId.setEmail(userEmail);
+		for (int i = 0; i < userEntiiesList.size(); i++) {
+			if(userEntiiesList.get(i).getUserDomain().equals(userDomain)&&
+					(userEntiiesList.get(i).getUserEmail().equals(userEmail))) {
+				return userConverter.toBoundary(userEntiiesList.get(i));
+			}
+		}
+
+			throw new RuntimeException("User not found, kindly sign up first.");
 		
-		
-		UserBoundary userBoundary = new UserBoundary();
-				userBoundary.setUserId(userId);
-				userBoundary.setRole("Manager");
-				userBoundary.setUsername("Demo User");
-				userBoundary.setAvatar("J");
-		
-		return userBoundary;
 	}
 
 	@Override
@@ -106,13 +110,13 @@ public class UsersServiceMockup implements UsersService{
 		}
 		
 		
-		for (int i = 0; i < userEntitiesVector.size(); i++) {
-			if(userEntitiesVector.get(i).getUserDomain().equals(userdomain)&&
-					(userEntitiesVector.get(i).getUserEmail().equals(userEmail))) {
-				userEntitiesVector.get(i).setAvatar(update.getAvatar());
-				userEntitiesVector.get(i).setUsername(update.getUsername());
-				userEntitiesVector.get(i).setRole(UserRole.valueOf(update.getRole().toUpperCase()));
-				return userConverter.toBoundary(userEntitiesVector.get(i));
+		for (int i = 0; i < userEntiiesList.size(); i++) {
+			if(userEntiiesList.get(i).getUserDomain().equals(userdomain)&&
+					(userEntiiesList.get(i).getUserEmail().equals(userEmail))) {
+				userEntiiesList.get(i).setAvatar(update.getAvatar());
+				userEntiiesList.get(i).setUsername(update.getUsername());
+				userEntiiesList.get(i).setRole(UserRole.valueOf(update.getRole().toUpperCase()));
+				return userConverter.toBoundary(userEntiiesList.get(i));
 			}
 		}
 		
@@ -121,7 +125,7 @@ public class UsersServiceMockup implements UsersService{
 
 	@Override
 	public List<UserBoundary> getAllUsers() {
-		return userEntitiesVector 
+		return userEntiiesList 
 				.stream()
 				.map(userConverter::toBoundary) 
 				.collect(Collectors.toList()); 
@@ -129,7 +133,7 @@ public class UsersServiceMockup implements UsersService{
 
 	@Override
 	public void deleteAllUsers() {
-		userEntitiesVector.clear();
+		userEntiiesList.clear();
 	}
 
 }

@@ -1,9 +1,13 @@
 package iob.service.mockups;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import iob.bounderies.ActivityBoundary;
@@ -15,16 +19,22 @@ import iob.logic.ActivityConverter;
 @Service
 public class ActivitiesServiceMockup implements ActivitiesService{
 
-	Vector<ActivityEntity> activitiesEntityVector;
+	private List<ActivityEntity> activitiesEntityList;
 	private AtomicLong idGenerator; 
 	private ActivityConverter activityConverter;
 	
 	@Autowired
 	public ActivitiesServiceMockup() {
-		activitiesEntityVector = new Vector<>();
 		idGenerator = new AtomicLong();
 		activityConverter = new ActivityConverter();
 	}
+	
+	@PostConstruct
+	public void init () {
+		// create a thread safe list
+		this.activitiesEntityList = Collections.synchronizedList(new ArrayList<>()); 
+	}
+	
 	@Override
 	public Object invokeActivity(ActivityBoundary activity) {
 		validateActivityBoundary(activity);
@@ -36,14 +46,14 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 		activity.setActivityId(activityId);
 		activity.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 		
-		activitiesEntityVector.add(activityConverter.toEntity(activity));
+		activitiesEntityList.add(activityConverter.toEntity(activity));
 		return activity;
 	}
 
 	
 	@Override
 	public List<ActivityBoundary> getAllActivities() {
-		return activitiesEntityVector //Vector<ActivityEntity>
+		return activitiesEntityList //Vector<ActivityEntity>
 				.stream() // Stream<ActivityEntity>
 				.map(activityConverter::toBoundary) // Stream<ActivityBoundary>
 				.collect(Collectors.toList()); // List<ActivityBoundary>
@@ -52,7 +62,7 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 
 	@Override
 	public void deleteAllAcitivities() {
-		this.activitiesEntityVector.clear();
+		this.activitiesEntityList.clear();
 	}
 	
 	private void validateActivityBoundary(ActivityBoundary activity) {
