@@ -21,9 +21,9 @@ public class UserController {
 	private UserConverter userConverter;
 	
 	@org.springframework.beans.factory.annotation.Autowired
-	public UserController(UsersService userService) {
+	public UserController(UsersService userService,UserConverter userConverter) {
 		this.userService = userService;
-		this.userConverter = new UserConverter();
+		this.userConverter = userConverter;
 	}
 	//Create a new user
 	@RequestMapping(

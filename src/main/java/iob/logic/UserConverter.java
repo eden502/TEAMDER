@@ -29,7 +29,7 @@ public class UserConverter {
 				userEntity.setUserDomain(boundary.getUserId().getDomain());
 				userEntity.setUserEmail(boundary.getUserId().getEmail());
 				userEntity.setUsername(boundary.getUsername());
-				userEntity.setRole(UserRole.valueOf(boundary.getRole()));
+				userEntity.setRole(UserRole.valueOf(boundary.getRole().toUpperCase()));
 				userEntity.setAvatar(boundary.getAvatar());
 		return userEntity;
 		

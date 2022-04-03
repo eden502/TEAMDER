@@ -111,7 +111,7 @@ public class UsersServiceMockup implements UsersService{
 					(userEntitiesVector.get(i).getUserEmail().equals(userEmail))) {
 				userEntitiesVector.get(i).setAvatar(update.getAvatar());
 				userEntitiesVector.get(i).setUsername(update.getUsername());
-				userEntitiesVector.get(i).setRole(UserRole.valueOf(update.getRole()));
+				userEntitiesVector.get(i).setRole(UserRole.valueOf(update.getRole().toUpperCase()));
 				return userConverter.toBoundary(userEntitiesVector.get(i));
 			}
 		}

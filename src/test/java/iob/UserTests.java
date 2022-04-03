@@ -3,7 +3,6 @@ package iob;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-
 import javax.annotation.PostConstruct;
 
 import org.junit.jupiter.api.AfterEach;
@@ -12,6 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.client.RestTemplate;
+
+import iob.bounderies.NewUserBoundary;
+import iob.bounderies.UserBoundary;
+import iob.bounderies.UserId;
 
 
 
@@ -45,21 +48,44 @@ public class UserTests {
 	@Test
 	public void testCreateUserActuallyCreatesAUser() throws Exception {
 		// GIVEN the server is up
-		// TODO initialize newUserBoundary 
+		// initialize newUserBoundary
+		NewUserBoundary newUserBoundary = new NewUserBoundary();
+		newUserBoundary.setAvatar("J");
+		newUserBoundary.setEmail("newUserBoundary@gmail.com");
+		newUserBoundary.setRole("Manager");
+		newUserBoundary.setUsername("newUserBoundary");
 
 		
 		// WHEN I POST newUserBoundary
-		// TODO POST the newUserBoundary	
-
+		// POST the newUserBoundary	
+		UserBoundary postReturnedUserBoundary = this.restTemplate
+				.postForObject(this.url, newUserBoundary, UserBoundary.class);
 		// THEN the server returns status 2xx
-		// TODO GET the UserBoundary
-
+		// GET the UserBoundary
+		UserBoundary retrivedUserBoundary = this.restTemplate
+				.getForObject(this.url+"/login/{userDomain}/{userEmail}",
+						UserBoundary.class,
+						postReturnedUserBoundary.getUserId().getDomain(),
+						postReturnedUserBoundary.getUserId().getEmail());
 		
+		
+		assertThat(retrivedUserBoundary).isNotNull();
 		// AND the server created userId for the posted UserBoundary 
-		// TODO check that userId created
-
+		// check that userId created
+		assertThat(retrivedUserBoundary.getUserId()).isNotNull();
 		// AND the attributes of the UserBoundary equal to the posted newUserBoundary
-		// TODO check that attributes are the same
+		// check that attributes are the same
+		assertThat(retrivedUserBoundary.getUserId().getDomain())
+		.isEqualTo(postReturnedUserBoundary.getUserId().getDomain());
+		
+		assertThat(retrivedUserBoundary.getUserId().getEmail())
+		.isEqualTo(postReturnedUserBoundary.getUserId().getEmail());
+		
+		assertThat(retrivedUserBoundary.getAvatar())
+		.isEqualTo(postReturnedUserBoundary.getAvatar());
+		
+		assertThat(retrivedUserBoundary.getRole())
+		.isEqualTo(postReturnedUserBoundary.getRole());
 
 
 	}
@@ -68,42 +94,90 @@ public class UserTests {
 	public void testRetriveUserActuallyRetrivesTheUser() throws Exception {
 		// GIVEN the server is up
 		// AND the server contains 2 Users
-		// TODO initialize 2 newUserBoundary
+		//initialize 2 newUserBoundary
 		
-		//TODO initialize newUserBoundary 1
+		//initialize newUserBoundary 1
+		NewUserBoundary newUserBoundary1 = new NewUserBoundary();
+		newUserBoundary1.setAvatar("J");
+		newUserBoundary1.setEmail("newUserBoundary1@gmail.com");
+		newUserBoundary1.setRole("Manager");
+		newUserBoundary1.setUsername("newUserBoundary1");
 
 		
 		
-		//TODO initialize newUserBoundary 2
-
+		//initialize newUserBoundary 2
+		NewUserBoundary newUserBoundary2 = new NewUserBoundary();
+		newUserBoundary2.setAvatar("J");
+		newUserBoundary2.setEmail("newUserBoundary2@gmail.com");
+		newUserBoundary2.setRole("Manager");
+		newUserBoundary2.setUsername("newUserBoundary2");
 		
-		//TODO HTTP POST newUserBoundary 1
-
+		//HTTP POST newUserBoundary 1
+		UserBoundary postReturnedUserBoundary1 = this.restTemplate
+				.postForObject(this.url, newUserBoundary1, UserBoundary.class);
 		
-		//TODO HTTP POST newUserBoundary 2
+		//HTTP POST newUserBoundary 2
+		UserBoundary postReturnedUserBoundary2 = this.restTemplate
+				.postForObject(this.url, newUserBoundary2, UserBoundary.class);
 
-
-		
 		
 		// WHEN I GET UserBoundary1
 		// AND GET UserBoundary2
-		
-		//TODO HTTP GET UserBoundary 1
 
 		
-		//TODO HTTP GET UserBoundary 2
 
+		//HTTP GET UserBoundary 1
+		UserBoundary retrivedUserBoundary1 = this.restTemplate
+				.getForObject(this.url+"/login/{userDomain}/{userEmail}",
+						UserBoundary.class,
+						postReturnedUserBoundary1.getUserId().getDomain(),
+						postReturnedUserBoundary1.getUserId().getEmail());
+		
+		
+		//HTTP GET UserBoundary 2
+		UserBoundary retrivedUserBoundary2 = this.restTemplate
+				.getForObject(this.url+"/login/{userDomain}/{userEmail}",
+						UserBoundary.class,
+						postReturnedUserBoundary2.getUserId().getDomain(),
+						postReturnedUserBoundary2.getUserId().getEmail());
+		
 
 		
+		assertThat(retrivedUserBoundary1).isNotNull();
+		// AND the server created userId for the posted UserBoundary 
+		// check that userId created
+		assertThat(retrivedUserBoundary1.getUserId()).isNotNull();
+		// AND the attributes of the UserBoundary equal to the posted newUserBoundary
+		// check that attributes are the same
+		assertThat(retrivedUserBoundary1.getUserId().getDomain())
+		.isEqualTo(postReturnedUserBoundary1.getUserId().getDomain());
 		
-		// THEN the server returns status 2xx
-		// AND the server retrieved the 2 UserBoundaries
-		// TODO check valid users retrieved
-
+		assertThat(retrivedUserBoundary1.getUserId().getEmail())
+		.isEqualTo(postReturnedUserBoundary1.getUserId().getEmail());
 		
-		// AND the attributes of the User Boundaries are the correct ones
-		// TODO check that attributes are the same as posted 
+		assertThat(retrivedUserBoundary1.getAvatar())
+		.isEqualTo(postReturnedUserBoundary1.getAvatar());
 		
+		assertThat(retrivedUserBoundary1.getRole())
+		.isEqualTo(postReturnedUserBoundary1.getRole());
+		
+		assertThat(retrivedUserBoundary2).isNotNull();
+		// AND the server created userId for the posted UserBoundary 
+		// check that userId created
+		assertThat(retrivedUserBoundary2.getUserId()).isNotNull();
+		// AND the attributes of the UserBoundary equal to the posted newUserBoundary
+		// check that attributes are the same
+		assertThat(retrivedUserBoundary2.getUserId().getDomain())
+		.isEqualTo(postReturnedUserBoundary2.getUserId().getDomain());
+		
+		assertThat(retrivedUserBoundary2.getUserId().getEmail())
+		.isEqualTo(postReturnedUserBoundary2.getUserId().getEmail());
+		
+		assertThat(retrivedUserBoundary2.getAvatar())
+		.isEqualTo(postReturnedUserBoundary2.getAvatar());
+		
+		assertThat(retrivedUserBoundary2.getRole())
+		.isEqualTo(postReturnedUserBoundary2.getRole());
 
 	
 	}
@@ -113,33 +187,68 @@ public class UserTests {
 	public void testUpdateUserActuallyUpdatesAUser() throws Exception {
 		// GIVEN the server is up
 	    // AND the server contains a User with a known id	
-		// TODO initialize newUserBoundary
+		// initialize newUserBoundary
+		NewUserBoundary newUserBoundary = new NewUserBoundary();
+		newUserBoundary.setAvatar("J");
+		newUserBoundary.setEmail("newUserBoundary@gmail.com");
+		newUserBoundary.setRole("Manager");
+		newUserBoundary.setUsername("newUserBoundary");
 		
 		
+		// HTTP POST newUserBoundary
+		UserBoundary postReturnedUserBoundary = this.restTemplate
+				.postForObject(this.url, newUserBoundary, UserBoundary.class);
 		
-		//TODO HTTP POST newUserBoundary
-
 		
+		// initialize update UserBoundary object
 		
-		//TODO initialize update UserBoundary object
-
+		UserId userId = new UserId();
+		userId.setDomain("2022b.diana.ukrainsky");
+		userId.setEmail("updatedUserBoundary@gmail.com");
+		
+		UserBoundary updatedUserBoundary = new UserBoundary();
+		updatedUserBoundary.setAvatar("Test");
+		updatedUserBoundary.setUserId(userId);
+		updatedUserBoundary.setRole("Manager");
+		updatedUserBoundary.setUsername("Test New user name");
 		
 		
 		// WHEN I PUT UserBoundary update
-		// TODO HTTP PUT update UserBoundary
+		// HTTP PUT update UserBoundary
+		this.restTemplate
+		.put(this.url + "/{userDomain}/{userEmail}",
+				updatedUserBoundary,
+				postReturnedUserBoundary.getUserId().getDomain(), 
+				postReturnedUserBoundary.getUserId().getEmail());
 
 
 		// THEN the server returns status 2xx
-		// TODO HTTP GET UserBoundary
+		// HTTP GET UserBoundary
+		UserBoundary retrivedUserBoundary = this.restTemplate
+				.getForObject(this.url+"/login/{userDomain}/{userEmail}",
+						UserBoundary.class,
+						postReturnedUserBoundary.getUserId().getDomain(),
+						postReturnedUserBoundary.getUserId().getEmail());
 		
+		assertThat(retrivedUserBoundary).isNotNull();
+		assertThat(retrivedUserBoundary.getUserId()).isNotNull();
 		
 		// AND the relevant attributes updated 
-		// TODO check that relevant attributes updated
-
-		// AND the attributes that not updated stayed the same 
-		// TODO check that unchangeable attributes not updated
+		// check that relevant attributes updated
+		assertThat(retrivedUserBoundary.getUsername())
+		.isNotEqualTo(updatedUserBoundary.getUsername());
+		
+		assertThat(retrivedUserBoundary.getAvatar())
+		.isNotEqualTo(updatedUserBoundary.getAvatar());
 		
 
+		// AND the attributes that not updated stayed the same
+		// check that unchangeable attributes not updated
+		assertThat(retrivedUserBoundary.getRole())
+		.isEqualTo(updatedUserBoundary.getRole());
+		
+		assertThat(retrivedUserBoundary.getUserId().getEmail())
+		.isNotEqualTo(updatedUserBoundary.getUserId().getEmail());
 		
 
 
