@@ -64,22 +64,22 @@ public class AdminTests {
 		// AND the server contains 3 Users
 		
 		NewUserBoundary newUserBoundary1 = new NewUserBoundary();
-		newUserBoundary1.setAvatar("");
+		newUserBoundary1.setAvatar("avatar1");
 		newUserBoundary1.setEmail("newUserBoundary1@gmail.com");
-		newUserBoundary1.setRole("");
+		newUserBoundary1.setRole("ADMIN");
 		newUserBoundary1.setUsername("newUserBoundary1");
 		
 		NewUserBoundary newUserBoundary2 = new NewUserBoundary();
-		newUserBoundary2.setAvatar("");
+		newUserBoundary2.setAvatar("avatar2");
 		newUserBoundary2.setEmail("newUserBoundary2@gmail.com");
-		newUserBoundary2.setRole("");
+		newUserBoundary2.setRole("ADMIN");
 		newUserBoundary2.setUsername("newUserBoundary2");
 		
 		NewUserBoundary newUserBoundary3 = new NewUserBoundary();
-		newUserBoundary2.setAvatar("");
-		newUserBoundary2.setEmail("newUserBoundary3@gmail.com");
-		newUserBoundary2.setRole("");
-		newUserBoundary2.setUsername("newUserBoundary3");
+		newUserBoundary3.setAvatar("avatar3");
+		newUserBoundary3.setEmail("newUserBoundary3@gmail.com");
+		newUserBoundary3.setRole("ADMIN");
+		newUserBoundary3.setUsername("newUserBoundary3");
 		
 		UserBoundary postReturnedUserBoundary1 = this.restTemplate
 				.postForObject(this.postUsersUrl, newUserBoundary1, UserBoundary.class);
