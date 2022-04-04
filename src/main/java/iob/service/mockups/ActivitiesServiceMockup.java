@@ -35,7 +35,6 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 	@Value("${spring.application.name:null}")
 	public void setDomain(String domain) {
 		this.domain = domain;
-		System.err.println("Domain in activities = " + this.domain);
 	}
 	
 	@PostConstruct

@@ -85,7 +85,7 @@ public class UserTests {
 		.isEqualTo(postReturnedUserBoundary.getAvatar());
 		
 		assertThat(retrivedUserBoundary.getRole())
-		.isEqualTo(postReturnedUserBoundary.getRole());
+		.isEqualToIgnoringCase(postReturnedUserBoundary.getRole());
 
 
 	}
@@ -159,7 +159,7 @@ public class UserTests {
 		.isEqualTo(postReturnedUserBoundary1.getAvatar());
 		
 		assertThat(retrivedUserBoundary1.getRole())
-		.isEqualTo(postReturnedUserBoundary1.getRole());
+		.isEqualToIgnoringCase(postReturnedUserBoundary1.getRole());
 		
 		assertThat(retrivedUserBoundary2).isNotNull();
 		// AND the server created userId for the posted UserBoundary 
@@ -177,7 +177,7 @@ public class UserTests {
 		.isEqualTo(postReturnedUserBoundary2.getAvatar());
 		
 		assertThat(retrivedUserBoundary2.getRole())
-		.isEqualTo(postReturnedUserBoundary2.getRole());
+		.isEqualToIgnoringCase(postReturnedUserBoundary2.getRole());
 
 	
 	}
@@ -209,7 +209,7 @@ public class UserTests {
 		UserBoundary updatedUserBoundary = new UserBoundary();
 		updatedUserBoundary.setAvatar("Test");
 		updatedUserBoundary.setUserId(userId);
-		updatedUserBoundary.setRole("Manager");
+		updatedUserBoundary.setRole("Player");
 		updatedUserBoundary.setUsername("Test New user name");
 		
 		
@@ -236,16 +236,18 @@ public class UserTests {
 		// AND the relevant attributes updated 
 		// check that relevant attributes updated
 		assertThat(retrivedUserBoundary.getUsername())
-		.isNotEqualTo(updatedUserBoundary.getUsername());
+		.isEqualTo(updatedUserBoundary.getUsername());
 		
 		assertThat(retrivedUserBoundary.getAvatar())
-		.isNotEqualTo(updatedUserBoundary.getAvatar());
+		.isEqualTo(updatedUserBoundary.getAvatar());
 		
+		assertThat(retrivedUserBoundary.getRole())
+		.isEqualToIgnoringCase(updatedUserBoundary.getRole());
+	
 
 		// AND the attributes that not updated stayed the same
 		// check that unchangeable attributes not updated
-		assertThat(retrivedUserBoundary.getRole())
-		.isEqualTo(updatedUserBoundary.getRole());
+
 		
 		assertThat(retrivedUserBoundary.getUserId().getEmail())
 		.isNotEqualTo(updatedUserBoundary.getUserId().getEmail());

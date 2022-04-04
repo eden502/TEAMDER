@@ -38,7 +38,6 @@ public class InstancesServiceMockup implements InstancesService {
 	@Value("${spring.application.name:null}")
 	public void setDomain(String domain) {
 		this.domain = domain;
-		System.err.println("Domain in instances = " + this.domain);
 	}
 	
 	@PostConstruct
