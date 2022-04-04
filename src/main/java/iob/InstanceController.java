@@ -28,7 +28,7 @@ public class InstanceController {
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-		public InstanceBoundary POSTInstance(@RequestBody InstanceBoundary ib) {
+		public InstanceBoundary createInstance(@RequestBody InstanceBoundary ib) {
 			return this.instancesService.createInstance(ib);
 		}
 	
@@ -37,7 +37,7 @@ public class InstanceController {
 			path = "/iob/instances/{instanceDomain}/{instanceId}",
 			method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public void PUTInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id,@RequestBody InstanceBoundary ib) {
+		public void updateInstance (@PathVariable("instanceDomain") String domain ,@PathVariable("instanceId") String id,@RequestBody InstanceBoundary ib) {
 			this.instancesService.updateInstance(domain, id, ib);
 	}
 	
@@ -47,7 +47,7 @@ public class InstanceController {
 			path = "/iob/instances/{instanceDomain}/{instanceId}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public InstanceBoundary GETInstance (@PathVariable("instanceDomain") String instanceDomain ,@PathVariable("instanceId") String instanceID ) {		
+		public InstanceBoundary getInstance (@PathVariable("instanceDomain") String instanceDomain ,@PathVariable("instanceId") String instanceID ) {		
 			return instancesService.getSpecificInstance(instanceDomain, instanceID);
 		}
 
@@ -57,7 +57,7 @@ public class InstanceController {
 			path = "/iob/instances",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public InstanceBoundary[] GETAllInstances () {
+		public InstanceBoundary[] getAllInstances () {
 		
 			return instancesService.getAllInstances().toArray(new InstanceBoundary[0]);
 		

@@ -31,7 +31,7 @@ public class UserController {
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-		public UserBoundary POSTUser (@RequestBody NewUserBoundary newUserBoundary) {
+		public UserBoundary createUser (@RequestBody NewUserBoundary newUserBoundary) {
 		
 			return userService.createUser(userConverter.newUserbToUserb(newUserBoundary));
 		}
@@ -41,7 +41,7 @@ public class UserController {
 			path = "/iob/users/login/{userDomain}/{userEmail}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-		public UserBoundary GETUser (@PathVariable("userDomain") String userDomain ,@PathVariable("userEmail") String userEmail ) {
+		public UserBoundary getUser (@PathVariable("userDomain") String userDomain ,@PathVariable("userEmail") String userEmail ) {
 
 			return userService.login(userDomain, userEmail);
 		}
@@ -52,7 +52,7 @@ public class UserController {
 			path = "/iob/users/{userDomain}/{userEmail}",
 			method = RequestMethod.PUT,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-		public void PUTUser (@PathVariable("userDomain") String domain ,@PathVariable("userEmail") String userEmail , @RequestBody UserBoundary userBoundary) {
+		public void updateUser (@PathVariable("userDomain") String domain ,@PathVariable("userEmail") String userEmail , @RequestBody UserBoundary userBoundary) {
 			
 			userService.updateUser(domain, userEmail, userBoundary);
 		}

@@ -32,7 +32,7 @@ public class AdminController {
 			path = "/iob/admin/users",
 			method = RequestMethod.DELETE)
 	
-		public void DELETEALLUser () {
+		public void deleteAllUsers () {
 			userService.deleteAllUsers();
 		}
 	
@@ -42,7 +42,7 @@ public class AdminController {
 			path = "/iob/admin/activities",
 			method = RequestMethod.DELETE)
 	
-	public void DELETEAllActivites () {
+	public void deleteAllActivites () {
 		activitiesService.deleteAllAcitivities();
 		}
 
@@ -52,7 +52,7 @@ public class AdminController {
 			path = "/iob/admin/instances",
 			method = RequestMethod.DELETE)
 	
-	public void DELETEAllInstances() {
+	public void deleteAllInstances() {
 			instancesService.deleteAllInstances();
 		}
 	
@@ -63,7 +63,7 @@ public class AdminController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	
-		public UserBoundary[] ExportAllUsers () {
+		public UserBoundary[] exportAllUsers () {
 		return userService.getAllUsers().toArray(new UserBoundary[0]);
 		}
 	

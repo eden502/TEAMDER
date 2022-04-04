@@ -29,7 +29,7 @@ public class ActivityController {
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-		public Object postInstanceActivity (@RequestBody ActivityBoundary activityBoundary) {
+		public Object createInstanceActivity (@RequestBody ActivityBoundary activityBoundary) {
 			
 			return activitiesService.invokeActivity(activityBoundary);
 		}
