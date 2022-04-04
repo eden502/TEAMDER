@@ -26,8 +26,8 @@ public class UsersServiceMockup implements UsersService{
 	private String domain;
 	
 	@Autowired
-	public UsersServiceMockup() {
-		userConverter= new UserConverter();
+	public UsersServiceMockup(UserConverter userConverter) {
+		this.userConverter= userConverter;
 	}
 	
 	@Value("${spring.application.name:null}")
@@ -97,10 +97,10 @@ public class UsersServiceMockup implements UsersService{
 	}
 
 	@Override
-	public UserBoundary updateUser(String userDomain, String userEmail, UserBoundary update) {
+	public UserBoundary updateUser(String userdomain, String userEmail, UserBoundary update) {
 		
 		
-		if(userDomain == null || userDomain.equals("")) {
+		if(userdomain == null || userdomain.equals("")) {
 			throw new RuntimeException("User Domain is NULL or empty.");
 		}
 		if(userEmail == null || userEmail.equals("")) {
@@ -121,7 +121,7 @@ public class UsersServiceMockup implements UsersService{
 		
 		
 		for (int i = 0; i < userEntitiesList.size(); i++) {
-			if(userEntitiesList.get(i).getUserDomain().equals(userDomain)&&
+			if(userEntitiesList.get(i).getUserDomain().equals(userdomain)&&
 					(userEntitiesList.get(i).getUserEmail().equals(userEmail))) {
 				userEntitiesList.get(i).setAvatar(update.getAvatar());
 				userEntitiesList.get(i).setUsername(update.getUsername());

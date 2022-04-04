@@ -27,9 +27,9 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 	private String domain;
 	
 	@Autowired
-	public ActivitiesServiceMockup() {
+	public ActivitiesServiceMockup(ActivityConverter activityConverter) {
 		idGenerator = new AtomicLong();
-		activityConverter = new ActivityConverter();
+		this.activityConverter = activityConverter;
 	}
 	
 	@Value("${spring.application.name:null}")
