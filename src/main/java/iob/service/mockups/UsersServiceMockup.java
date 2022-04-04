@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import iob.bounderies.UserBoundary;
 import iob.bounderies.UserId;
 import iob.data.UserEntity;
@@ -19,18 +21,25 @@ import iob.logic.UsersService;
 @Service
 public class UsersServiceMockup implements UsersService{
 
-	private List<UserEntity> userEntiiesList;  
+	private List<UserEntity> userEntitiesList;  
 	private UserConverter userConverter;
+	private String domain;
 	
 	@Autowired
 	public UsersServiceMockup() {
 		userConverter= new UserConverter();
 	}
 	
+	@Value("${spring.application.name:null}")
+	public void setDomain(String domain) {
+		this.domain = domain;
+		System.err.println("Domain in users = " + this.domain);
+	}
+	
 	@PostConstruct
 	public void init () {
 		// create a thread safe list
-		this.userEntiiesList = Collections.synchronizedList(new ArrayList<>()); 
+		this.userEntitiesList = Collections.synchronizedList(new ArrayList<>()); 
 	}
 	
 	@Override
@@ -59,8 +68,10 @@ public class UsersServiceMockup implements UsersService{
 			throw new RuntimeException("User avatar is NULL or empty.");
 		}
 		
+		user.getUserId().setDomain(this.domain);
+		
 		UserEntity userEntity = userConverter.toEntity(user);
-		userEntiiesList.add(userEntity);
+		userEntitiesList.add(userEntity);
 		
 		return user;
 	}
@@ -75,10 +86,10 @@ public class UsersServiceMockup implements UsersService{
 			throw new RuntimeException("User Email is NULL or empty.");
 		}
 		
-		for (int i = 0; i < userEntiiesList.size(); i++) {
-			if(userEntiiesList.get(i).getUserDomain().equals(userDomain)&&
-					(userEntiiesList.get(i).getUserEmail().equals(userEmail))) {
-				return userConverter.toBoundary(userEntiiesList.get(i));
+		for (int i = 0; i < userEntitiesList.size(); i++) {
+			if(userEntitiesList.get(i).getUserDomain().equals(userDomain)&&
+					(userEntitiesList.get(i).getUserEmail().equals(userEmail))) {
+				return userConverter.toBoundary(userEntitiesList.get(i));
 			}
 		}
 
@@ -87,10 +98,10 @@ public class UsersServiceMockup implements UsersService{
 	}
 
 	@Override
-	public UserBoundary updateUser(String userdomain, String userEmail, UserBoundary update) {
+	public UserBoundary updateUser(String userDomain, String userEmail, UserBoundary update) {
 		
 		
-		if(userdomain == null || userdomain.equals("")) {
+		if(userDomain == null || userDomain.equals("")) {
 			throw new RuntimeException("User Domain is NULL or empty.");
 		}
 		if(userEmail == null || userEmail.equals("")) {
@@ -110,13 +121,13 @@ public class UsersServiceMockup implements UsersService{
 		}
 		
 		
-		for (int i = 0; i < userEntiiesList.size(); i++) {
-			if(userEntiiesList.get(i).getUserDomain().equals(userdomain)&&
-					(userEntiiesList.get(i).getUserEmail().equals(userEmail))) {
-				userEntiiesList.get(i).setAvatar(update.getAvatar());
-				userEntiiesList.get(i).setUsername(update.getUsername());
-				userEntiiesList.get(i).setRole(UserRole.valueOf(update.getRole().toUpperCase()));
-				return userConverter.toBoundary(userEntiiesList.get(i));
+		for (int i = 0; i < userEntitiesList.size(); i++) {
+			if(userEntitiesList.get(i).getUserDomain().equals(userDomain)&&
+					(userEntitiesList.get(i).getUserEmail().equals(userEmail))) {
+				userEntitiesList.get(i).setAvatar(update.getAvatar());
+				userEntitiesList.get(i).setUsername(update.getUsername());
+				userEntitiesList.get(i).setRole(UserRole.valueOf(update.getRole().toUpperCase()));
+				return userConverter.toBoundary(userEntitiesList.get(i));
 			}
 		}
 		
@@ -125,7 +136,7 @@ public class UsersServiceMockup implements UsersService{
 
 	@Override
 	public List<UserBoundary> getAllUsers() {
-		return userEntiiesList 
+		return userEntitiesList 
 				.stream()
 				.map(userConverter::toBoundary) 
 				.collect(Collectors.toList()); 
@@ -133,7 +144,7 @@ public class UsersServiceMockup implements UsersService{
 
 	@Override
 	public void deleteAllUsers() {
-		userEntiiesList.clear();
+		userEntitiesList.clear();
 	}
 
 }

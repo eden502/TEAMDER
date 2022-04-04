@@ -37,7 +37,7 @@ public class UserConverter {
 	public UserBoundary newUserbToUserb(NewUserBoundary newUserB) {
 		
 		UserId userId = new UserId();
-				userId.setDomain("2022b.diana.ukrainsky");
+				userId.setDomain(null);
 				userId.setEmail(newUserB.getEmail());
 		
 		UserBoundary userBoundary = new UserBoundary();

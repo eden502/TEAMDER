@@ -18,6 +18,7 @@ import iob.data.InstanceEntity;
 import iob.logic.InstanceConverter;
 import iob.logic.InstancesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 
 @Service
@@ -26,11 +27,18 @@ public class InstancesServiceMockup implements InstancesService {
 	private List<InstanceEntity> instanceEntityList; 
 	private InstanceConverter instanceConverter;
 	private AtomicLong idGenerator; 
+	private String domain;
 
 	@Autowired
 	public InstancesServiceMockup(InstanceConverter instanceConverter) {
 		this.instanceConverter = instanceConverter;
 		this.idGenerator = new AtomicLong();
+	}
+	
+	@Value("${spring.application.name:null}")
+	public void setDomain(String domain) {
+		this.domain = domain;
+		System.err.println("Domain in instances = " + this.domain);
 	}
 	
 	@PostConstruct
@@ -43,7 +51,7 @@ public class InstancesServiceMockup implements InstancesService {
 	public InstanceBoundary createInstance(InstanceBoundary instance) {
 		validateInstanceBoundary(instance);
 		GeneralId instanceId = new GeneralId();
-		instanceId.setDomain("2022b.diana.ukrainsky");
+		instanceId.setDomain(this.domain);
 		instanceId.setId("" + idGenerator.incrementAndGet());
 		instance.setInstanceId(instanceId);
 		instance.setCreatedTimestamp(java.time.LocalDateTime.now().toString());

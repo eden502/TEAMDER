@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
 import iob.data.ActivityEntity;
@@ -22,11 +24,18 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 	private List<ActivityEntity> activitiesEntityList;
 	private AtomicLong idGenerator; 
 	private ActivityConverter activityConverter;
+	private String domain;
 	
 	@Autowired
 	public ActivitiesServiceMockup() {
 		idGenerator = new AtomicLong();
 		activityConverter = new ActivityConverter();
+	}
+	
+	@Value("${spring.application.name:null}")
+	public void setDomain(String domain) {
+		this.domain = domain;
+		System.err.println("Domain in activities = " + this.domain);
 	}
 	
 	@PostConstruct
@@ -40,7 +49,7 @@ public class ActivitiesServiceMockup implements ActivitiesService{
 		validateActivityBoundary(activity);
 		
 		GeneralId activityId = new GeneralId();
-		activityId.setDomain("2022b.diana.ukrainsky");
+		activityId.setDomain(this.domain);
 		activityId.setId("" + idGenerator.incrementAndGet());
 		
 		activity.setActivityId(activityId);
