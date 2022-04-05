@@ -2,8 +2,6 @@ package iob.data;
 
 public enum UserRole {
 
-	PLAYER,
-	MANAGER,
-	ADMIN
-	
+	PLAYER, MANAGER, ADMIN
+
 }

@@ -11,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.client.RestTemplate;
 import iob.bounderies.ActivityBoundary;
+import iob.bounderies.CreatedBy;
 import iob.bounderies.GeneralId;
 import iob.bounderies.Instance;
+import iob.bounderies.InstanceBoundary;
 import iob.bounderies.InvokedBy;
 import iob.bounderies.UserBoundary;
 import iob.bounderies.UserId;
@@ -21,469 +23,485 @@ import iob.bounderies.NewUserBoundary;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AdminTests {
 	private int port;
-	private String activitiesUrl;
-	private String usersUrl;
-	private String postUsersUrl;
+	private String activitiesAdminUrl;
+	private String usersAdminUrl;
+	private String postUserUrl;
 	private String instancesUrl;
-	private String getInstancesUrl;
+	private String postActivityUrl;
+	private String instancesAdminUrl;
 	private RestTemplate restTemplate;
-	
+
 	@LocalServerPort
 	public void setPort(int port) {
 		this.port = port;
 	}
-	
+
 	@PostConstruct
 	public void testsInit() {
-		this.activitiesUrl = "http://localhost:" + this.port + "/iob/admin/activities";
-		this.usersUrl = "http://localhost:" + this.port + "/iob/admin/users";
-		this.postUsersUrl ="http://localhost:" + this.port + "/iob/users";
-		this.instancesUrl = "http://localhost:" + this.port + "/iob/admin/instances";
-		this.getInstancesUrl = "http://localhost:" + this.port + "/iob/instances";
+		this.activitiesAdminUrl = "http://localhost:" + this.port + "/iob/admin/activities";
+		this.usersAdminUrl = "http://localhost:" + this.port + "/iob/admin/users";
+		this.postUserUrl = "http://localhost:" + this.port + "/iob/users";
+		this.instancesUrl = "http://localhost:" + this.port + "/iob/instances";
+		this.postActivityUrl = "http://localhost:" + this.port + "/iob/activities";
+		this.instancesAdminUrl = "http://localhost:" + this.port + "/iob/admin/instances";
 		this.restTemplate = new RestTemplate();
 	}
-	
 
 	@AfterEach
 	public void tearDown() {
-		this.restTemplate
-			.delete(this.activitiesUrl);
-		
-		this.restTemplate
-		.delete(this.usersUrl);
-		
-		this.restTemplate
-		.delete(this.instancesUrl);
+		this.restTemplate.delete(this.activitiesAdminUrl);
+
+		this.restTemplate.delete(this.usersAdminUrl);
+
+		this.restTemplate.delete(this.instancesAdminUrl);
 	}
-	
-	
-	
+
 	@Test
 	public void testDeleteAllUsersActuallyDeletesAllUsers() throws Exception {
 		// GIVEN the server is up
 		// AND the server contains 3 Users
-		
+
 		NewUserBoundary newUserBoundary1 = new NewUserBoundary();
 		newUserBoundary1.setAvatar("avatar1");
 		newUserBoundary1.setEmail("newUserBoundary1@gmail.com");
 		newUserBoundary1.setRole("ADMIN");
 		newUserBoundary1.setUsername("newUserBoundary1");
-		
+
 		NewUserBoundary newUserBoundary2 = new NewUserBoundary();
 		newUserBoundary2.setAvatar("avatar2");
 		newUserBoundary2.setEmail("newUserBoundary2@gmail.com");
 		newUserBoundary2.setRole("ADMIN");
 		newUserBoundary2.setUsername("newUserBoundary2");
-		
+
 		NewUserBoundary newUserBoundary3 = new NewUserBoundary();
 		newUserBoundary3.setAvatar("avatar3");
 		newUserBoundary3.setEmail("newUserBoundary3@gmail.com");
 		newUserBoundary3.setRole("ADMIN");
 		newUserBoundary3.setUsername("newUserBoundary3");
-		
-		UserBoundary postReturnedUserBoundary1 = this.restTemplate
-				.postForObject(this.postUsersUrl, newUserBoundary1, UserBoundary.class);
-		
-		UserBoundary postReturnedUserBoundary2 = this.restTemplate
-				.postForObject(this.postUsersUrl, newUserBoundary2, UserBoundary.class);
-		
-		UserBoundary postReturnedUserBoundary3 = this.restTemplate
-				.postForObject(this.postUsersUrl, newUserBoundary3, UserBoundary.class);
-		
+
+		this.restTemplate.postForObject(this.postUserUrl, newUserBoundary1, UserBoundary.class);
+
+		this.restTemplate.postForObject(this.postUserUrl, newUserBoundary2, UserBoundary.class);
+
+		this.restTemplate.postForObject(this.postUserUrl, newUserBoundary3, UserBoundary.class);
+
 		// WHEN I DELETE all users
-		this.restTemplate.delete(this.usersUrl);
-		
-		UserBoundary[] usersOnServer=this.restTemplate	
-				.getForObject(this.usersUrl, UserBoundary[].class );
-		
+		this.restTemplate.delete(this.usersAdminUrl);
+
+		UserBoundary[] usersOnServer = this.restTemplate.getForObject(this.usersAdminUrl, UserBoundary[].class);
+
 		// THEN the server returns status 2xx
 		// AND there are no users in the domain
 		assertThat(usersOnServer).isEmpty();
 	}
-	
-	
+
 	@Test
 	public void testDeleteAllInstancesActuallyDeletesAllInstances() throws Exception {
 		// GIVEN the server is up
 		// AND the server contains 3 Instances
-		// TODO initialize 3 InstanceBoundary
-		
-		//TODO initialize InstanceBoundary 1
+		// initialize 3 InstanceBoundary
 
-		
-		
-		//TODO initialize InstanceBoundary 2
+		// instanceBoundary 1
+		UserId userId1 = new UserId();
+		userId1.setEmail("Test1@gmail.com");
+		userId1.setDomain("2022b.diana.ukrainsky");
 
-		
-		//TODO initialize InstanceBoundary 3
-		
-		
-		
-		//TODO HTTP POST InstanceBoundary 1
+		CreatedBy createdBy1 = new CreatedBy();
+		createdBy1.setUserId(userId1);
 
-		
-		//TODO HTTP POST InstanceBoundary 2
+		InstanceBoundary postInstanceBoundary1 = new InstanceBoundary();
+		postInstanceBoundary1.setInstanceId(null);
+		postInstanceBoundary1.setCreatedBy(createdBy1);
 
-		
-		//TODO HTTP POST InstanceBoundary 3
+		// instanceBoundary 2
+		UserId userId2 = new UserId();
+		userId2.setEmail("Test2@gmail.com");
+		userId2.setDomain("2022b.diana.ukrainsky");
 
-		
-		
+		CreatedBy createdBy2 = new CreatedBy();
+		createdBy2.setUserId(userId2);
+
+		InstanceBoundary postInstanceBoundary2 = new InstanceBoundary();
+		postInstanceBoundary2.setInstanceId(null);
+		postInstanceBoundary2.setCreatedBy(createdBy2);
+
+		// instanceBoundary 3
+		UserId userId3 = new UserId();
+		userId3.setEmail("Test3@gmail.com");
+		userId3.setDomain("2022b.diana.ukrainsky");
+
+		CreatedBy createdBy3 = new CreatedBy();
+		createdBy3.setUserId(userId3);
+
+		InstanceBoundary postInstanceBoundary3 = new InstanceBoundary();
+		postInstanceBoundary3.setInstanceId(null);
+		postInstanceBoundary3.setCreatedBy(createdBy3);
+
+		// HTTP POST
+		this.restTemplate.postForObject(this.instancesUrl, postInstanceBoundary1, InstanceBoundary.class);
+		// HTTP POST
+		this.restTemplate.postForObject(this.instancesUrl, postInstanceBoundary2, InstanceBoundary.class);
+
+		// HTTP POST
+		this.restTemplate.postForObject(this.instancesUrl, postInstanceBoundary3, InstanceBoundary.class);
+
 		// WHEN I DELETE all Instances
-		
+		this.restTemplate.delete(this.instancesAdminUrl);
 
-		
-		//TODO HTTP GET All Instances
+		// HTTP GET All Instances
+		InstanceBoundary instanceBoundaryArray[] = this.restTemplate.getForObject(this.instancesUrl,
+				InstanceBoundary[].class);
 
-		
-		
 		// THEN the server returns status 2xx
 		// AND there are no Instances in the domain
-		// TODO check Instances array retrieved is empty
-
+		// check Instances array retrieved is empty
+		assertThat(instanceBoundaryArray).isNotNull();
+		assertThat(instanceBoundaryArray).isEmpty();
 
 	}
-	
-	
+
 	@Test
 	public void testDeleteAllActivitiesActuallyDeletesAllActivities() throws Exception {
 		// GIVEN the server is up
 		// AND the server contains 3 Activities
-		// TODO initialize 3 ActivityBoundary
-		
-		//TODO initialize ActivityBoundary 1
 
-		
-		
-		//TODO initialize ActivityBoundary 2
+		ActivityBoundary activityBoundary1 = new ActivityBoundary();
+		ActivityBoundary activityBoundary2 = new ActivityBoundary();
+		ActivityBoundary activityBoundary3 = new ActivityBoundary();
 
-		
-		//TODO initialize ActivityBoundary 3
-		
-		
-		
-		//TODO HTTP POST ActivityBoundary 1
+		// initialize ActivityBoundary 1
 
-		
-		//TODO HTTP POST ActivityBoundary 2
+		GeneralId instanceGeneralId_1 = new GeneralId();
+		instanceGeneralId_1.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_1.setId("12");
 
-		
-		//TODO HTTP POST ActivityBoundary 3
+		Instance instance_1 = new Instance();
+		instance_1.setInstanceId(instanceGeneralId_1);
 
-		
-		
+		UserId userId_1 = new UserId();
+		userId_1.setDomain("2022b.diana.ukrainsky");
+		userId_1.setEmail("user1@gmail.com");
+
+		InvokedBy invokedBy1 = new InvokedBy();
+		invokedBy1.setUserId(userId_1);
+
+		Map<String, Object> activityAttributes1 = new HashMap<>();
+		activityAttributes1.put("Key1", 100);
+		activityAttributes1.put("Key2", "Test");
+		activityAttributes1.put("Key3", 55.55);
+
+		// set ActivityBoundary 1
+		activityBoundary1.setType("adminTestsType");
+		activityBoundary1.setInstance(instance_1);
+		activityBoundary1.setInvokedBy(invokedBy1);
+		activityBoundary1.setActivityAttributes(activityAttributes1);
+
+		// initialize ActivityBoundary 2
+
+		GeneralId instanceGeneralId_2 = new GeneralId();
+		instanceGeneralId_2.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_2.setId("23");
+
+		Instance instance_2 = new Instance();
+		instance_2.setInstanceId(instanceGeneralId_2);
+
+		UserId userId_2 = new UserId();
+		userId_2.setDomain("2022b.diana.ukrainsky");
+		userId_2.setEmail("user2@gmail.com");
+
+		InvokedBy invokedBy2 = new InvokedBy();
+		invokedBy2.setUserId(userId_2);
+
+		Map<String, Object> activityAttributes2 = new HashMap<>();
+		activityAttributes2.put("Key1", 200);
+		activityAttributes2.put("Key2", "Test");
+		activityAttributes2.put("Key3", 77.55);
+
+		// set ActivityBoundary 2
+		activityBoundary2.setType("adminTestsType");
+		activityBoundary2.setInstance(instance_2);
+		activityBoundary2.setInvokedBy(invokedBy2);
+		activityBoundary2.setActivityAttributes(activityAttributes2);
+
+		// initialize ActivityBoundary 3
+
+		GeneralId instanceGeneralId_3 = new GeneralId();
+		instanceGeneralId_3.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_3.setId("34");
+
+		Instance instance_3 = new Instance();
+		instance_3.setInstanceId(instanceGeneralId_3);
+
+		UserId userId_3 = new UserId();
+		userId_3.setDomain("2022b.diana.ukrainsky");
+		userId_3.setEmail("user3@gmail.com");
+
+		InvokedBy invokedBy3 = new InvokedBy();
+		invokedBy3.setUserId(userId_3);
+
+		Map<String, Object> activityAttributes3 = new HashMap<>();
+		activityAttributes3.put("Key1", 300);
+		activityAttributes3.put("Key2", "Test");
+		activityAttributes3.put("Key3", 99.55);
+
+		// set ActivityBoundary 3
+		activityBoundary3.setType("adminTestsType");
+		activityBoundary3.setInstance(instance_3);
+		activityBoundary3.setInvokedBy(invokedBy3);
+		activityBoundary3.setActivityAttributes(activityAttributes3);
+
+		// HTTP POST ActivityBoundary 1
+		this.restTemplate.postForObject(this.postActivityUrl, activityBoundary1, ActivityBoundary.class);
+
+		// HTTP POST ActivityBoundary 2
+		this.restTemplate.postForObject(this.postActivityUrl, activityBoundary2, ActivityBoundary.class);
+
+		// HTTP POST ActivityBoundary 3
+		this.restTemplate.postForObject(this.postActivityUrl, activityBoundary3, ActivityBoundary.class);
+
 		// WHEN I DELETE all Activities
-		
+		this.restTemplate.delete(this.activitiesAdminUrl);
 
-		
-		//TODO HTTP GET All Activities
+		// HTTP GET All Activities
+		ActivityBoundary activityBoundaryArray[] = this.restTemplate.getForObject(this.activitiesAdminUrl,
+				ActivityBoundary[].class);
 
-		
-		
 		// THEN the server returns status 2xx
 		// AND there are no Activities in the domain
-		// TODO check Activities array retrieved is empty
-
+		// check Activities array retrieved is empty
+		assertThat(activityBoundaryArray).isNotNull();
+		assertThat(activityBoundaryArray).isEmpty();
 	}
-	
+
 	@Test
 	public void testExportAllActivitiesActuallyExportsAllActivities() throws Exception {
 		// GIVEN the server is up
 		// AND the server contains 3 Activities
 		// initialize 3 ActivityBoundary
-		
+
 		ActivityBoundary activityBoundary1 = new ActivityBoundary();
 		ActivityBoundary activityBoundary2 = new ActivityBoundary();
 		ActivityBoundary activityBoundary3 = new ActivityBoundary();
-		
+
 		// initialize ActivityBoundary 1
-		GeneralId activityGeneralId_1 = new GeneralId();
-		activityGeneralId_1.setDomain("2022b.diana.ukrainsky");
-		activityGeneralId_1.setId("1");
-		
+
 		GeneralId instanceGeneralId_1 = new GeneralId();
 		instanceGeneralId_1.setDomain("2022b.diana.ukrainsky");
 		instanceGeneralId_1.setId("12");
-		
+
 		Instance instance_1 = new Instance();
 		instance_1.setInstanceId(instanceGeneralId_1);
-		
+
 		UserId userId_1 = new UserId();
 		userId_1.setDomain("2022b.diana.ukrainsky");
 		userId_1.setEmail("user1@gmail.com");
-		
+
 		InvokedBy invokedBy1 = new InvokedBy();
 		invokedBy1.setUserId(userId_1);
-		
-		Map<String,Object> activityAttributes1 = new HashMap<>();
+
+		Map<String, Object> activityAttributes1 = new HashMap<>();
 		activityAttributes1.put("Key1", 100);
 		activityAttributes1.put("Key2", "Test");
 		activityAttributes1.put("Key3", 55.55);
-		
-		
+
 		// set ActivityBoundary 1
-		activityBoundary1.setActivityId(activityGeneralId_1);
 		activityBoundary1.setType("adminTestsType");
 		activityBoundary1.setInstance(instance_1);
-		activityBoundary1.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 		activityBoundary1.setInvokedBy(invokedBy1);
 		activityBoundary1.setActivityAttributes(activityAttributes1);
-						
+
 		// initialize ActivityBoundary 2
-		GeneralId activityGeneralId_2 = new GeneralId();
-		activityGeneralId_2.setDomain("2022b.diana.ukrainsky");
-		activityGeneralId_2.setId("2");
-		
+
 		GeneralId instanceGeneralId_2 = new GeneralId();
 		instanceGeneralId_2.setDomain("2022b.diana.ukrainsky");
 		instanceGeneralId_2.setId("23");
-		
+
 		Instance instance_2 = new Instance();
 		instance_2.setInstanceId(instanceGeneralId_2);
-		
+
 		UserId userId_2 = new UserId();
 		userId_2.setDomain("2022b.diana.ukrainsky");
 		userId_2.setEmail("user2@gmail.com");
-		
+
 		InvokedBy invokedBy2 = new InvokedBy();
 		invokedBy2.setUserId(userId_2);
-		
-		Map<String,Object> activityAttributes2 = new HashMap<>();
+
+		Map<String, Object> activityAttributes2 = new HashMap<>();
 		activityAttributes2.put("Key1", 200);
 		activityAttributes2.put("Key2", "Test");
 		activityAttributes2.put("Key3", 77.55);
-		
+
 		// set ActivityBoundary 2
-		activityBoundary2.setActivityId(activityGeneralId_2);
 		activityBoundary2.setType("adminTestsType");
 		activityBoundary2.setInstance(instance_2);
-		activityBoundary2.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 		activityBoundary2.setInvokedBy(invokedBy2);
 		activityBoundary2.setActivityAttributes(activityAttributes2);
 
-		
 		// initialize ActivityBoundary 3
-		GeneralId activityGeneralId_3 = new GeneralId();
-		activityGeneralId_3.setDomain("2022b.diana.ukrainsky");
-		activityGeneralId_3.setId("3");
-		
+
 		GeneralId instanceGeneralId_3 = new GeneralId();
 		instanceGeneralId_3.setDomain("2022b.diana.ukrainsky");
 		instanceGeneralId_3.setId("34");
-		
+
 		Instance instance_3 = new Instance();
 		instance_3.setInstanceId(instanceGeneralId_3);
-		
+
 		UserId userId_3 = new UserId();
 		userId_3.setDomain("2022b.diana.ukrainsky");
 		userId_3.setEmail("user3@gmail.com");
-		
+
 		InvokedBy invokedBy3 = new InvokedBy();
 		invokedBy3.setUserId(userId_3);
-		
-		Map<String,Object> activityAttributes3 = new HashMap<>();
+
+		Map<String, Object> activityAttributes3 = new HashMap<>();
 		activityAttributes3.put("Key1", 300);
 		activityAttributes3.put("Key2", "Test");
 		activityAttributes3.put("Key3", 99.55);
-		
+
 		// set ActivityBoundary 3
-		activityBoundary3.setActivityId(activityGeneralId_3);
 		activityBoundary3.setType("adminTestsType");
 		activityBoundary3.setInstance(instance_3);
-		activityBoundary3.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
 		activityBoundary3.setInvokedBy(invokedBy3);
 		activityBoundary3.setActivityAttributes(activityAttributes3);
-		
+
 		// ActivityBoundary array
-		ActivityBoundary [] activityBoundaryArray = new ActivityBoundary[] {
-				activityBoundary1, 
-				activityBoundary2, 
-				activityBoundary3};
+		ActivityBoundary[] activityBoundaryArray = new ActivityBoundary[] { activityBoundary1, activityBoundary2,
+				activityBoundary3 };
 
 		// HTTP POST ActivityBoundary 1
-		ActivityBoundary activityBoundaryReceivedFromPOST1 = this.restTemplate
-				.postForObject(
-						this.activitiesUrl, 
-						activityBoundary1, 
-						ActivityBoundary.class);
-		
+		ActivityBoundary activityBoundaryReceivedFromPOST1 = this.restTemplate.postForObject(this.postActivityUrl,
+				activityBoundary1, ActivityBoundary.class);
+
 		// HTTP POST ActivityBoundary 2
-		ActivityBoundary activityBoundaryReceivedFromPOST2 = this.restTemplate
-				.postForObject(
-						this.activitiesUrl, 
-						activityBoundary2, 
-						ActivityBoundary.class);
-		
+		ActivityBoundary activityBoundaryReceivedFromPOST2 = this.restTemplate.postForObject(this.postActivityUrl,
+				activityBoundary2, ActivityBoundary.class);
+
 		// HTTP POST ActivityBoundary 3
-		ActivityBoundary activityBoundaryReceivedFromPOST3 = this.restTemplate
-				.postForObject(
-						this.activitiesUrl, 
-						activityBoundary3, 
-						ActivityBoundary.class);
-		
+		ActivityBoundary activityBoundaryReceivedFromPOST3 = this.restTemplate.postForObject(this.postActivityUrl,
+				activityBoundary3, ActivityBoundary.class);
+
 		// Array of ActivityBoundary's received from POST
 		ActivityBoundary[] receivedFromPOSTActivityBoundaryArray = new ActivityBoundary[] {
-				activityBoundaryReceivedFromPOST1, 
-				activityBoundaryReceivedFromPOST2, 
-				activityBoundaryReceivedFromPOST3};
-		
+				activityBoundaryReceivedFromPOST1, activityBoundaryReceivedFromPOST2,
+				activityBoundaryReceivedFromPOST3 };
+
 		// WHEN I GET all Activities
 		// HTTP GET All Activities
-		ActivityBoundary[] retreivedActivityBoundaryArray = this.restTemplate
-				.getForObject(
-						this.activitiesUrl,
-						ActivityBoundary[].class);
+		ActivityBoundary[] retreivedActivityBoundaryArray = this.restTemplate.getForObject(this.activitiesAdminUrl,
+				ActivityBoundary[].class);
 
 		// THEN the server returns status 2xx
 		// AND the initialized activities retrieved
 		assertThat(retreivedActivityBoundaryArray).isNotNull();
-		
+
 		// check Activities array retrieved contains the activity boundaries initialized
-		for(int i = 0; i < activityBoundaryArray.length; i++) {
-			
+		for (int i = 0; i < activityBoundaryArray.length; i++) {
+
 			ActivityBoundary createdActivityBoundery = activityBoundaryArray[i];
 			ActivityBoundary retreivedActivityBoundery = receivedFromPOSTActivityBoundaryArray[i];
-			
-			assertThat(retreivedActivityBoundery.getActivityId().getDomain())
-			.isEqualTo(createdActivityBoundery.getActivityId().getDomain());
-			
-			assertThat(retreivedActivityBoundery.getActivityId().getId())
-			.isEqualTo(createdActivityBoundery.getActivityId().getId());
-			
-			assertThat(retreivedActivityBoundery.getType())
-			.isEqualTo(createdActivityBoundery.getType());
-			
+
+			assertThat(retreivedActivityBoundery.getType()).isEqualTo(createdActivityBoundery.getType());
+
 			assertThat(retreivedActivityBoundery.getInstance().getInstanceId().getDomain())
-			.isEqualTo(createdActivityBoundery.getInstance().getInstanceId().getDomain());
-			
+					.isEqualTo(createdActivityBoundery.getInstance().getInstanceId().getDomain());
+
 			assertThat(retreivedActivityBoundery.getInstance().getInstanceId().getId())
-			.isEqualTo(createdActivityBoundery.getInstance().getInstanceId().getId());
-			
-			assertThat(retreivedActivityBoundery.getCreatedTimestamp())
-			.isEqualTo(createdActivityBoundery.getCreatedTimestamp());
-			
-			
-			assertThat(retreivedActivityBoundery.getInvokedBy().getUserId())
-			.isEqualTo(createdActivityBoundery.getInvokedBy().getUserId());
-			
+					.isEqualTo(createdActivityBoundery.getInstance().getInstanceId().getId());
+
+			assertThat(retreivedActivityBoundery.getInvokedBy().getUserId().getDomain())
+					.isEqualTo(createdActivityBoundery.getInvokedBy().getUserId().getDomain());
+
+			assertThat(retreivedActivityBoundery.getInvokedBy().getUserId().getEmail())
+					.isEqualTo(createdActivityBoundery.getInvokedBy().getUserId().getEmail());
+
 			assertThat(retreivedActivityBoundery.getActivityAttributes().get("Key1"))
-			.isNotEqualTo(createdActivityBoundery.getActivityAttributes().get("Key1"));
-			
+					.isEqualTo(createdActivityBoundery.getActivityAttributes().get("Key1"));
+
 			assertThat(retreivedActivityBoundery.getActivityAttributes().get("Key2"))
-			.isNotEqualTo(createdActivityBoundery.getActivityAttributes().get("Key2"));
-			
+					.isEqualTo(createdActivityBoundery.getActivityAttributes().get("Key2"));
+
 			assertThat(retreivedActivityBoundery.getActivityAttributes().get("Key3"))
-			.isNotEqualTo(createdActivityBoundery.getActivityAttributes().get("Key3"));
+					.isEqualTo(createdActivityBoundery.getActivityAttributes().get("Key3"));
 		}
-		
+
 	}
-	
-	
+
 	@Test
 	public void testExportAllUsersActuallyExportsAllUsers() throws Exception {
 		// GIVEN the server is up
 		// AND the server contains 3 Users
 		// initialize 3 newUserBoundary
-		
-		// initialize newUserBoundary 1
-		UserId userId1 = new UserId();
-		userId1.setDomain("2022b.diana.ukrainsky");
-		userId1.setEmail("user1@gmail.com");
-		
-		UserBoundary userBoundary1 = new UserBoundary();
-		userBoundary1.setAvatar("star");
-		userBoundary1.setRole("testMember1");
-		userBoundary1.setUsername("First");
-		userBoundary1.setUserId(userId1);
-		
-		// initialize newUserBoundary 2
-		UserId userId2 = new UserId();
-		userId2.setDomain("2022b.diana.ukrainsky");
-		userId2.setEmail("user2@gmail.com");
-		
-		UserBoundary userBoundary2 = new UserBoundary();
-		userBoundary2.setAvatar("moon");
-		userBoundary2.setRole("testMember2");
-		userBoundary2.setUsername("Second");
-		userBoundary2.setUserId(userId2);
-		
-		// initialize newUserBoundary 3
-		UserId userId3 = new UserId();
-		userId3.setDomain("2022b.diana.ukrainsky");
-		userId3.setEmail("user1@gmail.com");
-		
-		UserBoundary userBoundary3 = new UserBoundary();
-		userBoundary3.setAvatar("tree");
-		userBoundary3.setRole("testMember3");
-		userBoundary3.setUsername("Thidr");
-		userBoundary3.setUserId(userId3);
-		
-		// Array of usersBoundery's received from POST 
-		UserBoundary[] userBoundariesArray = new UserBoundary[] {
-				userBoundary1, 
-				userBoundary2, 
-				userBoundary3};
 
-		
+		// initialize newUserBoundary 1
+		NewUserBoundary userBoundary1 = new NewUserBoundary();
+		userBoundary1.setAvatar("star");
+		userBoundary1.setRole("Player");
+		userBoundary1.setUsername("First");
+		userBoundary1.setEmail("userBoudary1@gmail.com");
+
+		// initialize newUserBoundary 2
+		NewUserBoundary userBoundary2 = new NewUserBoundary();
+		userBoundary2.setAvatar("moon");
+		userBoundary2.setRole("Manager");
+		userBoundary2.setUsername("Second");
+		userBoundary2.setEmail("userBoudary2@gmail.com");
+
+		// initialize newUserBoundary 3
+
+		NewUserBoundary userBoundary3 = new NewUserBoundary();
+		userBoundary3.setAvatar("tree");
+		userBoundary3.setRole("admin");
+		userBoundary3.setUsername("Third");
+		userBoundary3.setEmail("userBoudary3@gmail.com");
+
+		// Array of usersBoundery's received from POST
+		NewUserBoundary[] createdUserBoundaryArray = new NewUserBoundary[] { userBoundary1, userBoundary2,
+				userBoundary3 };
+
 		// HTTP POST newUserBoundary 1
-		UserBoundary userBoundaryFromPOST1 = this.restTemplate
-				.postForObject(
-						this.usersUrl, 
-						userBoundary1, 
-						UserBoundary.class);
-		
+		UserBoundary userBoundaryFromPOST1 = this.restTemplate.postForObject(this.postUserUrl, userBoundary1,
+				UserBoundary.class);
+
 		// HTTP POST newUserBoundary 2
-		UserBoundary userBoundaryFromPOST2 = this.restTemplate
-				.postForObject(
-						this.usersUrl, 
-						userBoundary2, 
-						UserBoundary.class);
-		
+		UserBoundary userBoundaryFromPOST2 = this.restTemplate.postForObject(this.postUserUrl, userBoundary2,
+				UserBoundary.class);
+
 		// HTTP POST newUserBoundary 3
-		UserBoundary userBoundaryFromPOST3 = this.restTemplate
-				.postForObject(
-						this.usersUrl, 
-						userBoundary3, 
-						UserBoundary.class);
-		
+		UserBoundary userBoundaryFromPOST3 = this.restTemplate.postForObject(this.postUserUrl, userBoundary3,
+				UserBoundary.class);
+
 		// WHEN I GET all users
-		// Array of usersBoundery's received from POST 
-		UserBoundary[] userBoundariesFromPOSTArray = new UserBoundary[] {
-				userBoundaryFromPOST1, 
-				userBoundaryFromPOST2, 
-				userBoundaryFromPOST3};
-		
+		// Array of usersBoundery's received from POST
+		UserBoundary[] userBoundariesFromPOSTArray = new UserBoundary[] { userBoundaryFromPOST1, userBoundaryFromPOST2,
+				userBoundaryFromPOST3 };
+
 		// HTTP GET All users
-		UserBoundary[] retrivedUserBoundaryArray = this.restTemplate
-				.getForObject(
-						this.usersUrl,
-						UserBoundary[].class);
+		UserBoundary[] retrivedUserBoundaryArray = this.restTemplate.getForObject(this.usersAdminUrl,
+				UserBoundary[].class);
 
 		// THEN the server returns status 2xx
 		// AND the initialized users retrieved
 		assertThat(retrivedUserBoundaryArray).isNotNull();
-		
+
 		// check users array retrieved contains the users boundaries initialized
-		for(int i = 0; i < userBoundariesArray.length; i++) {
-			UserBoundary createdUserBoundery = userBoundariesArray[i];
-			UserBoundary retreivedUserBoundery = userBoundariesFromPOSTArray[i];
-			
+		for (int i = 0; i < createdUserBoundaryArray.length; i++) {
+			NewUserBoundary createdUserBoundery = createdUserBoundaryArray[i];
+			UserBoundary retreivedUserBoundery = retrivedUserBoundaryArray[i];
+			UserBoundary postReturnedUserBoundery = userBoundariesFromPOSTArray[i];
+
 			assertThat(retreivedUserBoundery.getUserId().getDomain())
-			.isEqualTo(createdUserBoundery.getUserId().getDomain());
-			
+					.isEqualTo(postReturnedUserBoundery.getUserId().getDomain());
+
 			assertThat(retreivedUserBoundery.getUserId().getEmail())
-			.isEqualTo(createdUserBoundery.getUserId().getEmail());
-			
-			assertThat(retreivedUserBoundery.getAvatar())
-			.isEqualTo(createdUserBoundery.getAvatar());
-			
-			assertThat(retreivedUserBoundery.getRole())
-			.isEqualTo(createdUserBoundery.getRole());
-			
-			assertThat(retreivedUserBoundery.getUsername())
-			.isEqualTo(createdUserBoundery.getUsername());
+					.isEqualTo(postReturnedUserBoundery.getUserId().getEmail());
+
+			assertThat(retreivedUserBoundery.getAvatar()).isEqualTo(createdUserBoundery.getAvatar());
+
+			assertThat(retreivedUserBoundery.getRole()).isEqualToIgnoringCase(createdUserBoundery.getRole());
+
+			assertThat(retreivedUserBoundery.getUsername()).isEqualTo(createdUserBoundery.getUsername());
 		}
 
 	}
-	
+
 }

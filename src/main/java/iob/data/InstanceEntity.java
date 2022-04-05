@@ -2,9 +2,8 @@ package iob.data;
 
 import java.util.Map;
 
-
 public class InstanceEntity {
-	
+
 	private String instanceDomain;
 	private String instanceId;
 	private String type;
@@ -16,9 +15,9 @@ public class InstanceEntity {
 	private double locationLat;
 	private double locationLng;
 	private Map<String, Object> instanceAttributes;
-	
+
 	public InstanceEntity() {
-		
+
 	}
 
 	public String getInstanceDomain() {
@@ -27,7 +26,7 @@ public class InstanceEntity {
 
 	public void setInstanceDomain(String instanceDomain) {
 		this.instanceDomain = instanceDomain;
-		
+
 	}
 
 	public String getInstanceId() {
@@ -36,7 +35,7 @@ public class InstanceEntity {
 
 	public void setInstanceId(String instanceId) {
 		this.instanceId = instanceId;
-		
+
 	}
 
 	public String getType() {
@@ -45,7 +44,7 @@ public class InstanceEntity {
 
 	public void setType(String type) {
 		this.type = type;
-		
+
 	}
 
 	public String getName() {
@@ -54,7 +53,7 @@ public class InstanceEntity {
 
 	public void setName(String name) {
 		this.name = name;
-		
+
 	}
 
 	public boolean isActive() {
@@ -63,7 +62,7 @@ public class InstanceEntity {
 
 	public void setActive(boolean active) {
 		this.active = active;
-		
+
 	}
 
 	public String getCreatedTimestamp() {
@@ -72,7 +71,7 @@ public class InstanceEntity {
 
 	public void setCreatedTimestamp(String createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
-		
+
 	}
 
 	public String getCreatedByUserDomain() {
@@ -81,7 +80,7 @@ public class InstanceEntity {
 
 	public void setCreatedByUserDomain(String createdByUserDomain) {
 		this.createdByUserDomain = createdByUserDomain;
-		
+
 	}
 
 	public String getCreatedByUserEmail() {
@@ -90,7 +89,7 @@ public class InstanceEntity {
 
 	public void setCreatedByUserEmail(String createdByUserEmail) {
 		this.createdByUserEmail = createdByUserEmail;
-		
+
 	}
 
 	public double getLocationLat() {
@@ -99,7 +98,7 @@ public class InstanceEntity {
 
 	public void setLocationLat(double locationLat) {
 		this.locationLat = locationLat;
-		
+
 	}
 
 	public double getLocationLng() {
@@ -108,7 +107,7 @@ public class InstanceEntity {
 
 	public void setLocationLng(double locationLng) {
 		this.locationLng = locationLng;
-		
+
 	}
 
 	public Map<String, Object> getInstanceAttributes() {
@@ -117,7 +116,7 @@ public class InstanceEntity {
 
 	public void setInstanceAttributes(Map<String, Object> instanceAttributes) {
 		this.instanceAttributes = instanceAttributes;
-		
+
 	}
-	
+
 }

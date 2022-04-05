@@ -3,9 +3,9 @@ package iob.bounderies;
 public class Instance {
 
 	private GeneralId instanceId;
-	
+
 	public Instance() {
-		
+
 	}
 
 	public GeneralId getInstanceId() {
@@ -14,8 +14,7 @@ public class Instance {
 
 	public void setInstanceId(GeneralId instanceId) {
 		this.instanceId = instanceId;
-		
+
 	}
-	
-	
+
 }

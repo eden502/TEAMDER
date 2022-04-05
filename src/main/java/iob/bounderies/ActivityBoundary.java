@@ -10,9 +10,9 @@ public class ActivityBoundary {
 	private String createdTimestamp;
 	private InvokedBy invokedBy;
 	private Map<String, Object> activityAttributes;
-	
+
 	public ActivityBoundary() {
-		
+
 	}
 
 	public GeneralId getActivityId() {
@@ -21,7 +21,7 @@ public class ActivityBoundary {
 
 	public void setActivityId(GeneralId activityId) {
 		this.activityId = activityId;
-		
+
 	}
 
 	public String getType() {
@@ -30,7 +30,7 @@ public class ActivityBoundary {
 
 	public void setType(String type) {
 		this.type = type;
-		
+
 	}
 
 	public Instance getInstance() {
@@ -39,25 +39,25 @@ public class ActivityBoundary {
 
 	public void setInstance(Instance instance) {
 		this.instance = instance;
-		
+
 	}
-	
+
 	public String getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
 	public void setCreatedTimestamp(String createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
-		
+
 	}
-	
+
 	public InvokedBy getInvokedBy() {
 		return invokedBy;
 	}
 
 	public void setInvokedBy(InvokedBy invokedBy) {
 		this.invokedBy = invokedBy;
-		
+
 	}
 
 	public Map<String, Object> getActivityAttributes() {
@@ -66,7 +66,7 @@ public class ActivityBoundary {
 
 	public void setActivityAttributes(Map<String, Object> activityAttributes) {
 		this.activityAttributes = activityAttributes;
-		
+
 	}
-	
+
 }

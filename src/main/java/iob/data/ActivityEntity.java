@@ -3,7 +3,7 @@ package iob.data;
 import java.util.Map;
 
 public class ActivityEntity {
-	
+
 	private String activityDomain;
 	private String activityId;
 	private String type;
@@ -13,9 +13,9 @@ public class ActivityEntity {
 	private String invokedUserDomain;
 	private String invokedUserEmail;
 	private Map<String, Object> activityAttributes;
-	
+
 	public ActivityEntity() {
-		
+
 	}
 
 	public String getActivityDomain() {
@@ -24,7 +24,7 @@ public class ActivityEntity {
 
 	public void setActivityDomain(String activityDomain) {
 		this.activityDomain = activityDomain;
-		
+
 	}
 
 	public String getActivityId() {
@@ -33,7 +33,7 @@ public class ActivityEntity {
 
 	public void setActivityId(String activityId) {
 		this.activityId = activityId;
-		
+
 	}
 
 	public String getType() {
@@ -42,7 +42,7 @@ public class ActivityEntity {
 
 	public void setType(String type) {
 		this.type = type;
-		
+
 	}
 
 	public String getInstanceDomain() {
@@ -51,7 +51,7 @@ public class ActivityEntity {
 
 	public void setInstanceDomain(String instanceDomain) {
 		this.instanceDomain = instanceDomain;
-		
+
 	}
 
 	public String getInstanceId() {
@@ -60,7 +60,7 @@ public class ActivityEntity {
 
 	public void setInstanceId(String instanceId) {
 		this.instanceId = instanceId;
-		
+
 	}
 
 	public String getCreatedTimestamp() {
@@ -69,7 +69,7 @@ public class ActivityEntity {
 
 	public void setCreatedTimestamp(String createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
-		
+
 	}
 
 	public String getInvokedUserDomain() {
@@ -78,7 +78,7 @@ public class ActivityEntity {
 
 	public void setInvokedUserDomain(String invokedUserDomain) {
 		this.invokedUserDomain = invokedUserDomain;
-		
+
 	}
 
 	public String getInvokedUserEmail() {
@@ -87,7 +87,7 @@ public class ActivityEntity {
 
 	public void setInvokedUserEmail(String invokedUserEmail) {
 		this.invokedUserEmail = invokedUserEmail;
-		
+
 	}
 
 	public Map<String, Object> getActivityAttributes() {
@@ -96,8 +96,7 @@ public class ActivityEntity {
 
 	public void setActivityAttributes(Map<String, Object> activityAttributes) {
 		this.activityAttributes = activityAttributes;
-		
+
 	}
-	
-	
+
 }

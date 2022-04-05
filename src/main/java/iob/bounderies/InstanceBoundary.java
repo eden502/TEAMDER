@@ -1,6 +1,5 @@
 package iob.bounderies;
 
-
 import java.util.Map;
 
 public class InstanceBoundary {
@@ -13,9 +12,9 @@ public class InstanceBoundary {
 	private CreatedBy createdBy;
 	private Location location;
 	private Map<String, Object> instanceAttributes;
-	
+
 	public InstanceBoundary() {
-		
+
 	}
 
 	public GeneralId getInstanceId() {
@@ -24,17 +23,16 @@ public class InstanceBoundary {
 
 	public void setInstanceId(GeneralId instanceId) {
 		this.instanceId = instanceId;
-		
+
 	}
 
 	public String getType() {
 		return type;
 	}
-	
 
 	public void setType(String type) {
 		this.type = type;
-		
+
 	}
 
 	public String getName() {
@@ -43,7 +41,7 @@ public class InstanceBoundary {
 
 	public void setName(String name) {
 		this.name = name;
-		
+
 	}
 
 	public Boolean getActive() {
@@ -52,7 +50,7 @@ public class InstanceBoundary {
 
 	public void setActive(Boolean active) {
 		this.active = active;
-		
+
 	}
 
 	public String getCreatedTimestamp() {
@@ -61,7 +59,7 @@ public class InstanceBoundary {
 
 	public void setCreatedTimestamp(String createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
-		
+
 	}
 
 	public CreatedBy getCreatedBy() {
@@ -70,7 +68,7 @@ public class InstanceBoundary {
 
 	public void setCreatedBy(CreatedBy createdBy) {
 		this.createdBy = createdBy;
-		
+
 	}
 
 	public Location getLocation() {
@@ -79,7 +77,7 @@ public class InstanceBoundary {
 
 	public void setLocation(Location location) {
 		this.location = location;
-		
+
 	}
 
 	public Map<String, Object> getInstanceAttributes() {
@@ -88,9 +86,7 @@ public class InstanceBoundary {
 
 	public void setInstanceAttributes(Map<String, Object> instanceAttributes) {
 		this.instanceAttributes = instanceAttributes;
-		
+
 	}
-	
-	
-	
+
 }

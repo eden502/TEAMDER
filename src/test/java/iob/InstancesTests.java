@@ -400,7 +400,7 @@ public class InstancesTests {
 		postInstanceBoundary3.setCreatedBy(createdBy3);
 		
 		//InstanceBoundary Array
-		InstanceBoundary[] postInstanceBoundaryArray  = new InstanceBoundary[] {postInstanceBoundary1,postInstanceBoundary2,postInstanceBoundary3};
+		InstanceBoundary[] createdInstanceBoundaryArray  = new InstanceBoundary[] {postInstanceBoundary1,postInstanceBoundary2,postInstanceBoundary3};
 		
 		
 		// HTTP POST
@@ -441,13 +441,13 @@ public class InstancesTests {
 		
 		//   AND all of the instances retrieved
 		
-		for(int i = 0 ; i < postInstanceBoundaryArray.length ; i++) {
+		for(int i = 0 ; i < createdInstanceBoundaryArray.length ; i++) {
 			
 			assertThat(retrivedInstanceBoundaryArray[i].getCreatedBy().getUserId().getDomain())
-			.isEqualTo(postInstanceBoundaryArray[i].getCreatedBy().getUserId().getDomain());
+			.isEqualTo(createdInstanceBoundaryArray[i].getCreatedBy().getUserId().getDomain());
 			
 			assertThat(retrivedInstanceBoundaryArray[i].getCreatedBy().getUserId().getEmail())
-			.isEqualTo(postInstanceBoundaryArray[i].getCreatedBy().getUserId().getEmail());
+			.isEqualTo(createdInstanceBoundaryArray[i].getCreatedBy().getUserId().getEmail());
 			
 			assertThat(retrivedInstanceBoundaryArray[i].getInstanceId().getDomain())
 			.isEqualTo(postReturnedInstanceBoundaryArray[i].getInstanceId().getDomain());
