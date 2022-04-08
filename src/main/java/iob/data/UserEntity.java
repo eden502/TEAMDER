@@ -1,5 +1,11 @@
 package iob.data;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="USERS")
 public class UserEntity {
 	
 	private String userDomain;
@@ -9,30 +15,20 @@ public class UserEntity {
 	private String avatar;
 	
 	
-	public UserEntity() {
-		
-	}
-
-
+	public UserEntity() { }
 
 	public String getUserDomain() {
 		return userDomain;
 	}
 
-
-
 	public void setUserDomain(String userDomain) {
 		this.userDomain = userDomain;
-		
 	}
-
-
-
+	
+	@Id
 	public String getUserEmail() {
 		return userEmail;
 	}
-
-
 
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
@@ -40,20 +36,14 @@ public class UserEntity {
 	}
 
 	
-
-
 	public UserRole getRole() {
 		return role;
 	}
-
-
 
 	public void setRole(UserRole role) {
 		this.role = role;
 		
 	}
-
-
 
 	public String getUsername() {
 		return username;

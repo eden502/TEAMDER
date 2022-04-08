@@ -17,7 +17,7 @@ import iob.data.UserRole;
 import iob.logic.UserConverter;
 import iob.logic.UsersService;
 
-@Service
+//@Service
 public class UsersServiceMockup implements UsersService {
 
 	private List<UserEntity> userEntitiesList;
