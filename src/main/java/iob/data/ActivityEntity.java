@@ -1,5 +1,6 @@
 package iob.data;
 
+import java.util.Date;
 import java.util.Map;
 
 public class ActivityEntity {
@@ -9,7 +10,7 @@ public class ActivityEntity {
 	private String type;
 	private String instanceDomain;
 	private String instanceId;
-	private String createdTimestamp;
+	private Date createdTimestamp;
 	private String invokedUserDomain;
 	private String invokedUserEmail;
 	private Map<String, Object> activityAttributes;
@@ -63,11 +64,11 @@ public class ActivityEntity {
 
 	}
 
-	public String getCreatedTimestamp() {
+	public Date getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
-	public void setCreatedTimestamp(String createdTimestamp) {
+	public void setCreatedTimestamp(Date createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
 
 	}

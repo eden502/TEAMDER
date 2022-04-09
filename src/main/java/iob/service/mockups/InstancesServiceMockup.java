@@ -2,6 +2,7 @@ package iob.service.mockups;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ import iob.logic.InstancesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-@Service
+//@Service
 public class InstancesServiceMockup implements InstancesService {
 
 	private List<InstanceEntity> instanceEntityList;
@@ -50,7 +51,7 @@ public class InstancesServiceMockup implements InstancesService {
 		instanceId.setDomain(this.domain);
 		instanceId.setId("" + idGenerator.incrementAndGet());
 		instance.setInstanceId(instanceId);
-		instance.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
+		instance.setCreatedTimestamp(new Date());
 
 		instanceEntityList.add(instanceConverter.toEntity(instance));
 

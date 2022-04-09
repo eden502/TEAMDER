@@ -1,7 +1,20 @@
 package iob.data;
 
+import java.util.Date;
 import java.util.Map;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+
+
+@Entity
+@Table(name="INSTANCES")
 public class InstanceEntity {
 
 	private String instanceDomain;
@@ -9,7 +22,7 @@ public class InstanceEntity {
 	private String type;
 	private String name;
 	private boolean active;
-	private String createdTimestamp;
+	private Date createdTimestamp;
 	private String createdByUserDomain;
 	private String createdByUserEmail;
 	private double locationLat;
@@ -28,7 +41,8 @@ public class InstanceEntity {
 		this.instanceDomain = instanceDomain;
 
 	}
-
+	
+	@Id
 	public String getInstanceId() {
 		return instanceId;
 	}
@@ -64,12 +78,13 @@ public class InstanceEntity {
 		this.active = active;
 
 	}
-
-	public String getCreatedTimestamp() {
+	@Column(name="CREATION_TIMESTAMP")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
-	public void setCreatedTimestamp(String createdTimestamp) {
+	public void setCreatedTimestamp(Date createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
 
 	}
@@ -109,7 +124,7 @@ public class InstanceEntity {
 		this.locationLng = locationLng;
 
 	}
-
+	@Transient
 	public Map<String, Object> getInstanceAttributes() {
 		return instanceAttributes;
 	}

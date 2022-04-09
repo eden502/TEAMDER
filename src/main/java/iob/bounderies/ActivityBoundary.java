@@ -1,5 +1,6 @@
 package iob.bounderies;
 
+import java.util.Date;
 import java.util.Map;
 
 public class ActivityBoundary {
@@ -7,7 +8,7 @@ public class ActivityBoundary {
 	private GeneralId activityId;
 	private String type;
 	private Instance instance;
-	private String createdTimestamp;
+	private Date createdTimestamp;
 	private InvokedBy invokedBy;
 	private Map<String, Object> activityAttributes;
 
@@ -42,11 +43,11 @@ public class ActivityBoundary {
 
 	}
 
-	public String getCreatedTimestamp() {
+	public Date getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
-	public void setCreatedTimestamp(String createdTimestamp) {
+	public void setCreatedTimestamp(Date createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
 
 	}

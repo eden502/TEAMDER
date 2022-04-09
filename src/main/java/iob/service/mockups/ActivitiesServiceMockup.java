@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class ActivitiesServiceMockup implements ActivitiesService {
 		activityId.setId("" + idGenerator.incrementAndGet());
 
 		activity.setActivityId(activityId);
-		activity.setCreatedTimestamp(java.time.LocalDateTime.now().toString());
+		activity.setCreatedTimestamp(new Date());
 
 		activitiesEntityList.add(activityConverter.toEntity(activity));
 		return activity;

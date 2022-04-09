@@ -12,7 +12,6 @@ import iob.logic.InstancesService;
 
 @RestController
 public class InstanceController {
-	// private long idGenerator = 0; --> Please implement inside the service!
 	private InstancesService instancesService;
 
 	@org.springframework.beans.factory.annotation.Autowired

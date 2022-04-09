@@ -153,6 +153,9 @@ public class InstancesTests {
 		InstanceBoundary postInstanceBoundary1 = new InstanceBoundary();
 		postInstanceBoundary1.setInstanceId(null);
 		postInstanceBoundary1.setCreatedBy(createdBy1);
+		postInstanceBoundary1.setType("Test Type");
+		postInstanceBoundary1.setName("Test Name");
+		postInstanceBoundary1.setActive(true);
 		
 		
 		// instanceBoundary 2
@@ -167,6 +170,9 @@ public class InstancesTests {
 		InstanceBoundary postInstanceBoundary2 = new InstanceBoundary();
 		postInstanceBoundary2.setInstanceId(null);
 		postInstanceBoundary2.setCreatedBy(createdBy2);
+		postInstanceBoundary2.setType("Test Type");
+		postInstanceBoundary2.setName("Test Name");
+		postInstanceBoundary2.setActive(true);
 		
 		// HTTP POST
 		InstanceBoundary postReturnedInstanceBoundary1 = this.restTemplate
@@ -370,6 +376,9 @@ public class InstancesTests {
 		InstanceBoundary postInstanceBoundary1 = new InstanceBoundary();
 		postInstanceBoundary1.setInstanceId(null);
 		postInstanceBoundary1.setCreatedBy(createdBy1);
+		postInstanceBoundary1.setType("Test Type");
+		postInstanceBoundary1.setName("Test Name");
+		postInstanceBoundary1.setActive(true);
 		
 		
 		// instanceBoundary 2
@@ -384,6 +393,9 @@ public class InstancesTests {
 		InstanceBoundary postInstanceBoundary2 = new InstanceBoundary();
 		postInstanceBoundary2.setInstanceId(null);
 		postInstanceBoundary2.setCreatedBy(createdBy2);
+		postInstanceBoundary2.setType("Test Type");
+		postInstanceBoundary2.setName("Test Name");
+		postInstanceBoundary2.setActive(true);
 		
 		
 		// instanceBoundary 3
@@ -398,6 +410,9 @@ public class InstancesTests {
 		InstanceBoundary postInstanceBoundary3 = new InstanceBoundary();
 		postInstanceBoundary3.setInstanceId(null);
 		postInstanceBoundary3.setCreatedBy(createdBy3);
+		postInstanceBoundary3.setType("Test Type");
+		postInstanceBoundary3.setName("Test Name");
+		postInstanceBoundary3.setActive(true);
 		
 		//InstanceBoundary Array
 		InstanceBoundary[] createdInstanceBoundaryArray  = new InstanceBoundary[] {postInstanceBoundary1,postInstanceBoundary2,postInstanceBoundary3};

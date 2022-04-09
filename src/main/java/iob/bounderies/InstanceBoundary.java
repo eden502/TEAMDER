@@ -1,5 +1,6 @@
 package iob.bounderies;
 
+import java.util.Date;
 import java.util.Map;
 
 public class InstanceBoundary {
@@ -8,7 +9,7 @@ public class InstanceBoundary {
 	private String type;
 	private String name;
 	private Boolean active;
-	private String createdTimestamp;
+	private Date createdTimestamp;
 	private CreatedBy createdBy;
 	private Location location;
 	private Map<String, Object> instanceAttributes;
@@ -53,11 +54,11 @@ public class InstanceBoundary {
 
 	}
 
-	public String getCreatedTimestamp() {
+	public Date getCreatedTimestamp() {
 		return createdTimestamp;
 	}
 
-	public void setCreatedTimestamp(String createdTimestamp) {
+	public void setCreatedTimestamp(Date createdTimestamp) {
 		this.createdTimestamp = createdTimestamp;
 
 	}
