@@ -46,7 +46,7 @@ public class AdminController {
 	public void deleteAllInstances() {
 		instancesService.deleteAllInstances();
 	}
-
+	
 	// Export all users
 	@RequestMapping(path = "/iob/admin/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 
