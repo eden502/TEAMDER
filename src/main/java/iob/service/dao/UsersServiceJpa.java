@@ -95,8 +95,10 @@ public class UsersServiceJpa implements UsersService{
 		}
 		
 		UserEntity userEntity = getUserEntityById(userEmail);
+	    
+		String userDomain_splited = this.userConverter.getDomainFromId(userEntity.getId());
 		
-		if(userEntity.getUserDomain().equals(userDomain))
+		if(userDomain_splited.equals(userDomain))
 			return userConverter.toBoundary(userEntity);
 		else throw new RuntimeException("Email or domain are not valid.");
 	}

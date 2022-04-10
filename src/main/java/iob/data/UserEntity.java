@@ -8,34 +8,21 @@ import javax.persistence.Table;
 @Table(name="USERS")
 public class UserEntity {
 	
-	private String userDomain;
-	private String userEmail;
+	private String id;
 	private UserRole role;
 	private String username;
 	private String avatar;
 	
-	
-	public UserEntity() { }
 
-	public String getUserDomain() {
-		return userDomain;
-	}
-
-	public void setUserDomain(String userDomain) {
-		this.userDomain = userDomain;
-	}
-	
 	@Id
-	public String getUserEmail() {
-		return userEmail;
+	public String getId() {
+		return id;
 	}
 
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
-		
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	
 	public UserRole getRole() {
 		return role;
 	}

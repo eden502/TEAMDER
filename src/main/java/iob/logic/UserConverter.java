@@ -14,8 +14,10 @@ public class UserConverter {
 	public UserBoundary toBoundary(UserEntity entity) {
 
 		UserId userId = new UserId();
-		userId.setDomain(entity.getUserDomain());
-		userId.setEmail(entity.getUserEmail());
+		String boundaryDomain = getDomainFromId(entity.getId());
+	    String boundaryEmail = getEmailFromId(entity.getId());
+		userId.setDomain(boundaryDomain);
+		userId.setEmail(boundaryEmail);
 		UserBoundary userBoundary = new UserBoundary();
 		userBoundary.setUserId(userId);
 		userBoundary.setAvatar(entity.getAvatar());
@@ -27,8 +29,7 @@ public class UserConverter {
 	public UserEntity toEntity(UserBoundary boundary) {
 
 		UserEntity userEntity = new UserEntity();
-		userEntity.setUserDomain(boundary.getUserId().getDomain());
-		userEntity.setUserEmail(boundary.getUserId().getEmail());
+		userEntity.setId(boundary.getUserId().getDomain()+"@"+boundary.getUserId().getEmail());
 		userEntity.setUsername(boundary.getUsername());
 		userEntity.setRole(UserRole.valueOf(boundary.getRole().toUpperCase()));
 		userEntity.setAvatar(boundary.getAvatar());
@@ -50,5 +51,17 @@ public class UserConverter {
 
 		return userBoundary;
 
+	}
+	
+	public String getDomainFromId(String id) {
+		String[] splited_domain_email = id.split("@", 2);
+		return splited_domain_email[0];
+		
+	}
+	
+	public String getEmailFromId(String id) {
+		String[] splited_domain_email = id.split("@", 2);
+		return splited_domain_email[1];
+		
 	}
 }
