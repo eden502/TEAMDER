@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class InstancesServiceMockup implements InstancesService {
 		validateInstanceBoundary(instance);
 		GeneralId instanceId = new GeneralId();
 		instanceId.setDomain(this.domain);
-		instanceId.setId("" + idGenerator.incrementAndGet());
+		instanceId.setId(UUID.randomUUID().toString());
 		instance.setInstanceId(instanceId);
 		instance.setCreatedTimestamp(new Date());
 

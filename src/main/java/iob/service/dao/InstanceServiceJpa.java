@@ -3,6 +3,7 @@ package iob.service.dao;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,7 +47,7 @@ public class InstanceServiceJpa implements InstancesService{
 		//create new Id 
 		GeneralId instanceId = new GeneralId();
 		instanceId.setDomain(this.domain);
-		instanceId.setId("" + idGenerator.incrementAndGet());
+		instanceId.setId(UUID.randomUUID().toString());
 		instance.setInstanceId(instanceId);
 		
 		//time stamp

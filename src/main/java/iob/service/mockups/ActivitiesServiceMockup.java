@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ public class ActivitiesServiceMockup implements ActivitiesService {
 
 		GeneralId activityId = new GeneralId();
 		activityId.setDomain(this.domain);
-		activityId.setId("" + idGenerator.incrementAndGet());
+		activityId.setId(UUID.randomUUID().toString());
 
 		activity.setActivityId(activityId);
 		activity.setCreatedTimestamp(new Date());
@@ -88,7 +89,7 @@ public class ActivitiesServiceMockup implements ActivitiesService {
 				|| activity.getInstance().getInstanceId().getDomain().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary`s InstanceId must have a valid domain");
 
-		if (!activity.getInstance().getInstanceId().getDomain().equals("2022b.diana.ukrainsky"))
+		if (activity.getInstance().getInstanceId().getDomain() == null)
 			throw new RuntimeException("ActivityBoundary`s InstanceId Wrong instance domain");
 
 		if (activity.getInstance().getInstanceId().getId() == null
@@ -105,7 +106,7 @@ public class ActivitiesServiceMockup implements ActivitiesService {
 				|| activity.getInvokedBy().getUserId().getDomain().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary`s InvokedBy must have a valid domain");
 
-		if (!activity.getInvokedBy().getUserId().getDomain().equals("2022b.diana.ukrainsky"))
+		if (activity.getInvokedBy().getUserId().getDomain() == null)
 			throw new RuntimeException("ActivityBoundary`s InvokedBy Wrong user domain");
 
 		if (activity.getInvokedBy().getUserId().getEmail() == null
