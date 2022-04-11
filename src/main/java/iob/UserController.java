@@ -34,7 +34,7 @@ public class UserController {
 	@RequestMapping(path = "/iob/users/login/{userDomain}/{userEmail}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserBoundary getUser(@PathVariable("userDomain") String userDomain,
 			@PathVariable("userEmail") String userEmail) {
-
+		System.err.println("User email: "+userEmail);
 		return userService.login(userDomain, userEmail);
 	}
 

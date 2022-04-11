@@ -1,6 +1,8 @@
 package iob.data;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -22,7 +24,8 @@ public class UserEntity {
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	
+	@Enumerated(EnumType.STRING)
 	public UserRole getRole() {
 		return role;
 	}

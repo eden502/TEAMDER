@@ -93,6 +93,7 @@ public class UsersServiceJpa implements UsersService{
 		if (userEmail == null || userEmail.equals("")) {
 			throw new RuntimeException("User Email is NULL or empty.");
 		}
+		System.out.println("Use eamil inside login function: " + userEmail);
 		
 		UserEntity userEntity = getUserEntityById(userEmail);
 	    
@@ -107,18 +108,17 @@ public class UsersServiceJpa implements UsersService{
 	@Transactional
 	public UserBoundary updateUser(String userdomain, String userEmail, UserBoundary update) {
 		
-		System.out.println("Updating user");
-		UserEntity userEntityUpdate = this.userConverter.toEntity(update);
+		System.err.println("Updating use: ");
 		UserEntity userEntity = this.getUserEntityById(userEmail);
 			
 		if (update.getAvatar() != null) {
-			userEntity.setAvatar(userEntityUpdate.getAvatar());
+			userEntity.setAvatar(update.getAvatar());
 		}
 		if (update.getUsername() != null) {
-			userEntity.setUsername(userEntityUpdate.getUsername());;
+			userEntity.setUsername(update.getUsername());;
 		}
 		if (update.getRole() != null) {
-			userEntity.setRole(userEntityUpdate.getRole());
+			userEntity.setRole(UserRole.valueOf(update.getRole().toUpperCase()));
 		}
 		
 		userEntity = this.userDao.save(userEntity);
@@ -144,13 +144,14 @@ public class UsersServiceJpa implements UsersService{
 	
 	private UserEntity getUserEntityById(String userEmail) {
 		
-		Optional<UserEntity> optional = this.userDao.findById(userEmail);
+		System.out.println("User email is: " + userEmail);
+		Optional<UserEntity> optional = this.userDao.findById(this.domain+"@@"+userEmail);
 		
 		if (optional.isPresent()) {
 			UserEntity userEntity = optional.get();
 				return userEntity;
 		}else {
-			throw new RuntimeException("Cannot find user with email: " +userEmail);
+			throw new RuntimeException("Cannot find user with id: "+this.domain+ "@@" +userEmail);
 		}
 	}
 }
