@@ -124,6 +124,8 @@ public class InstancesTests {
 		assertThat(retrivedInstanceBoundary.getCreatedBy().getUserId().getEmail())
 		.isEqualTo(postInstanceBoundary.getCreatedBy().getUserId().getEmail());
 		
+		assertThat(retrivedInstanceBoundary.getInstanceAttributes()).isNotNull();
+		
 		assertThat(retrivedInstanceBoundary.getInstanceAttributes().get("key1"))
 		.isEqualTo(postInstanceBoundary.getInstanceAttributes().get("key1"));
 		
@@ -320,6 +322,8 @@ public class InstancesTests {
 		
 		assertThat(updatedInstanceBoundary.getLocation().getLng())
 		.isNotEqualTo(postInstanceBoundary.getLocation().getLng());
+		
+		assertThat(updatedInstanceBoundary.getInstanceAttributes()).isNotNull();
 		
 		assertThat(updatedInstanceBoundary.getInstanceAttributes().get("Key1"))
 		.isNotEqualTo(postInstanceBoundary.getInstanceAttributes().get("Key1"));

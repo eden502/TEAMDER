@@ -4,12 +4,16 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+
+
+import iob.service.dao.AttributesFieldConverter;
 
 
 
@@ -17,14 +21,13 @@ import javax.persistence.Transient;
 @Table(name="INSTANCES")
 public class InstanceEntity {
 
-	private String instanceDomain;
-	private String instanceId;
+	
+	private String id;
 	private String type;
 	private String name;
 	private boolean active;
 	private Date createdTimestamp;
-	private String createdByUserDomain;
-	private String createdByUserEmail;
+	private String createdByUserId;
 	private double locationLat;
 	private double locationLng;
 	private Map<String, Object> instanceAttributes;
@@ -33,22 +36,14 @@ public class InstanceEntity {
 
 	}
 
-	public String getInstanceDomain() {
-		return instanceDomain;
-	}
-
-	public void setInstanceDomain(String instanceDomain) {
-		this.instanceDomain = instanceDomain;
-
-	}
 	
 	@Id
-	public String getInstanceId() {
-		return instanceId;
+	public String getId() {
+		return id;
 	}
 
-	public void setInstanceId(String instanceId) {
-		this.instanceId = instanceId;
+	public void setId(String id) {
+		this.id = id;
 
 	}
 
@@ -70,7 +65,7 @@ public class InstanceEntity {
 
 	}
 
-	public boolean isActive() {
+	public boolean getActive() {
 		return active;
 	}
 
@@ -89,21 +84,12 @@ public class InstanceEntity {
 
 	}
 
-	public String getCreatedByUserDomain() {
-		return createdByUserDomain;
+	public String getCreatedByUserId() {
+		return createdByUserId;
 	}
 
-	public void setCreatedByUserDomain(String createdByUserDomain) {
-		this.createdByUserDomain = createdByUserDomain;
-
-	}
-
-	public String getCreatedByUserEmail() {
-		return createdByUserEmail;
-	}
-
-	public void setCreatedByUserEmail(String createdByUserEmail) {
-		this.createdByUserEmail = createdByUserEmail;
+	public void setCreatedByUserId(String createdByUserId) {
+		this.createdByUserId = createdByUserId;
 
 	}
 
@@ -124,7 +110,9 @@ public class InstanceEntity {
 		this.locationLng = locationLng;
 
 	}
-	@Transient
+	
+	@Convert(converter = AttributesFieldConverter.class)
+	@Lob
 	public Map<String, Object> getInstanceAttributes() {
 		return instanceAttributes;
 	}

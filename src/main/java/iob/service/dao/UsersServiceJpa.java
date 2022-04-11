@@ -96,7 +96,7 @@ public class UsersServiceJpa implements UsersService{
 		
 		UserEntity userEntity = getUserEntityById(userEmail);
 	    
-		String userDomain_splited = this.userConverter.getDomainFromId(userEntity.getId());
+		String userDomain_splited = this.userConverter.getUserDomainFromUserEntityId(userEntity.getId());
 		
 		if(userDomain_splited.equals(userDomain))
 			return userConverter.toBoundary(userEntity);

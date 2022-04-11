@@ -67,7 +67,7 @@ public class InstanceServiceJpa implements InstancesService{
 	@Override
 	@Transactional
 	public InstanceBoundary updateInstance(String instanceDomain, String instanceId, InstanceBoundary update) {
-		InstanceEntity instanceForUpdate = this.getSpecificEntityInstance(instanceId);
+		InstanceEntity instanceForUpdate = this.getSpecificEntityInstance(instanceDomain,instanceId);
 
 		if (update.getType() != null)
 			instanceForUpdate.setType(update.getType());
@@ -95,7 +95,7 @@ public class InstanceServiceJpa implements InstancesService{
 	@Override
 	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId) {
 
-		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceId));
+		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceDomain,instanceId));
 	}
 
 	@Override
@@ -113,15 +113,15 @@ public class InstanceServiceJpa implements InstancesService{
 		this.instanceDao.deleteAll();
 
 	}
-	private InstanceEntity getSpecificEntityInstance(String instanceId) {
+	private InstanceEntity getSpecificEntityInstance(String domain,String instanceId) {
 		Optional<InstanceEntity> optional = this.instanceDao
-				.findById(instanceId);
+				.findById(instanceConverter.getInstanceEntityIdFromDomainAndInstanceId(domain, instanceId));
 			
 			if (optional.isPresent()) {
 				return optional.get();
 			}
 			
-			throw new RuntimeException("Could not find Instance by id: " + instanceId);
+			throw new RuntimeException("Could not find Instance by id: " + instanceId + " and domain:"+domain);
 			
 	}
 	

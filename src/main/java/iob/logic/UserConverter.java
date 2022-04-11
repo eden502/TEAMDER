@@ -1,5 +1,6 @@
 package iob.logic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import iob.bounderies.NewUserBoundary;
@@ -11,11 +12,18 @@ import iob.data.UserRole;
 @Component
 public class UserConverter {
 
+	private IdConverter idConverter;
+
+	@Autowired
+	public UserConverter(IdConverter idConverter) {
+		this.idConverter = idConverter;
+	}
+
 	public UserBoundary toBoundary(UserEntity entity) {
 
 		UserId userId = new UserId();
-		String boundaryDomain = getDomainFromId(entity.getId());
-	    String boundaryEmail = getEmailFromId(entity.getId());
+		String boundaryDomain = getUserDomainFromUserEntityId(entity.getId());
+		String boundaryEmail = getUserEmailFromUserEntityId(entity.getId());
 		userId.setDomain(boundaryDomain);
 		userId.setEmail(boundaryEmail);
 		UserBoundary userBoundary = new UserBoundary();
@@ -26,16 +34,20 @@ public class UserConverter {
 		return userBoundary;
 	}
 
+
 	public UserEntity toEntity(UserBoundary boundary) {
 
 		UserEntity userEntity = new UserEntity();
-		userEntity.setId(boundary.getUserId().getDomain()+"@"+boundary.getUserId().getEmail());
+		userEntity.setId(
+				getUserEntityIdFromDomainAndEmail(boundary.getUserId().getDomain(), boundary.getUserId().getEmail()));
 		userEntity.setUsername(boundary.getUsername());
 		userEntity.setRole(UserRole.valueOf(boundary.getRole().toUpperCase()));
 		userEntity.setAvatar(boundary.getAvatar());
 		return userEntity;
 
 	}
+
+
 
 	public UserBoundary newUserbToUserb(NewUserBoundary newUserB) {
 
@@ -53,15 +65,20 @@ public class UserConverter {
 
 	}
 	
-	public String getDomainFromId(String id) {
-		String[] splited_domain_email = id.split("@", 2);
-		return splited_domain_email[0];
-		
+	public String getUserEmailFromUserEntityId(String id) {
+
+		return idConverter.getUserEmailFromUserEntityId(id);
+	}
+
+	public String getUserDomainFromUserEntityId(String id) {
+
+		return idConverter.getUserDomainFromUserEntityId(id);
 	}
 	
-	public String getEmailFromId(String id) {
-		String[] splited_domain_email = id.split("@", 2);
-		return splited_domain_email[1];
-		
+	public String getUserEntityIdFromDomainAndEmail(String domain, String email) {
+
+		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
 	}
+
+
 }
