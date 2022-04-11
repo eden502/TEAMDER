@@ -115,7 +115,7 @@ public class InstanceServiceJpa implements InstancesService{
 	}
 	private InstanceEntity getSpecificEntityInstance(String domain,String instanceId) {
 		Optional<InstanceEntity> optional = this.instanceDao
-				.findById(instanceConverter.getInstanceEntityIdFromDomainAndInstanceId(domain, instanceId));
+				.findById(instanceConverter.getEntityGeneralIdFromDomainAndGeneralId(domain, instanceId));
 			
 			if (optional.isPresent()) {
 				return optional.get();

@@ -1,5 +1,6 @@
 package iob.logic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import iob.bounderies.ActivityBoundary;
@@ -12,6 +13,13 @@ import iob.data.ActivityEntity;
 @Component
 public class ActivityConverter {
 
+	private IdConverter idConverter;
+
+	@Autowired
+	public ActivityConverter(IdConverter idConverter) {
+		this.idConverter = idConverter;
+	}
+	
 	public ActivityEntity toEntity(ActivityBoundary boundary) {
 
 		ActivityEntity activityEntity = new ActivityEntity();
@@ -58,4 +66,36 @@ public class ActivityConverter {
 
 		return activityBoundary;
 	}
+	
+	
+	public String getUserEntityIdFromDomainAndEmail(String domain, String email) {
+
+		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
+	}
+
+	public String getEntityGeneralIdFromDomainAndGeneralId(String domain, String id) {
+
+		return idConverter.getEntityGeneralIdFromDomainAndGeneralId(domain, id);
+	}
+	
+	public String getUserEmailFromUserEntityId(String createdByUserId) {
+
+		return idConverter.getUserEmailFromUserEntityId(createdByUserId);
+	}
+
+	public String getUserDomainFromUserEntityId(String createdByUserId) {
+
+		return idConverter.getUserDomainFromUserEntityId(createdByUserId);
+	}
+
+	public String getGeneralIdFromEntityGeneralId(String id) {
+
+		return idConverter.getGeneralIdFromEntityGeneralId(id);
+	}
+
+	public String getDomainFromEntityGeneralId(String id) {
+
+		return idConverter.getDomainFromEntityGeneralId(id);
+	}
+	
 }

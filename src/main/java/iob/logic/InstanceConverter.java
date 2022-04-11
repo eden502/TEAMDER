@@ -23,8 +23,8 @@ public class InstanceConverter {
 	public InstanceBoundary toBoundary(InstanceEntity entity) {
 
 		GeneralId instanceId = new GeneralId();
-		instanceId.setDomain(getInstanceDomainFromInstanceEntityId(entity.getId()));
-		instanceId.setId(getInstanceIdFromInstanceEntityId(entity.getId()));
+		instanceId.setDomain(getDomainFromEntityGeneralId(entity.getId()));
+		instanceId.setId(getGeneralIdFromEntityGeneralId(entity.getId()));
 
 		Location location = new Location();
 		location.setLat(entity.getLocationLat());
@@ -65,7 +65,7 @@ public class InstanceConverter {
 		}
 
 		InstanceEntity instanceEntity = new InstanceEntity();
-		instanceEntity.setId(getInstanceEntityIdFromDomainAndInstanceId(boundary.getInstanceId().getDomain(),
+		instanceEntity.setId(getEntityGeneralIdFromDomainAndGeneralId(boundary.getInstanceId().getDomain(),
 				boundary.getInstanceId().getId()));
 		instanceEntity.setType(boundary.getType());
 		instanceEntity.setName(boundary.getName());
@@ -89,7 +89,7 @@ public class InstanceConverter {
 		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
 	}
 
-	public String getInstanceEntityIdFromDomainAndInstanceId(String domain, String id) {
+	public String getEntityGeneralIdFromDomainAndGeneralId(String domain, String id) {
 
 		return idConverter.getEntityGeneralIdFromDomainAndGeneralId(domain, id);
 	}
@@ -104,12 +104,12 @@ public class InstanceConverter {
 		return idConverter.getUserDomainFromUserEntityId(createdByUserId);
 	}
 
-	public String getInstanceIdFromInstanceEntityId(String id) {
+	public String getGeneralIdFromEntityGeneralId(String id) {
 
 		return idConverter.getGeneralIdFromEntityGeneralId(id);
 	}
 
-	public String getInstanceDomainFromInstanceEntityId(String id) {
+	public String getDomainFromEntityGeneralId(String id) {
 
 		return idConverter.getDomainFromEntityGeneralId(id);
 	}
