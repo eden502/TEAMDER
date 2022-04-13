@@ -24,14 +24,12 @@ public class InstanceServiceJpa implements InstancesService{
 
 	private InstanceDao instanceDao;
 	private InstanceConverter instanceConverter;
-	private AtomicLong idGenerator;
 	private String domain;
 
 	@Autowired
 	public InstanceServiceJpa(InstanceConverter instanceConverter,InstanceDao instanceDao) {
 		this.instanceConverter = instanceConverter;
 		this.instanceDao = instanceDao;
-		this.idGenerator = new AtomicLong();
 	}
 
 	@Value("${spring.application.name:null}")

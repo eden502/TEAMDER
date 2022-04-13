@@ -25,13 +25,11 @@ import iob.logic.ActivityConverter;
 public class ActivitiesServiceMockup implements ActivitiesService {
 
 	private List<ActivityEntity> activitiesEntityList;
-	private AtomicLong idGenerator;
 	private ActivityConverter activityConverter;
 	private String domain;
 
 	@Autowired
 	public ActivitiesServiceMockup(ActivityConverter activityConverter) {
-		idGenerator = new AtomicLong();
 		this.activityConverter = activityConverter;
 	}
 

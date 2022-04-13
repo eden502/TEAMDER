@@ -25,13 +25,11 @@
 //
 //	private List<InstanceEntity> instanceEntityList;
 //	private InstanceConverter instanceConverter;
-//	private AtomicLong idGenerator;
 //	private String domain;
 //
 //	@Autowired
 //	public InstancesServiceMockup(InstanceConverter instanceConverter) {
 //		this.instanceConverter = instanceConverter;
-//		this.idGenerator = new AtomicLong();
 //	}
 //
 //	@Value("${spring.application.name:null}")
