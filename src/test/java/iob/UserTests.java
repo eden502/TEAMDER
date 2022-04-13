@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -25,10 +26,16 @@ public class UserTests {
 	private String url;
 	private String deleteUrl;
 	private RestTemplate restTemplate;
-	
+	private String domain;
+
 	@LocalServerPort
 	public void setPort(int port) {
 		this.port = port;
+	}
+
+	@Value("${spring.application.name:null}")
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 	
 	@PostConstruct
@@ -203,7 +210,7 @@ public class UserTests {
 		// initialize update UserBoundary object
 		
 		UserId userId = new UserId();
-		userId.setDomain("2022b.diana.ukrainsky");
+		userId.setDomain(this.domain);
 		userId.setEmail("updatedUserBoundary@gmail.com");
 		
 		UserBoundary updatedUserBoundary = new UserBoundary();

@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -30,10 +31,16 @@ public class AdminTests {
 	private String postActivityUrl;
 	private String instancesAdminUrl;
 	private RestTemplate restTemplate;
+	private String domain;
 
 	@LocalServerPort
 	public void setPort(int port) {
 		this.port = port;
+	}
+	
+	@Value("${spring.application.name:null}")
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	@PostConstruct
@@ -104,7 +111,7 @@ public class AdminTests {
 		// instanceBoundary 1
 		UserId userId1 = new UserId();
 		userId1.setEmail("Test1@gmail.com");
-		userId1.setDomain("2022b.diana.ukrainsky");
+		userId1.setDomain(this.domain);
 
 		CreatedBy createdBy1 = new CreatedBy();
 		createdBy1.setUserId(userId1);
@@ -119,7 +126,7 @@ public class AdminTests {
 		// instanceBoundary 2
 		UserId userId2 = new UserId();
 		userId2.setEmail("Test2@gmail.com");
-		userId2.setDomain("2022b.diana.ukrainsky");
+		userId2.setDomain(this.domain);
 
 		CreatedBy createdBy2 = new CreatedBy();
 		createdBy2.setUserId(userId2);
@@ -134,7 +141,7 @@ public class AdminTests {
 		// instanceBoundary 3
 		UserId userId3 = new UserId();
 		userId3.setEmail("Test3@gmail.com");
-		userId3.setDomain("2022b.diana.ukrainsky");
+		userId3.setDomain(this.domain);
 
 		CreatedBy createdBy3 = new CreatedBy();
 		createdBy3.setUserId(userId3);
@@ -181,14 +188,14 @@ public class AdminTests {
 		// initialize ActivityBoundary 1
 
 		GeneralId instanceGeneralId_1 = new GeneralId();
-		instanceGeneralId_1.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_1.setDomain(this.domain);
 		instanceGeneralId_1.setId("12");
 
 		Instance instance_1 = new Instance();
 		instance_1.setInstanceId(instanceGeneralId_1);
 
 		UserId userId_1 = new UserId();
-		userId_1.setDomain("2022b.diana.ukrainsky");
+		userId_1.setDomain(this.domain);
 		userId_1.setEmail("user1@gmail.com");
 
 		InvokedBy invokedBy1 = new InvokedBy();
@@ -208,14 +215,14 @@ public class AdminTests {
 		// initialize ActivityBoundary 2
 
 		GeneralId instanceGeneralId_2 = new GeneralId();
-		instanceGeneralId_2.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_2.setDomain(this.domain);
 		instanceGeneralId_2.setId("23");
 
 		Instance instance_2 = new Instance();
 		instance_2.setInstanceId(instanceGeneralId_2);
 
 		UserId userId_2 = new UserId();
-		userId_2.setDomain("2022b.diana.ukrainsky");
+		userId_2.setDomain(this.domain);
 		userId_2.setEmail("user2@gmail.com");
 
 		InvokedBy invokedBy2 = new InvokedBy();
@@ -235,14 +242,14 @@ public class AdminTests {
 		// initialize ActivityBoundary 3
 
 		GeneralId instanceGeneralId_3 = new GeneralId();
-		instanceGeneralId_3.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_3.setDomain(this.domain);
 		instanceGeneralId_3.setId("34");
 
 		Instance instance_3 = new Instance();
 		instance_3.setInstanceId(instanceGeneralId_3);
 
 		UserId userId_3 = new UserId();
-		userId_3.setDomain("2022b.diana.ukrainsky");
+		userId_3.setDomain(this.domain);
 		userId_3.setEmail("user3@gmail.com");
 
 		InvokedBy invokedBy3 = new InvokedBy();
@@ -295,14 +302,14 @@ public class AdminTests {
 		// initialize ActivityBoundary 1
 
 		GeneralId instanceGeneralId_1 = new GeneralId();
-		instanceGeneralId_1.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_1.setDomain(this.domain);
 		instanceGeneralId_1.setId("12");
 
 		Instance instance_1 = new Instance();
 		instance_1.setInstanceId(instanceGeneralId_1);
 
 		UserId userId_1 = new UserId();
-		userId_1.setDomain("2022b.diana.ukrainsky");
+		userId_1.setDomain(this.domain);
 		userId_1.setEmail("user1@gmail.com");
 
 		InvokedBy invokedBy1 = new InvokedBy();
@@ -322,14 +329,14 @@ public class AdminTests {
 		// initialize ActivityBoundary 2
 
 		GeneralId instanceGeneralId_2 = new GeneralId();
-		instanceGeneralId_2.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_2.setDomain(this.domain);
 		instanceGeneralId_2.setId("23");
 
 		Instance instance_2 = new Instance();
 		instance_2.setInstanceId(instanceGeneralId_2);
 
 		UserId userId_2 = new UserId();
-		userId_2.setDomain("2022b.diana.ukrainsky");
+		userId_2.setDomain(this.domain);
 		userId_2.setEmail("user2@gmail.com");
 
 		InvokedBy invokedBy2 = new InvokedBy();
@@ -349,14 +356,14 @@ public class AdminTests {
 		// initialize ActivityBoundary 3
 
 		GeneralId instanceGeneralId_3 = new GeneralId();
-		instanceGeneralId_3.setDomain("2022b.diana.ukrainsky");
+		instanceGeneralId_3.setDomain(this.domain);
 		instanceGeneralId_3.setId("34");
 
 		Instance instance_3 = new Instance();
 		instance_3.setInstanceId(instanceGeneralId_3);
 
 		UserId userId_3 = new UserId();
-		userId_3.setDomain("2022b.diana.ukrainsky");
+		userId_3.setDomain(this.domain);
 		userId_3.setEmail("user3@gmail.com");
 
 		InvokedBy invokedBy3 = new InvokedBy();

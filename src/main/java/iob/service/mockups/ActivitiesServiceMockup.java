@@ -89,7 +89,7 @@ public class ActivitiesServiceMockup implements ActivitiesService {
 				|| activity.getInstance().getInstanceId().getDomain().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary`s InstanceId must have a valid domain");
 
-		if (activity.getInstance().getInstanceId().getDomain() == null)
+		if (!activity.getInstance().getInstanceId().getDomain().equals(this.domain))
 			throw new RuntimeException("ActivityBoundary`s InstanceId Wrong instance domain");
 
 		if (activity.getInstance().getInstanceId().getId() == null
@@ -106,7 +106,7 @@ public class ActivitiesServiceMockup implements ActivitiesService {
 				|| activity.getInvokedBy().getUserId().getDomain().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary`s InvokedBy must have a valid domain");
 
-		if (activity.getInvokedBy().getUserId().getDomain() == null)
+		if (!activity.getInvokedBy().getUserId().getDomain().equals(this.domain))
 			throw new RuntimeException("ActivityBoundary`s InvokedBy Wrong user domain");
 
 		if (activity.getInvokedBy().getUserId().getEmail() == null

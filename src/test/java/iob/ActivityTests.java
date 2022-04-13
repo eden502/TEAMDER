@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -27,10 +28,16 @@ public class ActivityTests {
 	private String url;
 	private String adminUrl;
 	private RestTemplate restTemplate;
+	private String domain;
 	
 	@LocalServerPort
 	public void setPort(int port) {
 		this.port = port;
+	}
+	
+	@Value("${spring.application.name:null}")
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 	
 	@PostConstruct
@@ -54,14 +61,14 @@ public class ActivityTests {
 		
 		//initialize instance with instanceId
 		GeneralId instanceId = new GeneralId();
-		instanceId.setDomain("2022b.diana.ukrainsky");
+		instanceId.setDomain(this.domain);
 		instanceId.setId("Test ID");
 		Instance instance = new Instance();
 		instance.setInstanceId(instanceId);
 		
 		//initialize InvokedBy with UserId
 		UserId userId = new UserId();
-		userId.setDomain("2022b.diana.ukrainsky");
+		userId.setDomain(this.domain);
 		userId.setEmail("Test@gmail.com");
 		InvokedBy invokedBy = new InvokedBy();
 		invokedBy.setUserId(userId);

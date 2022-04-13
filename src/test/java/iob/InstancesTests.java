@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -27,10 +28,16 @@ public class InstancesTests {
 	private String url;
 	private String deleteUrl;
 	private RestTemplate restTemplate;
-	
+	private String domain;
+
 	@LocalServerPort
 	public void setPort(int port) {
 		this.port = port;
+	}
+	
+	@Value("${spring.application.name:null}")
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 	
 	@PostConstruct
@@ -57,7 +64,7 @@ public class InstancesTests {
 		
 		UserId userId = new UserId();
 		userId.setEmail("Test@gmail.com");
-		userId.setDomain("2022b.diana.ukrainsky");
+		userId.setDomain(this.domain);
 		
 		CreatedBy createdBy = new CreatedBy();
 		createdBy.setUserId(userId);
@@ -146,7 +153,7 @@ public class InstancesTests {
 		// instanceBoundary 1
 		UserId userId1 = new UserId();
 		userId1.setEmail("Test1@gmail.com");
-		userId1.setDomain("2022b.diana.ukrainsky");
+		userId1.setDomain(this.domain);
 		
 		CreatedBy createdBy1 = new CreatedBy();
 		createdBy1.setUserId(userId1);
@@ -163,7 +170,7 @@ public class InstancesTests {
 		// instanceBoundary 2
 		UserId userId2 = new UserId();
 		userId2.setEmail("Test2@gmail.com");
-		userId2.setDomain("2022b.diana.ukrainsky");
+		userId2.setDomain(this.domain);
 		
 		CreatedBy createdBy2 = new CreatedBy();
 		createdBy2.setUserId(userId2);
@@ -247,7 +254,7 @@ public class InstancesTests {
 		
 		UserId userId = new UserId();
 		userId.setEmail("Test@gmail.com");
-		userId.setDomain("2022b.diana.ukrainsky");
+		userId.setDomain(this.domain);
 		
 		CreatedBy createdBy = new CreatedBy();
 		createdBy.setUserId(userId);
@@ -371,7 +378,7 @@ public class InstancesTests {
 		// instanceBoundary 1
 		UserId userId1 = new UserId();
 		userId1.setEmail("Test1@gmail.com");
-		userId1.setDomain("2022b.diana.ukrainsky");
+		userId1.setDomain(this.domain);
 		
 		CreatedBy createdBy1 = new CreatedBy();
 		createdBy1.setUserId(userId1);
@@ -388,7 +395,7 @@ public class InstancesTests {
 		// instanceBoundary 2
 		UserId userId2 = new UserId();
 		userId2.setEmail("Test2@gmail.com");
-		userId2.setDomain("2022b.diana.ukrainsky");
+		userId2.setDomain(this.domain);
 		
 		CreatedBy createdBy2 = new CreatedBy();
 		createdBy2.setUserId(userId2);
@@ -405,7 +412,7 @@ public class InstancesTests {
 		// instanceBoundary 3
 		UserId userId3 = new UserId();
 		userId3.setEmail("Test3@gmail.com");
-		userId3.setDomain("2022b.diana.ukrainsky");
+		userId3.setDomain(this.domain);
 		
 		CreatedBy createdBy3 = new CreatedBy();
 		createdBy3.setUserId(userId3);
