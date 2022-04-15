@@ -2,6 +2,8 @@ package iob.service.dao;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -45,7 +47,7 @@ public class UsersServiceJpa implements UsersService {
 			throw new RuntimeException("User Id is NULL.");
 		}
 
-		if (userBoundary.getUserId().getEmail() == null || userBoundary.getUserId().getEmail().trim().isEmpty()) {
+		if (userBoundary.getUserId().getEmail() == null || userBoundary.getUserId().getEmail().trim().isEmpty()||!validateEmail(userBoundary.getUserId().getEmail())) {
 			throw new RuntimeException("User email is not valid.");
 		}
 
@@ -70,6 +72,13 @@ public class UsersServiceJpa implements UsersService {
 		userEntity = userDao.save(userEntity);
 		userBoundary = userConverter.toBoundary(userEntity);
 		return userBoundary;
+	}
+	
+	private boolean validateEmail(String email) {
+		final String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
 	}
 
 	@Override
