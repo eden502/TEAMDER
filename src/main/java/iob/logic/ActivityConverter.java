@@ -19,36 +19,38 @@ public class ActivityConverter {
 	public ActivityConverter(IdConverter idConverter) {
 		this.idConverter = idConverter;
 	}
-	
+
 	public ActivityEntity toEntity(ActivityBoundary boundary) {
 
 		ActivityEntity activityEntity = new ActivityEntity();
-		activityEntity.setActivityId(boundary.getActivityId().getId());
-		activityEntity.setActivityDomain(boundary.getActivityId().getDomain());
+		activityEntity.setId(getEntityGeneralIdFromDomainAndId(boundary.getActivityId().getDomain(),
+				boundary.getActivityId().getId()));
 		activityEntity.setType(boundary.getType());
-		activityEntity.setInstanceDomain(boundary.getInstance().getInstanceId().getDomain());
-		activityEntity.setInstanceId(boundary.getInstance().getInstanceId().getId());
+		activityEntity.setInstanceId(getEntityGeneralIdFromDomainAndId(
+				boundary.getInstance().getInstanceId().getDomain(), boundary.getInstance().getInstanceId().getId()));
 		activityEntity.setCreatedTimestamp(boundary.getCreatedTimestamp());
-		activityEntity.setInvokedUserDomain(boundary.getInvokedBy().getUserId().getDomain());
-		activityEntity.setInvokedUserEmail(boundary.getInvokedBy().getUserId().getEmail());
+		activityEntity.setInvokedUserId(getUserEntityIdFromDomainAndEmail(
+				boundary.getInvokedBy().getUserId().getDomain(), boundary.getInvokedBy().getUserId().getEmail()));
 		activityEntity.setActivityAttributes(boundary.getActivityAttributes());
 
 		return activityEntity;
 	}
 
 	public ActivityBoundary toBoundary(ActivityEntity entity) {
-
+		
+		
+		
 		GeneralId activityId = new GeneralId();
-		activityId.setDomain(entity.getActivityDomain());
-		activityId.setId(entity.getActivityId());
+		activityId.setDomain(getDomainFromEntityGeneralId(entity.getId()));
+		activityId.setId(getIdFromEntityGeneralId(entity.getId()));
 
 		GeneralId instanceId = new GeneralId();
-		instanceId.setId(entity.getInstanceId());
-		instanceId.setDomain(entity.getInstanceDomain());
+		instanceId.setId(getIdFromEntityGeneralId(entity.getInstanceId()));
+		instanceId.setDomain(getDomainFromEntityGeneralId(entity.getInstanceId()));
 
 		UserId userId = new UserId();
-		userId.setEmail(entity.getInvokedUserEmail());
-		userId.setDomain(entity.getInvokedUserDomain());
+		userId.setEmail(getUserEmailFromUserEntityId(entity.getInvokedUserId()));
+		userId.setDomain(getUserDomainFromUserEntityId(entity.getInvokedUserId()));
 
 		Instance instance = new Instance();
 		instance.setInstanceId(instanceId);
@@ -66,36 +68,35 @@ public class ActivityConverter {
 
 		return activityBoundary;
 	}
-	
-	
+
 	public String getUserEntityIdFromDomainAndEmail(String domain, String email) {
 
 		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
 	}
 
-	public String getEntityGeneralIdFromDomainAndGeneralId(String domain, String id) {
+	public String getEntityGeneralIdFromDomainAndId(String domain, String id) {
 
-		return idConverter.getEntityGeneralIdFromDomainAndGeneralId(domain, id);
-	}
-	
-	public String getUserEmailFromUserEntityId(String createdByUserId) {
-
-		return idConverter.getUserEmailFromUserEntityId(createdByUserId);
+		return idConverter.getEntityGeneralIdFromDomainAndId(domain, id);
 	}
 
-	public String getUserDomainFromUserEntityId(String createdByUserId) {
+	public String getUserEmailFromUserEntityId(String userId) {
 
-		return idConverter.getUserDomainFromUserEntityId(createdByUserId);
+		return idConverter.getUserEmailFromUserEntityId(userId);
 	}
 
-	public String getGeneralIdFromEntityGeneralId(String id) {
+	public String getUserDomainFromUserEntityId(String userId) {
 
-		return idConverter.getGeneralIdFromEntityGeneralId(id);
+		return idConverter.getUserDomainFromUserEntityId(userId);
 	}
 
-	public String getDomainFromEntityGeneralId(String id) {
+	public String getIdFromEntityGeneralId(String generalId) {
 
-		return idConverter.getDomainFromEntityGeneralId(id);
+		return idConverter.getIdFromEntityGeneralId(generalId);
 	}
-	
+
+	public String getDomainFromEntityGeneralId(String generalId) {
+
+		return idConverter.getDomainFromEntityGeneralId(generalId);
+	}
+
 }

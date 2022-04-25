@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -20,14 +19,14 @@ import iob.data.InstanceEntity;
 import iob.logic.InstanceConverter;
 import iob.logic.InstancesService;
 @Service
-public class InstanceServiceJpa implements InstancesService{
+public class InstancesServiceJpa implements InstancesService{
 
 	private InstanceDao instanceDao;
 	private InstanceConverter instanceConverter;
 	private String domain;
 
 	@Autowired
-	public InstanceServiceJpa(InstanceConverter instanceConverter,InstanceDao instanceDao) {
+	public InstancesServiceJpa(InstanceConverter instanceConverter,InstanceDao instanceDao) {
 		this.instanceConverter = instanceConverter;
 		this.instanceDao = instanceDao;
 	}
@@ -113,7 +112,7 @@ public class InstanceServiceJpa implements InstancesService{
 	}
 	private InstanceEntity getSpecificEntityInstance(String domain,String instanceId) {
 		Optional<InstanceEntity> optional = this.instanceDao
-				.findById(instanceConverter.getEntityGeneralIdFromDomainAndGeneralId(domain, instanceId));
+				.findById(instanceConverter.getEntityGeneralIdFromDomainAndId(domain, instanceId));
 			
 			if (optional.isPresent()) {
 				return optional.get();

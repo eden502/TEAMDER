@@ -24,7 +24,7 @@ public class InstanceConverter {
 
 		GeneralId instanceId = new GeneralId();
 		instanceId.setDomain(getDomainFromEntityGeneralId(entity.getId()));
-		instanceId.setId(getGeneralIdFromEntityGeneralId(entity.getId()));
+		instanceId.setId(getIdFromEntityGeneralId(entity.getId()));
 
 		Location location = new Location();
 		location.setLat(entity.getLocationLat());
@@ -65,7 +65,7 @@ public class InstanceConverter {
 		}
 
 		InstanceEntity instanceEntity = new InstanceEntity();
-		instanceEntity.setId(getEntityGeneralIdFromDomainAndGeneralId(boundary.getInstanceId().getDomain(),
+		instanceEntity.setId(getEntityGeneralIdFromDomainAndId(boundary.getInstanceId().getDomain(),
 				boundary.getInstanceId().getId()));
 		instanceEntity.setType(boundary.getType());
 		instanceEntity.setName(boundary.getName());
@@ -89,29 +89,29 @@ public class InstanceConverter {
 		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
 	}
 
-	public String getEntityGeneralIdFromDomainAndGeneralId(String domain, String id) {
+	public String getEntityGeneralIdFromDomainAndId(String domain, String id) {
 
-		return idConverter.getEntityGeneralIdFromDomainAndGeneralId(domain, id);
+		return idConverter.getEntityGeneralIdFromDomainAndId(domain, id);
 	}
 	
-	public String getUserEmailFromUserEntityId(String createdByUserId) {
+	public String getUserEmailFromUserEntityId(String userId) {
 
-		return idConverter.getUserEmailFromUserEntityId(createdByUserId);
+		return idConverter.getUserEmailFromUserEntityId(userId);
 	}
 
-	public String getUserDomainFromUserEntityId(String createdByUserId) {
+	public String getUserDomainFromUserEntityId(String userId) {
 
-		return idConverter.getUserDomainFromUserEntityId(createdByUserId);
+		return idConverter.getUserDomainFromUserEntityId(userId);
 	}
 
-	public String getGeneralIdFromEntityGeneralId(String id) {
+	public String getIdFromEntityGeneralId(String generalId) {
 
-		return idConverter.getGeneralIdFromEntityGeneralId(id);
+		return idConverter.getIdFromEntityGeneralId(generalId);
 	}
 
-	public String getDomainFromEntityGeneralId(String id) {
+	public String getDomainFromEntityGeneralId(String generalId) {
 
-		return idConverter.getDomainFromEntityGeneralId(id);
+		return idConverter.getDomainFromEntityGeneralId(generalId);
 	}
 
 }

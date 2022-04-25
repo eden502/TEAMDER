@@ -3,37 +3,49 @@ package iob.data;
 import java.util.Date;
 import java.util.Map;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import iob.service.dao.AttributesFieldConverter;
+
+@Entity
+@Table(name="ACTIVITIES")
 public class ActivityEntity {
 
-	private String activityDomain;
-	private String activityId;
+	private String id;
 	private String type;
-	private String instanceDomain;
 	private String instanceId;
 	private Date createdTimestamp;
-	private String invokedUserDomain;
-	private String invokedUserEmail;
+	private String invokedUserId;
 	private Map<String, Object> activityAttributes;
 
 	public ActivityEntity() {
 
 	}
 
-	public String getActivityDomain() {
-		return activityDomain;
+
+	public String getInvokedUserId() {
+		return invokedUserId;
 	}
 
-	public void setActivityDomain(String activityDomain) {
-		this.activityDomain = activityDomain;
 
+	public void setInvokedUserId(String invokedUserId) {
+		this.invokedUserId = invokedUserId;
 	}
 
-	public String getActivityId() {
-		return activityId;
+	@Id
+	public String getId() {
+		return id;
 	}
 
-	public void setActivityId(String activityId) {
-		this.activityId = activityId;
+	public void setId(String id) {
+		this.id = id;
 
 	}
 
@@ -46,14 +58,6 @@ public class ActivityEntity {
 
 	}
 
-	public String getInstanceDomain() {
-		return instanceDomain;
-	}
-
-	public void setInstanceDomain(String instanceDomain) {
-		this.instanceDomain = instanceDomain;
-
-	}
 
 	public String getInstanceId() {
 		return instanceId;
@@ -64,6 +68,8 @@ public class ActivityEntity {
 
 	}
 
+	@Column(name="CREATION_TIMESTAMP")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreatedTimestamp() {
 		return createdTimestamp;
 	}
@@ -73,24 +79,8 @@ public class ActivityEntity {
 
 	}
 
-	public String getInvokedUserDomain() {
-		return invokedUserDomain;
-	}
-
-	public void setInvokedUserDomain(String invokedUserDomain) {
-		this.invokedUserDomain = invokedUserDomain;
-
-	}
-
-	public String getInvokedUserEmail() {
-		return invokedUserEmail;
-	}
-
-	public void setInvokedUserEmail(String invokedUserEmail) {
-		this.invokedUserEmail = invokedUserEmail;
-
-	}
-
+	@Convert(converter = AttributesFieldConverter.class)
+	@Lob
 	public Map<String, Object> getActivityAttributes() {
 		return activityAttributes;
 	}

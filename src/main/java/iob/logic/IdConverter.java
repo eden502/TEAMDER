@@ -25,12 +25,12 @@ public class IdConverter {
 	
 	
 	
-	public String getEntityGeneralIdFromDomainAndGeneralId(String domain, String id) {
+	public String getEntityGeneralIdFromDomainAndId(String domain, String id) {
 		
 		return id+"@"+domain;
 	}
 	
-	public String getGeneralIdFromEntityGeneralId(String generalId) {
+	public String getIdFromEntityGeneralId(String generalId) {
 		
 		return generalId.split("@")[0];
 	}

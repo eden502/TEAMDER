@@ -65,14 +65,14 @@ public class UserConverter {
 
 	}
 	
-	public String getUserEmailFromUserEntityId(String id) {
+	public String getUserEmailFromUserEntityId(String userId) {
 
-		return idConverter.getUserEmailFromUserEntityId(id);
+		return idConverter.getUserEmailFromUserEntityId(userId);
 	}
 
-	public String getUserDomainFromUserEntityId(String id) {
+	public String getUserDomainFromUserEntityId(String userId) {
 
-		return idConverter.getUserDomainFromUserEntityId(id);
+		return idConverter.getUserDomainFromUserEntityId(userId);
 	}
 	
 	public String getUserEntityIdFromDomainAndEmail(String domain, String email) {
