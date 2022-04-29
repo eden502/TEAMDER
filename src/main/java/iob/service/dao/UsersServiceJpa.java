@@ -10,6 +10,8 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,8 +98,16 @@ public class UsersServiceJpa implements UsersService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<UserBoundary> getAllUsers() {
-
+		
 		Iterable<UserEntity> usersIterable = this.userDao.findAll();
+		//int page= 1;
+		//int size = 1;
+		//return this.userDao
+		//		.findAll(PageRequest.of(page, size, Direction.ASC, "username", "id"))
+		//		.getContent()
+		//		.stream()
+		//		.map(this.userConverter::toBoundary)
+		//		.collect(Collectors.toList());
 		Stream<UserEntity> stream = StreamSupport.stream(usersIterable.spliterator(), false);
 		return stream.map(userConverter::toBoundary).collect(Collectors.toList());
 	}
