@@ -17,8 +17,8 @@ import iob.service.dao.AttributesFieldConverter;
 
 
 
-@Entity
-@Table(name="INSTANCES")
+//@Entity
+//@Table(name="INSTANCES")
 public class InstanceEntity {
 
 	

@@ -14,8 +14,8 @@ import javax.persistence.TemporalType;
 
 import iob.service.dao.AttributesFieldConverter;
 
-@Entity
-@Table(name="ACTIVITIES")
+//@Entity
+//@Table(name="ACTIVITIES")
 public class ActivityEntity {
 
 	private String id;

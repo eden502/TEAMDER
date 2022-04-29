@@ -6,8 +6,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="USERS")
+//@Entity
+//@Table(name="USERS")
 public class UserEntity {
 	
 	private String id;
@@ -15,7 +15,7 @@ public class UserEntity {
 	private String username;
 	private String avatar;
 	
-
+	public UserEntity() {}
 	@Id
 	public String getId() {
 		return id;

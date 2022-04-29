@@ -27,6 +27,7 @@ import iob.logic.ActivityConverter;
 @Service
 public class ActivitiesServiceJpa implements ActivitiesService {
 
+	
 	private ActivityDao activityDao;
 	private ActivityConverter activityConverter;
 	private String domain;

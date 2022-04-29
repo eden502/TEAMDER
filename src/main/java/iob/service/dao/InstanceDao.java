@@ -1,9 +1,12 @@
 package iob.service.dao;
 
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import iob.data.InstanceEntity;
-
-public interface InstanceDao extends CrudRepository<InstanceEntity, String> {
+import iob.data.UserEntity;
+@Repository
+public interface InstanceDao extends MongoRepository<InstanceEntity, String> {
 	
 }
