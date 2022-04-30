@@ -160,7 +160,6 @@ public class InstancesServiceJpa implements InstancesService,InstanceServiceEnha
 		
 		if (optional.isPresent()) {
 			UserEntity userEntity = optional.get();
-			
 			if(userEntity.getRole().name().equalsIgnoreCase("PLAYER")) {
 				InstanceEntity instanceForUpdate = this.getSpecificEntityInstance(instanceDomain,instanceId);
 
