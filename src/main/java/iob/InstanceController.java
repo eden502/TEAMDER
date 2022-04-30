@@ -5,17 +5,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import iob.bounderies.InstanceBoundary;
+import iob.logic.InstanceServiceEnhanced;
 import iob.logic.InstancesService;
 
 @RestController
 public class InstanceController {
-	private InstancesService instancesService;
+	private InstanceServiceEnhanced instancesService;
 
 	@org.springframework.beans.factory.annotation.Autowired
-	public InstanceController(InstancesService instancesService) {
+	public InstanceController(InstanceServiceEnhanced instancesService) {
 		this.instancesService = instancesService;
 	}
 
@@ -25,11 +27,12 @@ public class InstanceController {
 		return this.instancesService.createInstance(ib);
 	}
 
-	// Update an instance
+	// Update an instance - last update 30/04/22 (Sprint 5)
 	@RequestMapping(path = "/iob/instances/{instanceDomain}/{instanceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void updateInstance(@PathVariable("instanceDomain") String domain, @PathVariable("instanceId") String id,
+	public void updateInstance(@PathVariable("instanceDomain") String instanceDomain, @PathVariable("instanceId") String instanceId, @RequestParam(name="userDomain", required = true) String userDomain,
+			@RequestParam(name="userEmail", required = true) String userEmail,
 			@RequestBody InstanceBoundary ib) {
-		this.instancesService.updateInstance(domain, id, ib);
+		this.instancesService.updateInstanceEnhanced(userDomain,userEmail,instanceDomain, instanceId, ib);
 	}
 
 	// Retrieve instance

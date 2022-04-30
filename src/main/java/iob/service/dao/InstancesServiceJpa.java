@@ -16,19 +16,24 @@ import org.springframework.transaction.annotation.Transactional;
 import iob.bounderies.GeneralId;
 import iob.bounderies.InstanceBoundary;
 import iob.data.InstanceEntity;
+import iob.data.UserEntity;
+import iob.logic.IdConverter;
 import iob.logic.InstanceConverter;
+import iob.logic.InstanceServiceEnhanced;
 import iob.logic.InstancesService;
 @Service
-public class InstancesServiceJpa implements InstancesService{
+public class InstancesServiceJpa implements InstancesService,InstanceServiceEnhanced{
 
+	private UserDao userDao;
 	private InstanceDao instanceDao;
 	private InstanceConverter instanceConverter;
 	private String domain;
 
 	@Autowired
-	public InstancesServiceJpa(InstanceConverter instanceConverter,InstanceDao instanceDao) {
+	public InstancesServiceJpa(InstanceConverter instanceConverter,InstanceDao instanceDao,UserDao userDao) {
 		this.instanceConverter = instanceConverter;
 		this.instanceDao = instanceDao;
+		this.userDao = userDao;
 	}
 
 	@Value("${spring.application.name:null}")
@@ -63,6 +68,7 @@ public class InstancesServiceJpa implements InstancesService{
 
 	@Override
 	@Transactional
+	@Deprecated
 	public InstanceBoundary updateInstance(String instanceDomain, String instanceId, InstanceBoundary update) {
 		InstanceEntity instanceForUpdate = this.getSpecificEntityInstance(instanceDomain,instanceId);
 
@@ -139,6 +145,53 @@ public class InstancesServiceJpa implements InstancesService{
 		if (instance.getCreatedBy().getUserId().getEmail() == null
 				|| instance.getCreatedBy().getUserId().getEmail().trim().isEmpty())
 			throw new RuntimeException("InstanceBoundary's UserId must have a valid email");
+	}
+	
+	
+	/**
+	 * New method for updating instance- checking permissions.
+	 * 
+	 */
+	@Override
+	public InstanceBoundary updateInstanceEnhanced(String userDomain, String userEmail, String instanceDomain,
+			String instanceId, InstanceBoundary update) {
+		
+		Optional<UserEntity> optional = userDao.findById(userDomain+ "@@" +userEmail);
+		
+		if (optional.isPresent()) {
+			UserEntity userEntity = optional.get();
+			
+			if(userEntity.getRole().name().equalsIgnoreCase("PLAYER")) {
+				InstanceEntity instanceForUpdate = this.getSpecificEntityInstance(instanceDomain,instanceId);
+
+				if (update.getType() != null)
+					instanceForUpdate.setType(update.getType());
+
+				if (update.getName() != null)
+					instanceForUpdate.setName(update.getName());
+
+				if (update.getActive() != null)
+					instanceForUpdate.setActive(update.getActive());
+
+				if (update.getLocation() != null) {
+					instanceForUpdate.setLocationLat(update.getLocation().getLat());
+					instanceForUpdate.setLocationLng(update.getLocation().getLng());
+				}
+				if (update.getInstanceAttributes() != null)
+					instanceForUpdate.setInstanceAttributes(update.getInstanceAttributes());
+				
+				instanceForUpdate = this.instanceDao.save(instanceForUpdate);
+				
+				return this.instanceConverter.toBoundary(instanceForUpdate);
+			}
+			else {
+				throw new RuntimeException("No permissions to perform update instance operation.");
+			}
+		} else {
+			throw new RuntimeException("Cannot find user with id: " + instanceId);
+		}
+		
+		
 	}
 
 }
