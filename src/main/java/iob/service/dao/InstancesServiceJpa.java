@@ -1,5 +1,6 @@
 package iob.service.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,12 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.GeoResult;
+import org.springframework.data.geo.GeoResults;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +24,8 @@ import iob.bounderies.GeneralId;
 import iob.bounderies.InstanceBoundary;
 import iob.data.InstanceEntity;
 import iob.data.UserEntity;
+import iob.exceptions.NoPermissionException;
+import iob.exceptions.NotFoundException;
 import iob.logic.IdConverter;
 import iob.logic.InstanceConverter;
 import iob.logic.InstanceServiceEnhanced;
@@ -67,7 +76,6 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced{
 	
 
 	@Override
-	@Transactional
 	@Deprecated
 	public InstanceBoundary updateInstance(String instanceDomain, String instanceId, InstanceBoundary update) {
 		InstanceEntity instanceForUpdate = this.getSpecificEntityInstance(instanceDomain,instanceId);
@@ -82,8 +90,8 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced{
 			instanceForUpdate.setActive(update.getActive());
 
 		if (update.getLocation() != null) {
-			instanceForUpdate.setLocationLat(update.getLocation().getLat());
-			instanceForUpdate.setLocationLng(update.getLocation().getLng());
+			//double [] location = {update.getLocation().getLat(),update.getLocation().getLng()};
+			instanceForUpdate.setLocation(new GeoJsonPoint(update.getLocation().getLat(), update.getLocation().getLat()));
 		}
 		if (update.getInstanceAttributes() != null)
 			instanceForUpdate.setInstanceAttributes(update.getInstanceAttributes());
@@ -102,7 +110,6 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced{
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<InstanceBoundary> getAllInstances() {
 		Iterable<InstanceEntity> iterable = this.instanceDao
 				.findAll();
@@ -111,7 +118,6 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced{
 	}
 
 	@Override
-	@Transactional
 	public void deleteAllInstances() {
 		this.instanceDao.deleteAll();
 
@@ -153,7 +159,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced{
 	 * 
 	 */
 	@Override
-	public InstanceBoundary updateInstanceEnhanced(String userDomain, String userEmail, String instanceDomain,
+	public InstanceBoundary updateInstance(String userDomain, String userEmail, String instanceDomain,
 			String instanceId, InstanceBoundary update) {
 		
 		Optional<UserEntity> optional = userDao.findById(userDomain+ "@@" +userEmail);
@@ -173,8 +179,8 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced{
 					instanceForUpdate.setActive(update.getActive());
 
 				if (update.getLocation() != null) {
-					instanceForUpdate.setLocationLat(update.getLocation().getLat());
-					instanceForUpdate.setLocationLng(update.getLocation().getLng());
+					//double [] location = {update.getLocation().getLat(),update.getLocation().getLat()};
+					instanceForUpdate.setLocation(new GeoJsonPoint(update.getLocation().getLat(), update.getLocation().getLat()));
 				}
 				if (update.getInstanceAttributes() != null)
 					instanceForUpdate.setInstanceAttributes(update.getInstanceAttributes());
@@ -184,12 +190,42 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced{
 				return this.instanceConverter.toBoundary(instanceForUpdate);
 			}
 			else {
-				throw new RuntimeException("No permissions to perform update instance operation.");
+				throw new NoPermissionException("No permissions to perform update instance operation.");
 			}
 		} else {
-			throw new RuntimeException("Cannot find user with id: " + instanceId);
+			throw new NotFoundException("Cannot find user with id: " + instanceId);
 		}
 		
+		
+	}
+	// Get all instances that inside the circle, also check that these instances are active.
+	@Override
+	public List<InstanceBoundary> getInstancesNear(String userDomain, String userEmail, String page, String size, double lat, double lng,
+			double distance) {
+		
+		Optional<UserEntity> optional = userDao.findById(userDomain+ "@@" +userEmail);
+		
+		if (optional.isPresent()) {
+			UserEntity userEntity = optional.get();
+			if(userEntity.getRole().name().equalsIgnoreCase("PLAYER")) {
+				
+				ArrayList<InstanceEntity> nearEntities = new ArrayList<>();
+				for (InstanceEntity instance : instanceDao.findByLocationNear(new Point(lat, lng), new Distance(distance,Metrics.KILOMETERS))) {
+				    if(instance.getActive()) {
+				    	nearEntities.add(instance);
+				    }
+				}
+				if(nearEntities.size() ==0 ) throw new NotFoundException("No near active instances");
+				
+				Stream<InstanceEntity> stream = StreamSupport.stream(nearEntities.spliterator(), false);
+				return stream.map(instanceConverter::toBoundary).collect(Collectors.toList()) ;
+			}
+			else {
+				throw new NoPermissionException("No permissions to perform update instance operation.");
+			}
+		} else {
+			throw new NotFoundException("Cannot find user with id: " + userDomain+ "@@" +userEmail);
+		}
 		
 	}
 

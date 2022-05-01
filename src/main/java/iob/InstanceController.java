@@ -32,8 +32,22 @@ public class InstanceController {
 	public void updateInstance(@PathVariable("instanceDomain") String instanceDomain, @PathVariable("instanceId") String instanceId, @RequestParam(name="userDomain", required = true) String userDomain,
 			@RequestParam(name="userEmail", required = true) String userEmail,
 			@RequestBody InstanceBoundary ib) {
-		this.instancesService.updateInstanceEnhanced(userDomain,userEmail,instanceDomain, instanceId, ib);
+		this.instancesService.updateInstance(userDomain,userEmail,instanceDomain, instanceId, ib);
 	}
+	
+	// Search instances by distance - new method for Spring 5 using Geo Location of MongoDB
+		@RequestMapping(path = "/iob/instances/search/near/{lat}/{lng}/{distance}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public InstanceBoundary[] searchInstanceByLocation(@PathVariable("lat") double lat,
+															@PathVariable("lng") double lng,
+															@PathVariable("distance") double distance,
+															@RequestParam(name="userDomain", required = true) String userDomain,
+															@RequestParam(name="userEmail", required = true) String userEmail,
+															@RequestParam(name="size", required = true) String size,
+															@RequestParam(name="page", required = true) String page) {
+			
+			return this.instancesService.getInstancesNear(userDomain,userEmail,page,size,lat,lng,distance).toArray(new InstanceBoundary[0]);
+
+		}
 
 	// Retrieve instance
 	@RequestMapping(path = "/iob/instances/{instanceDomain}/{instanceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
