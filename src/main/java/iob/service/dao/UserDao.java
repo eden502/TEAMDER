@@ -6,4 +6,4 @@ import org.springframework.stereotype.Repository;
 
 import iob.data.UserEntity;
 @Repository
-public interface UserDao extends PagingAndSortingRepository<UserEntity, String>, MongoRepository<UserEntity, String>{}
+public interface UserDao extends MongoRepository<UserEntity, String>{}

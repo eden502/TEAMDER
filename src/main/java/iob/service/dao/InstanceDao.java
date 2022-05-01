@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import iob.data.InstanceEntity;
 import iob.data.UserEntity;
 @Repository
-public interface InstanceDao extends PagingAndSortingRepository<InstanceEntity, String>, MongoRepository<InstanceEntity, String> {
+public interface InstanceDao extends MongoRepository<InstanceEntity, String> {
 	
 }

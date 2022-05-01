@@ -22,7 +22,7 @@ import iob.logic.InstanceConverter;
 import iob.logic.InstanceServiceEnhanced;
 import iob.logic.InstancesService;
 @Service
-public class InstancesServiceJpa implements InstancesService,InstanceServiceEnhanced{
+public class InstancesServiceJpa implements InstanceServiceEnhanced{
 
 	private UserDao userDao;
 	private InstanceDao instanceDao;
