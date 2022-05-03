@@ -19,11 +19,13 @@ import iob.bounderies.UserBoundary;
 
 import iob.data.UserEntity;
 import iob.data.UserRole;
+import iob.exceptions.NoPermissionException;
 import iob.logic.UserConverter;
 import iob.logic.UsersService;
+import iob.logic.UsersServiceEnhanced;
 
 @Service
-public class UsersServiceJpa implements UsersService {
+public class UsersServiceJpa implements UsersServiceEnhanced {
 	private UserDao userDao;
 	private UserConverter userConverter;
 	private String domain;
@@ -114,7 +116,17 @@ public class UsersServiceJpa implements UsersService {
 
 	@Override
 	@Transactional
+	@Deprecated
 	public void deleteAllUsers() {
+		//this.userDao.deleteAll();
+		throw new RuntimeException("Deprecated Method");
+	}
+	@Override
+	@Transactional
+	public void deleteAllUsers(String domain, String email) {
+		UserEntity ue = getUserEntityById(email, domain);
+		if (!ue.getRole().equals(UserRole.ADMIN))
+			throw new NoPermissionException();
 		this.userDao.deleteAll();
 	}
 
@@ -180,4 +192,6 @@ public class UsersServiceJpa implements UsersService {
 		}
 		
 	}
+
+
 }

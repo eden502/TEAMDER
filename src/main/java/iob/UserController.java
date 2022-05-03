@@ -24,7 +24,10 @@ public class UserController {
 	}
 
 	// Create a new user
-	@RequestMapping(path = "/iob/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/iob/users",
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public UserBoundary createUser(@RequestBody NewUserBoundary newUserBoundary) {
 
 		return userService.createUser(userConverter.newUserbToUserb(newUserBoundary));

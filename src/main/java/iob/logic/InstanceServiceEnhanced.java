@@ -11,4 +11,5 @@ public interface InstanceServiceEnhanced extends InstancesService{
 
 	public List<InstanceBoundary> getInstancesNear(String userDomain, String userEmail, String page, String size, double lat, double lng,
 			double distance);
+	public void deleteAllInstances(String domain, String email);
 }

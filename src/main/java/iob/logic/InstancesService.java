@@ -13,6 +13,7 @@ public interface InstancesService {
 	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId);
 
 	public List<InstanceBoundary> getAllInstances();
-
+	
+	@Deprecated
 	public void deleteAllInstances();
 }
