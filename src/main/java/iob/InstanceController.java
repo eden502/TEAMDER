@@ -35,7 +35,7 @@ public class InstanceController {
 		this.instancesService.updateInstance(userDomain,userEmail,instanceDomain, instanceId, ib);
 	}
 	
-	// Search instances by distance - new method for Spring 5 using Geo Location of MongoDB
+	// Search instances by distance - new method for Spring 5
 		@RequestMapping(path = "/iob/instances/search/near/{lat}/{lng}/{distance}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public InstanceBoundary[] searchInstanceByLocation(@PathVariable("lat") double lat,
 															@PathVariable("lng") double lng,

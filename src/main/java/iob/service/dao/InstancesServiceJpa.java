@@ -10,14 +10,21 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResult;
 import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.mongodb.client.MongoClients;
 
 import iob.bounderies.GeneralId;
 import iob.bounderies.InstanceBoundary;
@@ -223,12 +230,22 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 			if (userEntity.getRole().name().equalsIgnoreCase("PLAYER")) {
 
 				ArrayList<InstanceEntity> nearEntities = new ArrayList<>();
-				for (InstanceEntity instance : instanceDao.findByLocationNear(new Point(lat, lng),
-						new Distance(distance, Metrics.KILOMETERS))) {
+				
+				//List<InstanceEntity> instances =
+				MongoOperations mongoOps = new MongoTemplate(MongoClients.create("mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"), "myFirstDatabase");
+				Circle circle = new Circle(lat, lng, distance);
+				for (InstanceEntity instance : mongoOps.find(new Query(Criteria.where("location").within(circle)), InstanceEntity.class)){
 					if (instance.getActive()) {
 						nearEntities.add(instance);
 					}
 				}
+				// Can be usefull for future use
+				//for (InstanceEntity instance : instanceDao.findByLocationNear(new Point(lat, lng),
+				//		new Distance(distance, Metrics.KILOMETERS))) {
+				//	if (instance.getActive()) {
+				//		nearEntities.add(instance);
+				//	}
+				//}
 				if (nearEntities.size() == 0)
 					throw new NotFoundException("No near active instances");
 
