@@ -42,8 +42,8 @@ public class InstanceController {
 															@PathVariable("distance") double distance,
 															@RequestParam(name="userDomain", required = true) String userDomain,
 															@RequestParam(name="userEmail", required = true) String userEmail,
-															@RequestParam(name="size", required = true) String size,
-															@RequestParam(name="page", required = true) String page) {
+															@RequestParam(name="size", required = true) int size,
+															@RequestParam(name="page", required = true) int page) {
 			
 			return this.instancesService.getInstancesNear(userDomain,userEmail,page,size,lat,lng,distance).toArray(new InstanceBoundary[0]);
 

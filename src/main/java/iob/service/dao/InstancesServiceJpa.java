@@ -10,6 +10,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResult;
@@ -23,7 +26,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.PageRequest;
 import com.mongodb.client.MongoClients;
 
 import iob.bounderies.GeneralId;
@@ -220,7 +223,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	// Get all instances that inside the circle, also check that these instances are
 	// active.
 	@Override
-	public List<InstanceBoundary> getInstancesNear(String userDomain, String userEmail, String page, String size,
+	public List<InstanceBoundary> getInstancesNear(String userDomain, String userEmail, int page, int size,
 			double lat, double lng, double distance) {
 
 		Optional<UserEntity> optional = userDao.findById(userDomain + "@@" + userEmail);
@@ -234,7 +237,11 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 				//List<InstanceEntity> instances =
 				MongoOperations mongoOps = new MongoTemplate(MongoClients.create("mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"), "myFirstDatabase");
 				Circle circle = new Circle(lat, lng, distance);
-				for (InstanceEntity instance : mongoOps.find(new Query(Criteria.where("location").within(circle)), InstanceEntity.class)){
+				
+				Pageable pageable = PageRequest.of(page, size);
+				Query query = new Query(Criteria.where("location").within(circle)).with(pageable);
+				
+				for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)){
 					if (instance.getActive()) {
 						nearEntities.add(instance);
 					}
