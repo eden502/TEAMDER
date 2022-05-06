@@ -6,36 +6,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-
-
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
 import iob.data.ActivityEntity;
-
+import iob.data.UserEntity;
+import iob.data.UserRole;
+import iob.exceptions.NoPermissionException;
+import iob.exceptions.NotFoundException;
 import iob.logic.ActivitiesService;
+import iob.logic.ActivitiesServiceEnhanced;
 import iob.logic.ActivityConverter;
+import iob.logic.UserConverter;
 
 @Service
-public class ActivitiesServiceJpa implements ActivitiesService {
+public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 
 	
 	private ActivityDao activityDao;
+	private UserDao userDao;
 	private ActivityConverter activityConverter;
+	private UserConverter userConverter;
 	private String domain;
 
 	@Autowired
-	public ActivitiesServiceJpa(ActivityConverter activityConverter,ActivityDao activityDao) {
+	public ActivitiesServiceJpa(ActivityConverter activityConverter,ActivityDao activityDao,UserDao userDao,UserConverter userConverter) {
 		this.activityConverter = activityConverter;
 		this.activityDao = activityDao;
+		this.userDao = userDao;
+		this.userConverter = userConverter;
 	}
 
 	@Value("${spring.application.name:null}")
@@ -77,9 +86,41 @@ public class ActivitiesServiceJpa implements ActivitiesService {
 	}
 
 	@Override
-	@Transactional
+	@Deprecated
 	public void deleteAllAcitivities() {
-		this.activityDao.deleteAll();
+		//this.activityDao.deleteAll();
+		throw new RuntimeException("deprecated method");
+	}
+	
+	@Override
+	public void deleteAllAcitivities(String domain, String email) {
+		UserEntity userEntity = getUserEntity(domain, email);
+		
+		if(userIsAdmin(userEntity)) {
+			this.activityDao.deleteAll();
+		}else {
+			throw new NoPermissionException("user with id : " + userEntity.getId() + " has No permission to delete all activities");
+		}
+		
+	}
+	
+	
+	private boolean userIsAdmin(UserEntity userEntity) {
+		
+		return userEntity.getRole() == UserRole.ADMIN;
+	}
+
+
+
+	private UserEntity getUserEntity(String userDomain, String email) {
+		String id = userConverter.getUserEntityIdFromDomainAndEmail(userDomain, email);
+		Optional<UserEntity> optional = userDao.findById(id);
+		if (optional.isPresent()) {
+			UserEntity userEntity = optional.get();
+			return userEntity;
+		} else {
+			throw new NotFoundException("Cannot find user with id: " + id);
+		}
 	}
 
 	private void validateActivityBoundary(ActivityBoundary activity) {
@@ -123,5 +164,7 @@ public class ActivitiesServiceJpa implements ActivitiesService {
 		if(activity.getType()==null|| activity.getType().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary must have a valid type");
 	}
+
+
 
 }

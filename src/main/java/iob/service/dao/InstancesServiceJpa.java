@@ -39,6 +39,7 @@ import iob.logic.IdConverter;
 import iob.logic.InstanceConverter;
 import iob.logic.InstanceServiceEnhanced;
 import iob.logic.InstancesService;
+import iob.logic.UserConverter;
 
 @Service
 public class InstancesServiceJpa implements InstanceServiceEnhanced {
@@ -46,13 +47,16 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	private UserDao userDao;
 	private InstanceDao instanceDao;
 	private InstanceConverter instanceConverter;
+	private UserConverter userConverter;
 	private String domain;
 
 	@Autowired
-	public InstancesServiceJpa(InstanceConverter instanceConverter, InstanceDao instanceDao, UserDao userDao) {
+	public InstancesServiceJpa(InstanceConverter instanceConverter,UserConverter userConverter, InstanceDao instanceDao, UserDao userDao) {
 		this.instanceConverter = instanceConverter;
 		this.instanceDao = instanceDao;
 		this.userDao = userDao;
+		this.userConverter = userConverter;
+		
 	}
 
 	@Value("${spring.application.name:null}")
@@ -132,7 +136,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	@Override
 	@Transactional
 	public void deleteAllInstances(String domain, String email) {
-		Optional<UserEntity> optional = userDao.findById(domain + "@@" + email);
+		Optional<UserEntity> optional = userDao.findById(userConverter.getUserEntityIdFromDomainAndEmail(domain, email));
 		if (optional.isPresent()) {
 			UserEntity userEntity = optional.get();
 			if (userEntity.getRole().name().equalsIgnoreCase("ADMIN")) {
@@ -183,7 +187,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	public InstanceBoundary updateInstance(String userDomain, String userEmail, String instanceDomain,
 			String instanceId, InstanceBoundary update) {
 
-		Optional<UserEntity> optional = userDao.findById(userDomain + "@@" + userEmail);
+		Optional<UserEntity> optional = userDao.findById(userConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail));
 
 		if (optional.isPresent()) {
 			UserEntity userEntity = optional.get();
@@ -215,7 +219,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 				throw new NoPermissionException("No permissions to perform update instance operation.");
 			}
 		} else {
-			throw new NotFoundException("Cannot find user with id: " + instanceId);
+			throw new NotFoundException("Cannot find user with id: " + userConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail));
 		}
 
 	}
@@ -226,7 +230,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	public List<InstanceBoundary> getInstancesNear(String userDomain, String userEmail, int page, int size,
 			double lat, double lng, double distance) {
 
-		Optional<UserEntity> optional = userDao.findById(userDomain + "@@" + userEmail);
+		Optional<UserEntity> optional = userDao.findById(userConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail));
 
 		if (optional.isPresent()) {
 			UserEntity userEntity = optional.get();
@@ -262,7 +266,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 				throw new NoPermissionException("No permissions to perform update instance operation.");
 			}
 		} else {
-			throw new NotFoundException("Cannot find user with id: " + userDomain + "@@" + userEmail);
+			throw new NotFoundException("Cannot find user with id: " + userConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail));
 		}
 
 	}
