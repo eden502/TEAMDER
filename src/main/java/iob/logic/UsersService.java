@@ -12,6 +12,7 @@ public interface UsersService {
 
 	public UserBoundary updateUser(String userdomain, String userEmail, UserBoundary update);
 	
+	@Deprecated
 	public List<UserBoundary> getAllUsers();
 	
 	@Deprecated

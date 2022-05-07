@@ -77,8 +77,12 @@ public class AdminController {
 			path = "/iob/admin/users",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary[] exportAllUsers() {
-		return userService.getAllUsers().toArray(new UserBoundary[0]);
+	public UserBoundary[] exportAllUsers(
+			@RequestParam(name="userDomain",required = true) String userDomain,
+			@RequestParam(name = "userEmail",required = true) String userEmail,
+			@RequestParam(name="size", required = false, defaultValue = "10") int size,
+			@RequestParam(name="page", required = false, defaultValue = "0") int page) {
+		return userService.getAllUsers(userDomain,userEmail,size,page).toArray(new UserBoundary[0]);
 	}
 	
 

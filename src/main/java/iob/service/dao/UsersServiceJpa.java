@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import iob.bounderies.UserBoundary;
 import iob.data.UserEntity;
 import iob.data.UserRole;
 import iob.exceptions.NoPermissionException;
+import iob.exceptions.NotFoundException;
 import iob.logic.UserConverter;
 import iob.logic.UsersService;
 import iob.logic.UsersServiceEnhanced;
@@ -99,9 +102,10 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 
 	@Override
 	@Transactional(readOnly = true)
+	@Deprecated
 	public List<UserBoundary> getAllUsers() {
 		
-		Iterable<UserEntity> usersIterable = this.userDao.findAll();
+		//Iterable<UserEntity> usersIterable = this.userDao.findAll();
 		//int page= 1;
 		//int size = 1;
 		//return this.userDao
@@ -110,8 +114,23 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 		//		.stream()
 		//		.map(this.userConverter::toBoundary)
 		//		.collect(Collectors.toList());
-		Stream<UserEntity> stream = StreamSupport.stream(usersIterable.spliterator(), false);
-		return stream.map(userConverter::toBoundary).collect(Collectors.toList());
+		//Stream<UserEntity> stream = StreamSupport.stream(usersIterable.spliterator(), false);
+		//return stream.map(userConverter::toBoundary).collect(Collectors.toList());
+		throw new RuntimeException("Deprecated Method");
+	}
+	
+	@Override
+	public List<UserBoundary> getAllUsers(String userDomain,String userEmail,int size, int page) {
+		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
+		
+		if(userEntity.getRole() != UserRole.ADMIN)
+			throw new NoPermissionException();
+		
+		return this.userDao.findAll(PageRequest.of(page, size,Direction.DESC,"role"))
+				.getContent()
+				.stream()
+				.map(this.userConverter::toBoundary)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -125,7 +144,7 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 	@Transactional
 	public void deleteAllUsers(String domain, String email) {
 		UserEntity ue = getUserEntityById(email, domain);
-		if (!ue.getRole().equals(UserRole.ADMIN))
+		if (ue.getRole() != UserRole.ADMIN)
 			throw new NoPermissionException();
 		this.userDao.deleteAll();
 	}
@@ -139,7 +158,7 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 			UserEntity userEntity = optional.get();
 			return userEntity;
 		} else {
-			throw new RuntimeException("Cannot find user with id: " + id);
+			throw new NotFoundException("Cannot find user with id: " + id);
 		}
 	}
 
@@ -192,6 +211,8 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 		}
 		
 	}
+
+
 
 
 }
