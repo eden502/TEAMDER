@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.UserBoundary;
 import iob.logic.ActivitiesService;
+import iob.logic.ActivitiesServiceEnhanced;
 import iob.logic.InstanceServiceEnhanced;
 import iob.logic.InstancesService;
 import iob.logic.UsersService;
@@ -19,11 +20,11 @@ public class AdminController {
 
 	private UsersServiceEnhanced userService;
 	private InstanceServiceEnhanced instancesService;
-	private ActivitiesService activitiesService;
+	private ActivitiesServiceEnhanced activitiesService;
 
 	@Autowired
 	public AdminController(UsersServiceEnhanced usersService, InstanceServiceEnhanced instancesService,
-			ActivitiesService activitiesService) {
+			ActivitiesServiceEnhanced activitiesService) {
 		this.userService = usersService;
 		this.instancesService = instancesService;
 		this.activitiesService = activitiesService;
@@ -48,8 +49,10 @@ public class AdminController {
 	// Delete all activities in the domain
 	@RequestMapping(path = "/iob/admin/activities", method = RequestMethod.DELETE)
 
-	public void deleteAllActivites() {
-		activitiesService.deleteAllAcitivities();
+	public void deleteAllActivites(
+			@RequestParam(name="userDomain",required = true) String userDomain,
+			@RequestParam(name = "userEmail",required = true) String userEmail) {
+		activitiesService.deleteAllAcitivities(userDomain,userEmail);
 	}
 
 	// Delete all instances in the domain
@@ -74,8 +77,12 @@ public class AdminController {
 			path = "/iob/admin/users",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary[] exportAllUsers() {
-		return userService.getAllUsers().toArray(new UserBoundary[0]);
+	public UserBoundary[] exportAllUsers(
+			@RequestParam(name="userDomain",required = true) String userDomain,
+			@RequestParam(name = "userEmail",required = true) String userEmail,
+			@RequestParam(name="size", required = false, defaultValue = "10") int size,
+			@RequestParam(name="page", required = false, defaultValue = "0") int page) {
+		return userService.getAllUsers(userDomain,userEmail,size,page).toArray(new UserBoundary[0]);
 	}
 	
 

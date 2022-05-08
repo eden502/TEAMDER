@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import iob.bounderies.ActivityBoundary;
 import iob.logic.ActivitiesService;
+import iob.logic.ActivitiesServiceEnhanced;
 
 @RestController
 public class ActivityController {
 
-	private ActivitiesService activitiesService;
+	private ActivitiesServiceEnhanced activitiesService;
 
 	@Autowired
-	public ActivityController(ActivitiesService activitiesService) {
+	public ActivityController(ActivitiesServiceEnhanced activitiesService) {
 		this.activitiesService = activitiesService;
 	}
 

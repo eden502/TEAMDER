@@ -29,7 +29,10 @@ public class InstanceController {
 
 	// Update an instance - last update 30/04/22 (Sprint 5)
 	@RequestMapping(path = "/iob/instances/{instanceDomain}/{instanceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void updateInstance(@PathVariable("instanceDomain") String instanceDomain, @PathVariable("instanceId") String instanceId, @RequestParam(name="userDomain", required = true) String userDomain,
+	public void updateInstance(
+			@PathVariable("instanceDomain") String instanceDomain,
+			@PathVariable("instanceId") String instanceId,
+			@RequestParam(name="userDomain", required = true) String userDomain,
 			@RequestParam(name="userEmail", required = true) String userEmail,
 			@RequestBody InstanceBoundary ib) {
 		this.instancesService.updateInstance(userDomain,userEmail,instanceDomain, instanceId, ib);
