@@ -52,6 +52,7 @@ public class InstanceController {
 
 		}
 
+		
 	// Retrieve instance
 	@RequestMapping(path = "/iob/instances/{instanceDomain}/{instanceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public InstanceBoundary getInstance(@PathVariable("instanceDomain") String instanceDomain,
