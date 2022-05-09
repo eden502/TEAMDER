@@ -16,6 +16,8 @@ import java.util.stream.StreamSupport;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
@@ -77,12 +79,25 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 
 	@Override
 	@Transactional(readOnly = true)
+	@Deprecated
 	public List<ActivityBoundary> getAllActivities() {
-		Iterable<ActivityEntity> iterable = this.activityDao
-				.findAll();
-		Stream<ActivityEntity> stream = StreamSupport.stream(iterable.spliterator(), false);
-		return stream.map(activityConverter::toBoundary).collect(Collectors.toList());
+//		Iterable<ActivityEntity> iterable = this.activityDao
+//				.findAll();
+//		Stream<ActivityEntity> stream = StreamSupport.stream(iterable.spliterator(), false);
+//		return stream.map(activityConverter::toBoundary).collect(Collectors.toList());
+		throw new RuntimeException("Deprecated method");
+	}
+	
 
+	@Override
+	public List<ActivityBoundary> getAllActivities(String userDomain, String userEmail, int size, int page) {
+		UserEntity userEntity = getUserEntity(userEmail, userDomain);
+		
+		if(userEntity.getRole() != UserRole.ADMIN || userEntity.getRole() != UserRole.MANAGER)
+			throw new NoPermissionException();
+//		this.activityDao.findAll(PageRequest.of(page, size, Direction.DESC,"role"))
+		
+		return null;
 	}
 
 	@Override
@@ -164,6 +179,7 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 		if(activity.getType()==null|| activity.getType().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary must have a valid type");
 	}
+
 
 
 
