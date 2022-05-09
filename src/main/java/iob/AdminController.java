@@ -87,9 +87,21 @@ public class AdminController {
 	
 
 	// Export all activities
-	@RequestMapping(path = "/iob/admin/activities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-
-	public ActivityBoundary[] exportAllActivities() {
-		return activitiesService.getAllActivities().toArray(new ActivityBoundary[0]);
+	@RequestMapping(path = "/iob/admin/activities",
+					method = RequestMethod.GET,
+					produces = MediaType.APPLICATION_JSON_VALUE)
+	
+	public ActivityBoundary[] exportAllActivities(
+			@RequestParam(name="userDomain",required = true) String userDomain,
+			@RequestParam(name = "userEmail",required = true) String userEmail,
+			@RequestParam(name="size", required = false, defaultValue = "10") int size,
+			@RequestParam(name="page", required = false, defaultValue = "0") int page) {
+		System.err.println("errorrrr");
+		return activitiesService.getAllActivities(userDomain, userEmail, size, page).toArray(new ActivityBoundary[0]);
 	}
+	
+//	@Deprecated
+//	public ActivityBoundary[] exportAllActivities() {
+//		return activitiesService.getAllActivities().toArray(new ActivityBoundary[0]);
+//	}
 }

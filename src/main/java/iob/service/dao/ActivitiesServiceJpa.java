@@ -91,11 +91,14 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 
 	@Override
 	public List<ActivityBoundary> getAllActivities(String userDomain, String userEmail, int size, int page) {
-		UserEntity userEntity = getUserEntity(userEmail, userDomain);
+		System.err.println("userDomain ="+  userDomain );
+		System.err.println("userEmail ="+  userEmail);
+
+		UserEntity userEntity = getUserEntity(userDomain, userEmail);
 		
-		if(userEntity.getRole() != UserRole.ADMIN || userEntity.getRole() != UserRole.MANAGER)
+		if(userEntity.getRole() != UserRole.ADMIN)
 			throw new NoPermissionException();
-		
+		System.err.println("errorrrr2");
 		return this.activityDao.findAll(PageRequest.of(page, size, Direction.DESC,"role"))
 				.getContent()
 				.stream()
@@ -132,6 +135,7 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 
 	private UserEntity getUserEntity(String userDomain, String email) {
 		String id = userConverter.getUserEntityIdFromDomainAndEmail(userDomain, email);
+		System.err.println("id = "+id);
 		Optional<UserEntity> optional = userDao.findById(id);
 		if (optional.isPresent()) {
 			UserEntity userEntity = optional.get();
