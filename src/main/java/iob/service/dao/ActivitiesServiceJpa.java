@@ -95,9 +95,12 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 		
 		if(userEntity.getRole() != UserRole.ADMIN || userEntity.getRole() != UserRole.MANAGER)
 			throw new NoPermissionException();
-//		this.activityDao.findAll(PageRequest.of(page, size, Direction.DESC,"role"))
 		
-		return null;
+		return this.activityDao.findAll(PageRequest.of(page, size, Direction.DESC,"role"))
+				.getContent()
+				.stream()
+				.map(this.activityConverter::toBoundary)
+				.collect(Collectors.toList());
 	}
 
 	@Override
