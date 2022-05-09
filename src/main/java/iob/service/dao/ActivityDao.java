@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import iob.data.ActivityEntity;
 import iob.data.UserEntity;
 @Repository
-public interface ActivityDao extends PagingAndSortingRepository<ActivityEntity, String>, MongoRepository<ActivityEntity, String> {
+public interface ActivityDao extends MongoRepository<ActivityEntity, String> {
 
 }

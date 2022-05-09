@@ -5,20 +5,20 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import iob.service.dao.AttributesFieldConverter;
 
 
-
-//@Entity
-//@Table(name="INSTANCES")
+@Document
 public class InstanceEntity {
 
 	
@@ -28,8 +28,10 @@ public class InstanceEntity {
 	private boolean active;
 	private Date createdTimestamp;
 	private String createdByUserId;
-	private double locationLat;
-	private double locationLng;
+	// Changed to support Geo Search with MongoDB (01/05/2022 By Keren)
+	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+	private GeoJsonPoint location;
+	
 	private Map<String, Object> instanceAttributes;
 
 	public InstanceEntity() {
@@ -73,7 +75,7 @@ public class InstanceEntity {
 		this.active = active;
 
 	}
-	@Column(name="CREATION_TIMESTAMP")
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreatedTimestamp() {
 		return createdTimestamp;
@@ -92,7 +94,7 @@ public class InstanceEntity {
 		this.createdByUserId = createdByUserId;
 
 	}
-
+	/*
 	public double getLocationLat() {
 		return locationLat;
 	}
@@ -109,6 +111,15 @@ public class InstanceEntity {
 	public void setLocationLng(double locationLng) {
 		this.locationLng = locationLng;
 
+	}*/
+	
+	public GeoJsonPoint getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(GeoJsonPoint location) {
+		this.location = location;
 	}
 	
 	@Convert(converter = AttributesFieldConverter.class)
@@ -116,6 +127,7 @@ public class InstanceEntity {
 	public Map<String, Object> getInstanceAttributes() {
 		return instanceAttributes;
 	}
+
 
 	public void setInstanceAttributes(Map<String, Object> instanceAttributes) {
 		this.instanceAttributes = instanceAttributes;

@@ -9,6 +9,6 @@ public interface ActivitiesService {
 	public Object invokeActivity(ActivityBoundary activity);
 
 	public List<ActivityBoundary> getAllActivities();
-
+	@Deprecated
 	public void deleteAllAcitivities();
 }

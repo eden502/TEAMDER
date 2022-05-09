@@ -1,6 +1,7 @@
 package iob.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Component;
 
 import iob.bounderies.CreatedBy;
@@ -27,8 +28,8 @@ public class InstanceConverter {
 		instanceId.setId(getIdFromEntityGeneralId(entity.getId()));
 
 		Location location = new Location();
-		location.setLat(entity.getLocationLat());
-		location.setLng(entity.getLocationLng());
+		location.setLat(entity.getLocation().getX());
+		location.setLng(entity.getLocation().getY());
 
 		UserId userId = new UserId();
 		userId.setDomain(getUserDomainFromUserEntityId(entity.getCreatedByUserId()));
@@ -75,8 +76,8 @@ public class InstanceConverter {
 		instanceEntity.setCreatedByUserId(getUserEntityIdFromDomainAndEmail(
 				boundary.getCreatedBy().getUserId().getDomain(), boundary.getCreatedBy().getUserId().getEmail()));
 
-		instanceEntity.setLocationLat(boundary.getLocation().getLat());
-		instanceEntity.setLocationLng(boundary.getLocation().getLng());
+		//double [] location = {boundary.getLocation().getLat(),boundary.getLocation().getLng()};
+		instanceEntity.setLocation(new GeoJsonPoint(boundary.getLocation().getLat(),boundary.getLocation().getLng()));
 		instanceEntity.setInstanceAttributes(boundary.getInstanceAttributes());
 
 		return instanceEntity;

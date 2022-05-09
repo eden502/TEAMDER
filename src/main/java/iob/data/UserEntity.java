@@ -6,8 +6,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name="USERS")
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class UserEntity {
 	
 	private String id;

@@ -12,10 +12,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import iob.service.dao.AttributesFieldConverter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-//@Entity
-//@Table(name="ACTIVITIES")
+import iob.service.dao.AttributesFieldConverter;
+@Document
 public class ActivityEntity {
 
 	private String id;
@@ -68,7 +68,6 @@ public class ActivityEntity {
 
 	}
 
-	@Column(name="CREATION_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreatedTimestamp() {
 		return createdTimestamp;
