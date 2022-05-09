@@ -255,7 +255,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 			double lng, double distance) {
 
 		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
-		if (userEntity.getRole() == UserRole.PLAYER) {
+		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
 
 			ArrayList<InstanceEntity> nearEntities = new ArrayList<>();
 
@@ -269,9 +269,10 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 			Query query = new Query(Criteria.where("location").within(circle)).with(pageable);
 
 			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
-				if (instance.getActive()) {
-					nearEntities.add(instance);
+				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
+					continue;
 				}
+				else nearEntities.add(instance);
 			}
 			// Can be usefull for future use
 			// for (InstanceEntity instance : instanceDao.findByLocationNear(new Point(lat,
