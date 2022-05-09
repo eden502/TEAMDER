@@ -48,16 +48,16 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	private UserDao userDao;
 	private InstanceDao instanceDao;
 	private InstanceConverter instanceConverter;
-	private UserConverter userConverter;
+	private IdConverter idConverter;
 	private String domain;
 
 	@Autowired
-	public InstancesServiceJpa(InstanceConverter instanceConverter, UserConverter userConverter,
+	public InstancesServiceJpa(InstanceConverter instanceConverter, IdConverter idConverter,
 			InstanceDao instanceDao, UserDao userDao) {
 		this.instanceConverter = instanceConverter;
 		this.instanceDao = instanceDao;
 		this.userDao = userDao;
-		this.userConverter = userConverter;
+		this.idConverter = idConverter;
 
 	}
 
@@ -98,7 +98,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	}
 
 	private UserEntity getUserEntityById(String userEmail, String userDomain) {
-		String id = userConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail);
+		String id = this.idConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail);
 		Optional<UserEntity> optional = this.userDao.findById(id);
 
 		if (optional.isPresent()) {
@@ -161,7 +161,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	@Transactional
 	public void deleteAllInstances(String domain, String email) {
 		Optional<UserEntity> optional = userDao
-				.findById(userConverter.getUserEntityIdFromDomainAndEmail(domain, email));
+				.findById(this.idConverter.getUserEntityIdFromDomainAndEmail(domain, email));
 		if (optional.isPresent()) {
 			UserEntity userEntity = optional.get();
 			if (userEntity.getRole().name().equalsIgnoreCase("ADMIN")) {
@@ -175,7 +175,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 
 	private InstanceEntity getSpecificEntityInstance(String domain, String instanceId) {
 		Optional<InstanceEntity> optional = this.instanceDao
-				.findById(instanceConverter.getEntityGeneralIdFromDomainAndId(domain, instanceId));
+				.findById(this.idConverter.getEntityGeneralIdFromDomainAndId(domain, instanceId));
 
 		if (optional.isPresent()) {
 			return optional.get();

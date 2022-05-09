@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -16,6 +17,9 @@ import org.springframework.web.client.RestTemplate;
 import iob.bounderies.NewUserBoundary;
 import iob.bounderies.UserBoundary;
 import iob.bounderies.UserId;
+import iob.logic.IdConverter;
+import iob.logic.UserConverter;
+import iob.service.dao.UserDao;
 
 
 
@@ -24,7 +28,13 @@ public class UserTests {
 
 	private int port;
 	private String url;
-	private String deleteUrl;
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
+	private IdConverter idConverter;
+	
 	private RestTemplate restTemplate;
 	private String domain;
 
@@ -41,17 +51,11 @@ public class UserTests {
 	@PostConstruct
 	public void testsInit() {
 		this.url = "http://localhost:" + this.port + "/iob/users";
-		this.deleteUrl = "http://localhost:" + this.port + "/iob/admin/users";
 		this.restTemplate = new RestTemplate();
 	}
 	
 
-	@AfterEach
-	public void tearDown() {
-		this.restTemplate
-			.delete(this.deleteUrl);
-	}
-	
+
 	@Test
 	public void testCreateUserActuallyCreatesAUser() throws Exception {
 		// GIVEN the server is up
@@ -93,8 +97,12 @@ public class UserTests {
 		
 		assertThat(retrivedUserBoundary.getRole())
 		.isEqualToIgnoringCase(postReturnedUserBoundary.getRole());
-
-
+		
+		//Delete 
+		userDao.deleteById(
+				idConverter.getUserEntityIdFromDomainAndEmail(
+						postReturnedUserBoundary.getUserId().getDomain(),
+						postReturnedUserBoundary.getUserId().getEmail()));
 	}
 	
 	@Test
@@ -186,7 +194,17 @@ public class UserTests {
 		assertThat(retrivedUserBoundary2.getRole())
 		.isEqualToIgnoringCase(postReturnedUserBoundary2.getRole());
 
-	
+		//Delete 
+		userDao.deleteById(
+				idConverter.getUserEntityIdFromDomainAndEmail(
+						postReturnedUserBoundary1.getUserId().getDomain(),
+						postReturnedUserBoundary1.getUserId().getEmail()));
+		
+		//Delete 
+		userDao.deleteById(
+				idConverter.getUserEntityIdFromDomainAndEmail(
+						postReturnedUserBoundary2.getUserId().getDomain(),
+						postReturnedUserBoundary2.getUserId().getEmail()));
 	}
 	
 	
@@ -259,7 +277,11 @@ public class UserTests {
 		assertThat(retrivedUserBoundary.getUserId().getEmail())
 		.isNotEqualTo(updatedUserBoundary.getUserId().getEmail());
 		
-
+		//Delete 
+		userDao.deleteById(
+				idConverter.getUserEntityIdFromDomainAndEmail(
+						postReturnedUserBoundary.getUserId().getDomain(),
+						postReturnedUserBoundary.getUserId().getEmail()));
 
 	}
 	

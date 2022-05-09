@@ -22,8 +22,8 @@ public class UserConverter {
 	public UserBoundary toBoundary(UserEntity entity) {
 
 		UserId userId = new UserId();
-		String boundaryDomain = getUserDomainFromUserEntityId(entity.getId());
-		String boundaryEmail = getUserEmailFromUserEntityId(entity.getId());
+		String boundaryDomain = idConverter.getUserDomainFromUserEntityId(entity.getId());
+		String boundaryEmail = idConverter.getUserEmailFromUserEntityId(entity.getId());
 		userId.setDomain(boundaryDomain);
 		userId.setEmail(boundaryEmail);
 		UserBoundary userBoundary = new UserBoundary();
@@ -39,7 +39,9 @@ public class UserConverter {
 
 		UserEntity userEntity = new UserEntity();
 		userEntity.setId(
-				getUserEntityIdFromDomainAndEmail(boundary.getUserId().getDomain(), boundary.getUserId().getEmail()));
+				idConverter.getUserEntityIdFromDomainAndEmail(
+						boundary.getUserId().getDomain(),
+						boundary.getUserId().getEmail()));
 		userEntity.setUsername(boundary.getUsername());
 		userEntity.setRole(UserRole.valueOf(boundary.getRole().toUpperCase()));
 		userEntity.setAvatar(boundary.getAvatar());
@@ -65,20 +67,6 @@ public class UserConverter {
 
 	}
 	
-	public String getUserEmailFromUserEntityId(String userId) {
-
-		return idConverter.getUserEmailFromUserEntityId(userId);
-	}
-
-	public String getUserDomainFromUserEntityId(String userId) {
-
-		return idConverter.getUserDomainFromUserEntityId(userId);
-	}
-	
-	public String getUserEntityIdFromDomainAndEmail(String domain, String email) {
-
-		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
-	}
 
 
 }
