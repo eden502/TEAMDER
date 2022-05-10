@@ -55,18 +55,23 @@ public class InstanceController {
 		
 	// Retrieve instance
 	@RequestMapping(path = "/iob/instances/{instanceDomain}/{instanceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public InstanceBoundary getInstance(@PathVariable("instanceDomain") String instanceDomain,
-			@PathVariable("instanceId") String instanceID) {
-		return instancesService.getSpecificInstance(instanceDomain, instanceID);
+	public InstanceBoundary getInstance(@RequestParam(name="userDomain",required = true) String userDomain,
+			@RequestParam(name = "userEmail",required = true) String userEmail,
+			@PathVariable("instanceDomain") String instanceDomain,
+			@PathVariable("instanceId") String instanceId) {
+		return instancesService.getSpecificInstance(userDomain, userEmail, instanceDomain, instanceId);
 	}
 
 	// Get all instances
 	@RequestMapping(
 
 			path = "/iob/instances", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public InstanceBoundary[] getAllInstances() {
+	public InstanceBoundary[] getAllInstances(@RequestParam(name="userDomain",required = true) String userDomain,
+			@RequestParam(name = "userEmail",required = true) String userEmail,
+			@RequestParam(name="size", required = false, defaultValue = "10") int size,
+			@RequestParam(name="page", required = false, defaultValue = "0") int page) {
 
-		return instancesService.getAllInstances().toArray(new InstanceBoundary[0]);
+		return instancesService.getAllInstances(userDomain, userEmail, size, page).toArray(new InstanceBoundary[0]);
 
 	}
 }

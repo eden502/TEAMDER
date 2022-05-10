@@ -52,8 +52,8 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	private String domain;
 
 	@Autowired
-	public InstancesServiceJpa(InstanceConverter instanceConverter, IdConverter idConverter,
-			InstanceDao instanceDao, UserDao userDao) {
+	public InstancesServiceJpa(InstanceConverter instanceConverter, IdConverter idConverter, InstanceDao instanceDao,
+			UserDao userDao) {
 		this.instanceConverter = instanceConverter;
 		this.instanceDao = instanceDao;
 		this.userDao = userDao;
@@ -143,21 +143,28 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 
 		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));
 	}
-	
+
 	/**
 	 * New method for get Specific instance- checking permissions.
 	 * 
 	 */
 	@Override
-	public InstanceBoundary getSpecificInstance(String userDomain, String userEmail, String instanceDomain, String instanceId) {
+	public InstanceBoundary getSpecificInstance(String userDomain, String userEmail, String instanceDomain,
+			String instanceId) {
 		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
-		
-		if(userEntity.getRole() != UserRole.ADMIN)
-			throw new NoPermissionException();
-		
-		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));			
-	}
 
+		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
+			InstanceBoundary instance = instanceConverter
+					.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));
+			if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
+				throw new NotFoundException();
+			} 
+			return instance;
+		} 
+		else {
+			throw new NoPermissionException();
+		}
+	}
 
 	@Override
 	@Deprecated
@@ -166,26 +173,30 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 		Stream<InstanceEntity> stream = StreamSupport.stream(iterable.spliterator(), false);
 		return stream.map(instanceConverter::toBoundary).collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * New method for get all instances- checking permissions.
 	 * 
 	 */
 	@Override
 	@Transactional
-	public List<InstanceBoundary> getAllInstances(String userDomain,String userEmail,int size,int page){
+	public List<InstanceBoundary> getAllInstances(String userDomain, String userEmail, int size, int page) {
 		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
-		
-		if(userEntity.getRole() != UserRole.ADMIN)
-			throw new NoPermissionException();
-		
-		return this.instanceDao.findAll(PageRequest.of(page, size, Direction.DESC, "createdTimestamp", "id"))
-				.getContent()
-				.stream()
-				.map(this.instanceConverter::toBoundary)
-				.collect(Collectors.toList());
-	}
 
+		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
+			if (userEntity.getRole() == UserRole.PLAYER) {
+				return this.instanceDao.findAll(PageRequest.of(page, size, Direction.DESC, "createdTimestamp", "id"))
+						.getContent().stream().filter(instance -> instance.getActive())
+						.map(this.instanceConverter::toBoundary).collect(Collectors.toList());
+			}
+
+			return this.instanceDao.findAll(PageRequest.of(page, size, Direction.DESC, "createdTimestamp", "id"))
+					.getContent().stream().map(this.instanceConverter::toBoundary).collect(Collectors.toList());
+		} else {
+			throw new NoPermissionException();
+		}
+
+	}
 
 	@Override
 	@Deprecated
@@ -308,8 +319,8 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
 				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
 					continue;
-				}
-				else nearEntities.add(instance);
+				} else
+					nearEntities.add(instance);
 			}
 			// Can be usefull for future use
 			// for (InstanceEntity instance : instanceDao.findByLocationNear(new Point(lat,
