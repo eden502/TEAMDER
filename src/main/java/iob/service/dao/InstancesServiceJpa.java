@@ -340,4 +340,70 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 		}
 	}
 
+	@Override
+	public List<InstanceBoundary> getInstancesName(String userDomain, String userEmail, int page, int size,
+			String name) {
+		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
+		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
+
+			ArrayList<InstanceEntity> nameEntities = new ArrayList<>();
+
+			// List<InstanceEntity> instances =
+			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
+					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
+					"myFirstDatabase");
+
+			Pageable pageable = PageRequest.of(page, size);
+			Query query = new Query(Criteria.where("name").is(name)).with(pageable);
+
+			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
+				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
+					continue;
+				}
+				else nameEntities.add(instance);
+			}
+	
+			if (nameEntities.size() == 0)
+				throw new NotFoundException("No such name active instance");
+
+			Stream<InstanceEntity> stream = StreamSupport.stream(nameEntities.spliterator(), false);
+			return stream.map(instanceConverter::toBoundary).collect(Collectors.toList());
+		} else {
+			throw new NoPermissionException("No permissions to perform get instance operation.");
+		}
+	}
+
+	@Override
+	public List<InstanceBoundary> getInstancesType(String userDomain, String userEmail, int page, int size,
+			String type) {
+		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
+		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
+
+			ArrayList<InstanceEntity> typeEntities = new ArrayList<>();
+
+			// List<InstanceEntity> instances =
+			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
+					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
+					"myFirstDatabase");
+
+			Pageable pageable = PageRequest.of(page, size);
+			Query query = new Query(Criteria.where("name").is(type)).with(pageable);
+
+			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
+				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
+					continue;
+				}
+				else typeEntities.add(instance);
+			}
+	
+			if (typeEntities.size() == 0)
+				throw new NotFoundException("No such type active instance");
+
+			Stream<InstanceEntity> stream = StreamSupport.stream(typeEntities.spliterator(), false);
+			return stream.map(instanceConverter::toBoundary).collect(Collectors.toList());
+		} else {
+			throw new NoPermissionException("No permissions to perform get instance operation.");
+		}
+	}
+
 }
