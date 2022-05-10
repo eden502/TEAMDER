@@ -51,6 +51,30 @@ public class InstanceController {
 			return this.instancesService.getInstancesNear(userDomain,userEmail,page,size,lat,lng,distance).toArray(new InstanceBoundary[0]);
 
 		}
+		
+		// Search instances by name - new method for Spring 5
+				@RequestMapping(path = "/iob/instances/search/byName/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+				public InstanceBoundary[] searchInstanceByName(@PathVariable("name") String name,
+																	@RequestParam(name="userDomain", required = true) String userDomain,
+																	@RequestParam(name="userEmail", required = true) String userEmail,
+																	@RequestParam(name="size", required = false, defaultValue = "10") int size,
+																	@RequestParam(name="page", required = false, defaultValue = "0") int page) {
+					
+					return this.instancesService.getInstancesName(userDomain,userEmail,page,size,name).toArray(new InstanceBoundary[0]);
+
+				}
+				
+				// Search instances by type - new method for Spring 5
+				@RequestMapping(path = "/iob/instances/search/byName/{type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+				public InstanceBoundary[] searchInstanceByType(@PathVariable("type") String type,
+																	@RequestParam(name="userDomain", required = true) String userDomain,
+																	@RequestParam(name="userEmail", required = true) String userEmail,
+																	@RequestParam(name="size", required = false, defaultValue = "10") int size,
+																	@RequestParam(name="page", required = false, defaultValue = "0") int page) {
+					
+					return this.instancesService.getInstancesType(userDomain,userEmail,page,size,type).toArray(new InstanceBoundary[0]);
+
+				}
 
 		
 	// Retrieve instance

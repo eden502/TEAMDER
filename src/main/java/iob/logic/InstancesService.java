@@ -16,4 +16,6 @@ public interface InstancesService {
 	
 	@Deprecated
 	public void deleteAllInstances();
+	List<InstanceBoundary> getInstancesName(String userDomain, String userEmail, int page, int size, String name);
+	List<InstanceBoundary> getInstancesType(String userDomain, String userEmail, int page, int size, String type);
 }
