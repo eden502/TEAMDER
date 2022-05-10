@@ -138,17 +138,54 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	}
 
 	@Override
+	@Deprecated
 	public InstanceBoundary getSpecificInstance(String instanceDomain, String instanceId) {
 
 		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));
 	}
+	
+	/**
+	 * New method for get Specific instance- checking permissions.
+	 * 
+	 */
+	@Override
+	public InstanceBoundary getSpecificInstance(String userDomain, String userEmail, String instanceDomain, String instanceId) {
+		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
+		
+		if(userEntity.getRole() != UserRole.ADMIN)
+			throw new NoPermissionException();
+		
+		return instanceConverter.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));			
+	}
+
 
 	@Override
+	@Deprecated
 	public List<InstanceBoundary> getAllInstances() {
 		Iterable<InstanceEntity> iterable = this.instanceDao.findAll();
 		Stream<InstanceEntity> stream = StreamSupport.stream(iterable.spliterator(), false);
 		return stream.map(instanceConverter::toBoundary).collect(Collectors.toList());
 	}
+	
+	/**
+	 * New method for get all instances- checking permissions.
+	 * 
+	 */
+	@Override
+	@Transactional
+	public List<InstanceBoundary> getAllInstances(String userDomain,String userEmail,int size,int page){
+		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
+		
+		if(userEntity.getRole() != UserRole.ADMIN)
+			throw new NoPermissionException();
+		
+		return this.instanceDao.findAll(PageRequest.of(page, size, Direction.DESC, "createdTimestamp", "id"))
+				.getContent()
+				.stream()
+				.map(this.instanceConverter::toBoundary)
+				.collect(Collectors.toList());
+	}
+
 
 	@Override
 	@Deprecated
