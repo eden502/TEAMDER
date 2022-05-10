@@ -24,16 +24,16 @@ public class InstanceConverter {
 	public InstanceBoundary toBoundary(InstanceEntity entity) {
 
 		GeneralId instanceId = new GeneralId();
-		instanceId.setDomain(getDomainFromEntityGeneralId(entity.getId()));
-		instanceId.setId(getIdFromEntityGeneralId(entity.getId()));
+		instanceId.setDomain(idConverter.getDomainFromEntityGeneralId(entity.getId()));
+		instanceId.setId(idConverter.getIdFromEntityGeneralId(entity.getId()));
 
 		Location location = new Location();
 		location.setLat(entity.getLocation().getX());
 		location.setLng(entity.getLocation().getY());
 
 		UserId userId = new UserId();
-		userId.setDomain(getUserDomainFromUserEntityId(entity.getCreatedByUserId()));
-		userId.setEmail(getUserEmailFromUserEntityId(entity.getCreatedByUserId()));
+		userId.setDomain(idConverter.getUserDomainFromUserEntityId(entity.getCreatedByUserId()));
+		userId.setEmail(idConverter.getUserEmailFromUserEntityId(entity.getCreatedByUserId()));
 
 		CreatedBy createdBy = new CreatedBy();
 		createdBy.setUserId(userId);
@@ -66,15 +66,19 @@ public class InstanceConverter {
 		}
 
 		InstanceEntity instanceEntity = new InstanceEntity();
-		instanceEntity.setId(getEntityGeneralIdFromDomainAndId(boundary.getInstanceId().getDomain(),
-				boundary.getInstanceId().getId()));
+		instanceEntity.setId(
+				idConverter.getEntityGeneralIdFromDomainAndId(
+						boundary.getInstanceId().getDomain(),
+						boundary.getInstanceId().getId()));
 		instanceEntity.setType(boundary.getType());
 		instanceEntity.setName(boundary.getName());
 		instanceEntity.setActive(boundary.getActive().booleanValue());
 		instanceEntity.setCreatedTimestamp(boundary.getCreatedTimestamp());
 
-		instanceEntity.setCreatedByUserId(getUserEntityIdFromDomainAndEmail(
-				boundary.getCreatedBy().getUserId().getDomain(), boundary.getCreatedBy().getUserId().getEmail()));
+		instanceEntity.setCreatedByUserId(
+				idConverter.getUserEntityIdFromDomainAndEmail(
+						boundary.getCreatedBy().getUserId().getDomain(),
+						boundary.getCreatedBy().getUserId().getEmail()));
 
 		//double [] location = {boundary.getLocation().getLat(),boundary.getLocation().getLng()};
 		instanceEntity.setLocation(new GeoJsonPoint(boundary.getLocation().getLat(),boundary.getLocation().getLng()));
@@ -85,34 +89,6 @@ public class InstanceConverter {
 	
 	
 
-	public String getUserEntityIdFromDomainAndEmail(String domain, String email) {
-
-		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
-	}
-
-	public String getEntityGeneralIdFromDomainAndId(String domain, String id) {
-
-		return idConverter.getEntityGeneralIdFromDomainAndId(domain, id);
-	}
 	
-	public String getUserEmailFromUserEntityId(String userId) {
-
-		return idConverter.getUserEmailFromUserEntityId(userId);
-	}
-
-	public String getUserDomainFromUserEntityId(String userId) {
-
-		return idConverter.getUserDomainFromUserEntityId(userId);
-	}
-
-	public String getIdFromEntityGeneralId(String generalId) {
-
-		return idConverter.getIdFromEntityGeneralId(generalId);
-	}
-
-	public String getDomainFromEntityGeneralId(String generalId) {
-
-		return idConverter.getDomainFromEntityGeneralId(generalId);
-	}
 
 }

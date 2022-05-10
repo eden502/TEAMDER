@@ -23,6 +23,7 @@ import iob.data.UserEntity;
 import iob.data.UserRole;
 import iob.exceptions.NoPermissionException;
 import iob.exceptions.NotFoundException;
+import iob.logic.IdConverter;
 import iob.logic.UserConverter;
 import iob.logic.UsersService;
 import iob.logic.UsersServiceEnhanced;
@@ -31,12 +32,14 @@ import iob.logic.UsersServiceEnhanced;
 public class UsersServiceJpa implements UsersServiceEnhanced {
 	private UserDao userDao;
 	private UserConverter userConverter;
+	private IdConverter idConverter;
 	private String domain;
 
 	@Autowired
-	public UsersServiceJpa(UserDao userDao, UserConverter userConverter) {
+	public UsersServiceJpa(UserDao userDao, UserConverter userConverter,IdConverter idConverter) {
 		this.userDao = userDao;
 		this.userConverter = userConverter;
+		this.idConverter = idConverter;
 	}
 
 	@Value("${spring.application.name:null}")
@@ -70,8 +73,8 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 
 		UserEntity userEntity = getUserEntityById(userEmail,userDomain);
 
-		String userEntityDomain = this.userConverter.getUserDomainFromUserEntityId(userEntity.getId());
-		String userEntityEmail = this.userConverter.getUserEmailFromUserEntityId(userEntity.getId());
+		String userEntityDomain = this.idConverter.getUserDomainFromUserEntityId(userEntity.getId());
+		String userEntityEmail = this.idConverter.getUserEmailFromUserEntityId(userEntity.getId());
 		
 		if (userEntityDomain.equals(userDomain) && userEntityEmail.equals(userEmail))
 			return userConverter.toBoundary(userEntity);
@@ -150,7 +153,7 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 	}
 
 	private UserEntity getUserEntityById(String userEmail,String userDomain) {
-		String id = userConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail);
+		String id = idConverter.getUserEntityIdFromDomainAndEmail(userDomain, userEmail);
 		Optional<UserEntity> optional = this.userDao
 				.findById(id);
 

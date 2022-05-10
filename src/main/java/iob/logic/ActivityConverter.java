@@ -23,14 +23,19 @@ public class ActivityConverter {
 	public ActivityEntity toEntity(ActivityBoundary boundary) {
 
 		ActivityEntity activityEntity = new ActivityEntity();
-		activityEntity.setId(getEntityGeneralIdFromDomainAndId(boundary.getActivityId().getDomain(),
+		activityEntity.setId(idConverter.getEntityGeneralIdFromDomainAndId(
+				boundary.getActivityId().getDomain(),
 				boundary.getActivityId().getId()));
 		activityEntity.setType(boundary.getType());
-		activityEntity.setInstanceId(getEntityGeneralIdFromDomainAndId(
-				boundary.getInstance().getInstanceId().getDomain(), boundary.getInstance().getInstanceId().getId()));
+		activityEntity.setInstanceId(
+				idConverter.getEntityGeneralIdFromDomainAndId(
+				boundary.getInstance().getInstanceId().getDomain(),
+				boundary.getInstance().getInstanceId().getId()));
 		activityEntity.setCreatedTimestamp(boundary.getCreatedTimestamp());
-		activityEntity.setInvokedUserId(getUserEntityIdFromDomainAndEmail(
-				boundary.getInvokedBy().getUserId().getDomain(), boundary.getInvokedBy().getUserId().getEmail()));
+		activityEntity.setInvokedUserId(
+				idConverter.getUserEntityIdFromDomainAndEmail(
+				boundary.getInvokedBy().getUserId().getDomain(),
+				boundary.getInvokedBy().getUserId().getEmail()));
 		activityEntity.setActivityAttributes(boundary.getActivityAttributes());
 
 		return activityEntity;
@@ -41,16 +46,16 @@ public class ActivityConverter {
 		
 		
 		GeneralId activityId = new GeneralId();
-		activityId.setDomain(getDomainFromEntityGeneralId(entity.getId()));
-		activityId.setId(getIdFromEntityGeneralId(entity.getId()));
+		activityId.setDomain(idConverter.getDomainFromEntityGeneralId(entity.getId()));
+		activityId.setId(idConverter.getIdFromEntityGeneralId(entity.getId()));
 
 		GeneralId instanceId = new GeneralId();
-		instanceId.setId(getIdFromEntityGeneralId(entity.getInstanceId()));
-		instanceId.setDomain(getDomainFromEntityGeneralId(entity.getInstanceId()));
+		instanceId.setId(idConverter.getIdFromEntityGeneralId(entity.getInstanceId()));
+		instanceId.setDomain(idConverter.getDomainFromEntityGeneralId(entity.getInstanceId()));
 
 		UserId userId = new UserId();
-		userId.setEmail(getUserEmailFromUserEntityId(entity.getInvokedUserId()));
-		userId.setDomain(getUserDomainFromUserEntityId(entity.getInvokedUserId()));
+		userId.setEmail(idConverter.getUserEmailFromUserEntityId(entity.getInvokedUserId()));
+		userId.setDomain(idConverter.getUserDomainFromUserEntityId(entity.getInvokedUserId()));
 
 		Instance instance = new Instance();
 		instance.setInstanceId(instanceId);
@@ -69,34 +74,5 @@ public class ActivityConverter {
 		return activityBoundary;
 	}
 
-	public String getUserEntityIdFromDomainAndEmail(String domain, String email) {
-
-		return idConverter.getUserEntityIdFromDomainAndEmail(domain, email);
-	}
-
-	public String getEntityGeneralIdFromDomainAndId(String domain, String id) {
-
-		return idConverter.getEntityGeneralIdFromDomainAndId(domain, id);
-	}
-
-	public String getUserEmailFromUserEntityId(String userId) {
-
-		return idConverter.getUserEmailFromUserEntityId(userId);
-	}
-
-	public String getUserDomainFromUserEntityId(String userId) {
-
-		return idConverter.getUserDomainFromUserEntityId(userId);
-	}
-
-	public String getIdFromEntityGeneralId(String generalId) {
-
-		return idConverter.getIdFromEntityGeneralId(generalId);
-	}
-
-	public String getDomainFromEntityGeneralId(String generalId) {
-
-		return idConverter.getDomainFromEntityGeneralId(generalId);
-	}
 
 }
