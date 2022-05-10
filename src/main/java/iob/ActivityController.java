@@ -23,7 +23,10 @@ public class ActivityController {
 	}
 
 	// Invoke an instance activity
-	@RequestMapping(path = "/iob/activities", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/iob/activities", 
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE, 
+			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Object createInstanceActivity(@RequestBody ActivityBoundary activityBoundary) {
 
 		return activitiesService.invokeActivity(activityBoundary);

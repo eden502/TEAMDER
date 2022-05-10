@@ -24,7 +24,8 @@ public class UserController {
 	}
 
 	// Create a new user
-	@RequestMapping(path = "/iob/users",
+	@RequestMapping(
+			path = "/iob/users",
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -34,16 +35,25 @@ public class UserController {
 	}
 
 	// Login valid user and retrieve user details
-	@RequestMapping(path = "/iob/users/login/{userDomain}/{userEmail}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary getUser(@PathVariable("userDomain") String userDomain,
+	@RequestMapping(
+			path = "/iob/users/login/{userDomain}/{userEmail}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public UserBoundary getUser(
+			@PathVariable("userDomain") String userDomain,
 			@PathVariable("userEmail") String userEmail) {
 		System.err.println("User email: "+userEmail);
 		return userService.login(userDomain, userEmail);
 	}
 
 	// Update user details
-	@RequestMapping(path = "/iob/users/{userDomain}/{userEmail}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void updateUser(@PathVariable("userDomain") String domain, @PathVariable("userEmail") String userEmail,
+	@RequestMapping(
+			path = "/iob/users/{userDomain}/{userEmail}", 
+			method = RequestMethod.PUT,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void updateUser(
+			@PathVariable("userDomain") String domain,
+			@PathVariable("userEmail") String userEmail,
 			@RequestBody UserBoundary userBoundary) {
 
 		userService.updateUser(domain, userEmail, userBoundary);

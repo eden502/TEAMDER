@@ -22,7 +22,10 @@ public class InstanceController {
 	}
 
 	// Create an instance
-	@RequestMapping(path = "/iob/instances", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/iob/instances",
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public InstanceBoundary createInstance(@RequestBody InstanceBoundary ib) {
 		return this.instancesService.createInstance(ib);
 	}
@@ -39,7 +42,9 @@ public class InstanceController {
 	}
 	
 	// Search instances by distance - new method for Spring 5
-		@RequestMapping(path = "/iob/instances/search/near/{lat}/{lng}/{distance}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		@RequestMapping(path = "/iob/instances/search/near/{lat}/{lng}/{distance}",
+				method = RequestMethod.GET,
+				produces = MediaType.APPLICATION_JSON_VALUE)
 		public InstanceBoundary[] searchInstanceByLocation(@PathVariable("lat") double lat,
 															@PathVariable("lng") double lng,
 															@PathVariable("distance") double distance,
@@ -53,7 +58,9 @@ public class InstanceController {
 		}
 		
 		// Search instances by name - new method for Spring 5
-				@RequestMapping(path = "/iob/instances/search/byName/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+				@RequestMapping(path = "/iob/instances/search/byName/{name}",
+						method = RequestMethod.GET,
+						produces = MediaType.APPLICATION_JSON_VALUE)
 				public InstanceBoundary[] searchInstanceByName(@PathVariable("name") String name,
 																	@RequestParam(name="userDomain", required = true) String userDomain,
 																	@RequestParam(name="userEmail", required = true) String userEmail,
@@ -65,7 +72,9 @@ public class InstanceController {
 				}
 				
 				// Search instances by type - new method for Spring 5
-				@RequestMapping(path = "/iob/instances/search/byName/{type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+				@RequestMapping(path = "/iob/instances/search/byType/{type}",
+						method = RequestMethod.GET,
+						produces = MediaType.APPLICATION_JSON_VALUE)
 				public InstanceBoundary[] searchInstanceByType(@PathVariable("type") String type,
 																	@RequestParam(name="userDomain", required = true) String userDomain,
 																	@RequestParam(name="userEmail", required = true) String userEmail,
@@ -78,8 +87,11 @@ public class InstanceController {
 
 		
 	// Retrieve instance
-	@RequestMapping(path = "/iob/instances/{instanceDomain}/{instanceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public InstanceBoundary getInstance(@RequestParam(name="userDomain",required = true) String userDomain,
+	@RequestMapping(path = "/iob/instances/{instanceDomain}/{instanceId}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public InstanceBoundary getInstance(
+			@RequestParam(name="userDomain",required = true) String userDomain,
 			@RequestParam(name = "userEmail",required = true) String userEmail,
 			@PathVariable("instanceDomain") String instanceDomain,
 			@PathVariable("instanceId") String instanceId) {
@@ -90,7 +102,8 @@ public class InstanceController {
 	@RequestMapping(
 
 			path = "/iob/instances", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public InstanceBoundary[] getAllInstances(@RequestParam(name="userDomain",required = true) String userDomain,
+	public InstanceBoundary[] getAllInstances(
+			@RequestParam(name="userDomain",required = true) String userDomain,
 			@RequestParam(name = "userEmail",required = true) String userEmail,
 			@RequestParam(name="size", required = false, defaultValue = "10") int size,
 			@RequestParam(name="page", required = false, defaultValue = "0") int page) {

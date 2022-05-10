@@ -96,7 +96,6 @@ public class AdminController {
 			@RequestParam(name = "userEmail",required = true) String userEmail,
 			@RequestParam(name="size", required = false, defaultValue = "10") int size,
 			@RequestParam(name="page", required = false, defaultValue = "0") int page) {
-		System.err.println("errorrrr");
 		return activitiesService.getAllActivities(userDomain, userEmail, size, page).toArray(new ActivityBoundary[0]);
 	}
 	

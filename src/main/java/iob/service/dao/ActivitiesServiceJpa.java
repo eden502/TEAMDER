@@ -282,12 +282,13 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 		if (activity.getType() == null || activity.getType().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary must have a valid type");
 
-		if (!activity.getType().equalsIgnoreCase(ActivityType.ACCEPT_NEW_MEMBER.toString())
-				&& !activity.getType().equalsIgnoreCase(ActivityType.DELETE_GROUP.toString())
-				&& !activity.getType().equalsIgnoreCase(ActivityType.DELETE_MEMBER.toString())
-				&& !activity.getType().equalsIgnoreCase(ActivityType.EXIT_GROUP.toString())
-				&& !activity.getType().equalsIgnoreCase(ActivityType.JOIN_GROUP.toString()))
-			throw new RuntimeException("ActivityBoundary - unreconized ActivityType");
+// TODO Undo this comments after current Sprint
+//		if (!activity.getType().equalsIgnoreCase(ActivityType.ACCEPT_NEW_MEMBER.toString())
+//				&& !activity.getType().equalsIgnoreCase(ActivityType.DELETE_GROUP.toString())
+//				&& !activity.getType().equalsIgnoreCase(ActivityType.DELETE_MEMBER.toString())
+//				&& !activity.getType().equalsIgnoreCase(ActivityType.EXIT_GROUP.toString())
+//				&& !activity.getType().equalsIgnoreCase(ActivityType.JOIN_GROUP.toString()))
+//			throw new RuntimeException("ActivityBoundary - unreconized ActivityType");
 	}
 
 }

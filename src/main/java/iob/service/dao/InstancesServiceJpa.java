@@ -124,8 +124,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 			instanceForUpdate.setActive(update.getActive());
 
 		if (update.getLocation() != null) {
-			// double [] location =
-			// {update.getLocation().getLat(),update.getLocation().getLng()};
+
 			instanceForUpdate
 					.setLocation(new GeoJsonPoint(update.getLocation().getLat(), update.getLocation().getLat()));
 		}
@@ -158,10 +157,9 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 					.toBoundary(getSpecificEntityInstance(instanceDomain, instanceId));
 			if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
 				throw new NotFoundException();
-			} 
+			}
 			return instance;
-		} 
-		else {
+		} else {
 			throw new NoPermissionException();
 		}
 	}
@@ -279,8 +277,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 				instanceForUpdate.setActive(update.getActive());
 
 			if (update.getLocation() != null) {
-				// double [] location =
-				// {update.getLocation().getLat(),update.getLocation().getLat()};
+
 				instanceForUpdate
 						.setLocation(new GeoJsonPoint(update.getLocation().getLat(), update.getLocation().getLat()));
 			}
@@ -307,7 +304,6 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 
 			ArrayList<InstanceEntity> nearEntities = new ArrayList<>();
 
-			// List<InstanceEntity> instances =
 			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
 					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
 					"myFirstDatabase");
@@ -322,14 +318,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 				} else
 					nearEntities.add(instance);
 			}
-			// Can be usefull for future use
-			// for (InstanceEntity instance : instanceDao.findByLocationNear(new Point(lat,
-			// lng),
-			// new Distance(distance, Metrics.KILOMETERS))) {
-			// if (instance.getActive()) {
-			// nearEntities.add(instance);
-			// }
-			// }
+
 			if (nearEntities.size() == 0)
 				throw new NotFoundException("No near active instances");
 
@@ -348,21 +337,20 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 
 			ArrayList<InstanceEntity> nameEntities = new ArrayList<>();
 
-			// List<InstanceEntity> instances =
 			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
 					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
 					"myFirstDatabase");
 
-			Pageable pageable = PageRequest.of(page, size);
+			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"name");
 			Query query = new Query(Criteria.where("name").is(name)).with(pageable);
 
 			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
 				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
 					continue;
-				}
-				else nameEntities.add(instance);
+				} else
+					nameEntities.add(instance);
 			}
-	
+
 			if (nameEntities.size() == 0)
 				throw new NotFoundException("No such name active instance");
 
@@ -381,21 +369,21 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 
 			ArrayList<InstanceEntity> typeEntities = new ArrayList<>();
 
-			// List<InstanceEntity> instances =
 			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
 					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
 					"myFirstDatabase");
 
-			Pageable pageable = PageRequest.of(page, size);
-			Query query = new Query(Criteria.where("name").is(type)).with(pageable);
+			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"type");
+		
+			Query query = new Query(Criteria.where("type").is(type)).with(pageable);
 
 			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
 				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
 					continue;
-				}
-				else typeEntities.add(instance);
+				} else
+					typeEntities.add(instance);
 			}
-	
+
 			if (typeEntities.size() == 0)
 				throw new NotFoundException("No such type active instance");
 
