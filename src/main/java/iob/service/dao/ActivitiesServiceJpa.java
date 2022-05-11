@@ -3,8 +3,11 @@ package iob.service.dao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mongodb.client.MongoClients;
+
 import static org.mockito.ArgumentMatchers.anyString;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +23,16 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
+import iob.bounderies.InstanceBoundary;
 import iob.data.ActivityEntity;
 import iob.data.ActivityType;
 import iob.data.InstanceEntity;
@@ -40,6 +49,12 @@ import iob.logic.UserConverter;
 
 @Service
 public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
+
+	private final String ACTIVITY_PENDING_USER_MAP_KEY = "PendingUser";
+	private final String ACTIVITY_USER_TO_DELETE_MAP_KEY = "UserToDelete";
+	private final String INSTANCE_MEMBERS_MAP_KEY = "Members";
+	private final String INSTANCE_PENDING_MEMBERS_MAP_KEY = "PendingMembers";
+	private final String INSTANCE_GROUPS_MAP_KEY = "Groups";
 
 	private ActivityDao activityDao;
 	private UserDao userDao;
@@ -77,7 +92,7 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 
 		validateUserAndInstance(userEntity, instanceEntity);
 
-		//executeActivity(activity, userEntity, instanceEntity);
+		executeActivity(activity, userEntity, instanceEntity);
 
 		GeneralId activityId = new GeneralId();
 		activityId.setDomain(this.domain);
@@ -102,12 +117,12 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 			throw new NoPermissionException();
 
 		if (!instanceEntity.getActive())
-			throw new NotFoundException();
+			throw new NotFoundException("instance with id " + instanceEntity.getId() + " not found");
 	}
 
 	private void executeActivity(ActivityBoundary activity, UserEntity userEntity, InstanceEntity instanceEntity) {
 
-		ActivityType activityType = ActivityType.valueOf(activity.getType().toUpperCase());
+		ActivityType activityType = ActivityType.getType(activity.getType());
 		switch (activityType) {
 		case JOIN_GROUP:
 			// TODO implement
@@ -122,50 +137,145 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 			break;
 
 		case DELETE_MEMBER:
-			// TODO implement
+			executeDeleteMember(activity, instanceEntity);
 			break;
 
 		case EXIT_GROUP:
-			// TODO implement
+			executeExitGroup(activity, instanceEntity);
 			break;
 
+		case OTHER:
+			// No implementation for OTHER type for now, just save the activity to data.
+			break;
 		}
 
 	}
 
-	private void executeAcceptNewMember(ActivityBoundary acceptNewMemberActivity, InstanceEntity groupInstance) {
-
+	private void executeExitGroup(ActivityBoundary exitGroupActivity, InstanceEntity groupInstance) {
+		// check if the invoked instance is from GROUP type
 		if (!isGroupInstance(groupInstance)) {
 			throw new RuntimeException("Invoked Instance is not GROUP type");
 		}
-		
-		String pendingUserId = (String) acceptNewMemberActivity.getActivityAttributes().get("User");
-		InstanceEntity pendingMember = getUserInstanceFromUserId(pendingUserId);
-		
-		Map<String, Object> groupAttributes = groupInstance.getInstanceAttributes();
-		Map<String, Object> memberAttributes = pendingMember.getInstanceAttributes();
-		
-		
-		Set<String> members = (Set<String>) groupAttributes.get("Members");
-		Set<String> pendingMembers = (Set<String>) groupAttributes.get("PendingMembers");
-		Set<String>	groups = (Set<String>) memberAttributes.get("Groups");
-		
-		pendingMembers.remove(pendingUserId);
-		members.add(pendingUserId);
-		groups.add(groupInstance.getId());	
 
+		// get the id of the user that wants to exit group
+		String exitingUserId = idConverter
+				.getUserEntityIdFromDomainAndEmail(
+						exitGroupActivity.getInvokedBy().getUserId().getDomain(),
+						exitGroupActivity.getInvokedBy().getUserId().getEmail());
+
+
+		// get the instance entity that connected to that user
+		InstanceEntity memberToDelete = getUserInstanceFromUserId(exitingUserId);
+		if (memberToDelete == null)
+			throw new NotFoundException("instance connected to user id " + exitingUserId + " was not found");
+
+		// get the group instance attributes
+		Map<String, Object> groupAttributes = groupInstance.getInstanceAttributes();
+		// get the instance attributes of the the user to delete from group
+		Map<String, Object> memberAttributes = memberToDelete.getInstanceAttributes();
+
+		// get the members of the group
+		List<String> members = (List<String>) groupAttributes.get(INSTANCE_MEMBERS_MAP_KEY);
+		// get the groups of the member thats wants to leave the group
+		List<String> groups = (List<String>) memberAttributes.get(INSTANCE_GROUPS_MAP_KEY);
+
+		// remove the user from the members list
+		members.remove(exitingUserId);
+
+		// remove the group from the list of groups that the user have
+		groups.remove(groupInstance.getId());
+
+		// update the group and the user in the database
+		instanceDao.save(memberToDelete);
+		instanceDao.save(groupInstance);
+
+	}
+
+	private void executeDeleteMember(ActivityBoundary deleteMemberActivity, InstanceEntity groupInstance) {
+
+		// check if the invoked instance is from GROUP type
+		if (!isGroupInstance(groupInstance)) {
+			throw new RuntimeException("Invoked Instance is not GROUP type");
+		}
+
+		// get the id of the user that need to be deleted
+		String userIdToDelete = (String) deleteMemberActivity.getActivityAttributes()
+				.get(ACTIVITY_USER_TO_DELETE_MAP_KEY);
+
+		// get the instance entity that connected to that user
+		InstanceEntity memberToDelete = getUserInstanceFromUserId(userIdToDelete);
+		if (memberToDelete == null)
+			throw new NotFoundException("instance connected to user id " + userIdToDelete + " was not found");
+
+		// get the group instance attributes
+		Map<String, Object> groupAttributes = groupInstance.getInstanceAttributes();
+		// get the instance attributes of the the user to delete from group
+		Map<String, Object> memberAttributes = memberToDelete.getInstanceAttributes();
+
+		// get the members of the group
+		List<String> members = (List<String>) groupAttributes.get(INSTANCE_MEMBERS_MAP_KEY);
+		// get the groups of the member thats deleted from the group
+		List<String> groups = (List<String>) memberAttributes.get(INSTANCE_GROUPS_MAP_KEY);
+
+		// remove the user from the members list
+		members.remove(userIdToDelete);
+
+		// remove the group from the list of groups that the user have
+		groups.remove(groupInstance.getId());
+
+		// update the group and the user in the database
+		instanceDao.save(memberToDelete);
+		instanceDao.save(groupInstance);
+	}
+
+	private void executeAcceptNewMember(ActivityBoundary acceptNewMemberActivity, InstanceEntity groupInstance) {
+
+		// check if the invoked instance is from GROUP type
+		if (!isGroupInstance(groupInstance)) {
+			throw new RuntimeException("Invoked Instance is not GROUP type");
+		}
+
+		// get the id of the user that wants to join the group
+		String pendingUserId = (String) acceptNewMemberActivity.getActivityAttributes()
+				.get(ACTIVITY_PENDING_USER_MAP_KEY);
+
+		// get the instance entity that connected to that user
+		InstanceEntity pendingMember = getUserInstanceFromUserId(pendingUserId);
+		if (pendingMember == null)
+			throw new NotFoundException("instance connected to user id " + pendingUserId + " was not found");
+
+		// get the group instance attributes
+		Map<String, Object> groupAttributes = groupInstance.getInstanceAttributes();
+		// get the instance attributes of the the user instance that wants to join the
+		// group
+		Map<String, Object> memberAttributes = pendingMember.getInstanceAttributes();
+
+		// get the members of the group
+		List<String> members = (List<String>) groupAttributes.get(INSTANCE_MEMBERS_MAP_KEY);
+		// get the pending members of the group
+		List<String> pendingMembers = (List<String>) groupAttributes.get(INSTANCE_PENDING_MEMBERS_MAP_KEY);
+		// get the groups of the member thats wants to join the group
+		List<String> groups = (List<String>) memberAttributes.get(INSTANCE_GROUPS_MAP_KEY);
+
+		// remove the user from the pending members list
+		pendingMembers.remove(pendingUserId);
+		// add the user to the current members list
+		members.add(pendingUserId);
+		// add the group to the list of groups that the user have
+		groups.add(groupInstance.getId());
+
+		// update the group and the user in the database
 		instanceDao.save(pendingMember);
 		instanceDao.save(groupInstance);
 
 	}
 
-
-
 	private InstanceEntity getUserInstanceFromUserId(String pendingUserId) {
-		// TODO Implement this method to return the instance connected to this user id
-		return null;
-	}
+		List<InstanceEntity> instances = getInstancesByName(pendingUserId);
 
+		instances.stream().filter(instance -> instance.getType().equalsIgnoreCase(InstanceType.USER.toString()));
+		return instances.size() == 0 ? null : instances.get(0);
+	}
 
 	private boolean isGroupInstance(InstanceEntity instanceEntity) {
 
@@ -282,13 +392,21 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 		if (activity.getType() == null || activity.getType().trim().isEmpty())
 			throw new RuntimeException("ActivityBoundary must have a valid type");
 
-// TODO Undo this comments after current Sprint
-//		if (!activity.getType().equalsIgnoreCase(ActivityType.ACCEPT_NEW_MEMBER.toString())
-//				&& !activity.getType().equalsIgnoreCase(ActivityType.DELETE_GROUP.toString())
-//				&& !activity.getType().equalsIgnoreCase(ActivityType.DELETE_MEMBER.toString())
-//				&& !activity.getType().equalsIgnoreCase(ActivityType.EXIT_GROUP.toString())
-//				&& !activity.getType().equalsIgnoreCase(ActivityType.JOIN_GROUP.toString()))
-//			throw new RuntimeException("ActivityBoundary - unreconized ActivityType");
+	}
+
+	public List<InstanceEntity> getInstancesByName(String name) {
+
+		MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
+				"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
+				"myFirstDatabase");
+
+		Query query = new Query(Criteria.where("name").is(name));
+		List<InstanceEntity> res = mongoOps.find(query, InstanceEntity.class);
+		if (res.size() == 0)
+			throw new NotFoundException("There is no active instance with name " + name);
+
+		return res;
+
 	}
 
 }

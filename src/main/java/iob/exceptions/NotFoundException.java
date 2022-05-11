@@ -12,6 +12,7 @@ public class NotFoundException extends RuntimeException{
 
 	public NotFoundException(String message) {
 		super(message);
+		System.err.println(message);
 	}
 
 	public NotFoundException(Throwable cause) {
