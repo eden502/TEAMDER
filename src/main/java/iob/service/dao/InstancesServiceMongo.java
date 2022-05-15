@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.PageRequest;
 import com.mongodb.client.MongoClients;
 
+import MongoDBConfig.MongoDBConfig;
 import iob.bounderies.GeneralId;
 import iob.bounderies.InstanceBoundary;
 import iob.data.InstanceEntity;
@@ -43,7 +45,7 @@ import iob.logic.InstancesService;
 import iob.logic.UserConverter;
 
 @Service
-public class InstancesServiceJpa implements InstanceServiceEnhanced {
+public class InstancesServiceMongo implements InstanceServiceEnhanced {
 
 	private UserDao userDao;
 	private InstanceDao instanceDao;
@@ -52,7 +54,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	private String domain;
 
 	@Autowired
-	public InstancesServiceJpa(InstanceConverter instanceConverter, IdConverter idConverter, InstanceDao instanceDao,
+	public InstancesServiceMongo(InstanceConverter instanceConverter, IdConverter idConverter, InstanceDao instanceDao,
 			UserDao userDao) {
 		this.instanceConverter = instanceConverter;
 		this.instanceDao = instanceDao;
@@ -177,16 +179,27 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	 * 
 	 */
 	@Override
-	@Transactional
 	public List<InstanceBoundary> getAllInstances(String userDomain, String userEmail, int size, int page) {
 		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
 
 		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
+			
+			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"createdTimestamp", "name");
+
 			if (userEntity.getRole() == UserRole.PLAYER) {
-				return this.instanceDao.findAll(PageRequest.of(page, size, Direction.DESC, "createdTimestamp", "id"))
-						.getContent().stream().filter(instance -> instance.getActive())
+				AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+				ctx.register(MongoDBConfig.class);
+				ctx.refresh();
+				MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
+				
+				List<Criteria> criteria = new ArrayList<>();
+				Query query = new Query().with(pageable);
+				criteria.add(Criteria.where("active").is(true));
+				query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
+				return mongoOps.find(query, InstanceEntity.class).stream().filter(instance -> instance.getActive())
 						.map(this.instanceConverter::toBoundary).collect(Collectors.toList());
 			}
+				
 
 			return this.instanceDao.findAll(PageRequest.of(page, size, Direction.DESC, "createdTimestamp", "id"))
 					.getContent().stream().map(this.instanceConverter::toBoundary).collect(Collectors.toList());
@@ -204,7 +217,6 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 	}
 
 	@Override
-	@Transactional
 	public void deleteAllInstances(String domain, String email) {
 		Optional<UserEntity> optional = userDao
 				.findById(this.idConverter.getUserEntityIdFromDomainAndEmail(domain, email));
@@ -279,7 +291,7 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 			if (update.getLocation() != null) {
 
 				instanceForUpdate
-						.setLocation(new GeoJsonPoint(update.getLocation().getLat(), update.getLocation().getLat()));
+						.setLocation(new GeoJsonPoint(update.getLocation().getLat(), update.getLocation().getLng()));
 			}
 			if (update.getInstanceAttributes() != null)
 				instanceForUpdate.setInstanceAttributes(update.getInstanceAttributes());
@@ -302,26 +314,28 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
 		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
 
-			ArrayList<InstanceEntity> nearEntities = new ArrayList<>();
+			List<InstanceEntity> nearEntities = new ArrayList<>();
 
-			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
-					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
-					"myFirstDatabase");
+			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+			ctx.register(MongoDBConfig.class);
+			ctx.refresh();
+			MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
 			Circle circle = new Circle(lat, lng, distance);
 
-			Pageable pageable = PageRequest.of(page, size);
-			Query query = new Query(Criteria.where("location").within(circle)).with(pageable);
-
-			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
-				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
-					continue;
-				} else
-					nearEntities.add(instance);
-			}
-
-			if (nearEntities.size() == 0)
-				throw new NotFoundException("No near active instances");
-
+			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"createdTimestamp","name");
+			
+			List<Criteria> criteria = new ArrayList<>();
+			
+			Query query = new Query().with(pageable);
+			criteria.add(Criteria.where("location").within(circle));
+			
+			if (userEntity.getRole() == UserRole.PLAYER)
+				criteria.add(Criteria.where("active").is(true));
+			
+			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
+			
+			nearEntities = mongoOps.find(query, InstanceEntity.class);
+			
 			Stream<InstanceEntity> stream = StreamSupport.stream(nearEntities.spliterator(), false);
 			return stream.map(instanceConverter::toBoundary).collect(Collectors.toList());
 		} else {
@@ -335,24 +349,26 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
 		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
 
-			ArrayList<InstanceEntity> nameEntities = new ArrayList<>();
+			List<InstanceEntity> nameEntities = new ArrayList<>();
 
-			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
-					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
-					"myFirstDatabase");
-
-			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"name");
-			Query query = new Query(Criteria.where("name").is(name)).with(pageable);
-
-			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
-				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
-					continue;
-				} else
-					nameEntities.add(instance);
-			}
-
-			if (nameEntities.size() == 0)
-				throw new NotFoundException("No such name active instance");
+			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+			ctx.register(MongoDBConfig.class);
+			ctx.refresh();
+			MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
+			
+			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"createdTimestamp","name");
+			
+			List<Criteria> criteria = new ArrayList<>();
+			
+			Query query = new Query().with(pageable);
+			criteria.add(Criteria.where("name").is(name));
+			
+			if (userEntity.getRole() == UserRole.PLAYER)
+				criteria.add(Criteria.where("active").is(true));
+			
+			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
+			
+			nameEntities = mongoOps.find(query, InstanceEntity.class);
 
 			Stream<InstanceEntity> stream = StreamSupport.stream(nameEntities.spliterator(), false);
 			return stream.map(instanceConverter::toBoundary).collect(Collectors.toList());
@@ -367,25 +383,27 @@ public class InstancesServiceJpa implements InstanceServiceEnhanced {
 		UserEntity userEntity = getUserEntityById(userEmail, userDomain);
 		if (userEntity.getRole() == UserRole.PLAYER || userEntity.getRole() == UserRole.MANAGER) {
 
-			ArrayList<InstanceEntity> typeEntities = new ArrayList<>();
+			List<InstanceEntity> typeEntities = new ArrayList<>();
 
-			MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
-					"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
-					"myFirstDatabase");
+			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+			ctx.register(MongoDBConfig.class);
+			ctx.refresh();
+			MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
 
-			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"type");
-		
-			Query query = new Query(Criteria.where("type").is(type)).with(pageable);
-
-			for (InstanceEntity instance : mongoOps.find(query, InstanceEntity.class)) {
-				if (userEntity.getRole() == UserRole.PLAYER && !instance.getActive()) {
-					continue;
-				} else
-					typeEntities.add(instance);
-			}
-
-			if (typeEntities.size() == 0)
-				throw new NotFoundException("No such type active instance");
+			
+			Pageable pageable = PageRequest.of(page, size,Direction.DESC,"createdTimestamp","name");
+			
+			List<Criteria> criteria = new ArrayList<>();
+			
+			Query query = new Query().with(pageable);
+			criteria.add(Criteria.where("type").is(type));
+			
+			if (userEntity.getRole() == UserRole.PLAYER)
+				criteria.add(Criteria.where("active").is(true));
+			
+			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
+			
+			typeEntities = mongoOps.find(query, InstanceEntity.class);
 
 			Stream<InstanceEntity> stream = StreamSupport.stream(typeEntities.spliterator(), false);
 			return stream.map(instanceConverter::toBoundary).collect(Collectors.toList());

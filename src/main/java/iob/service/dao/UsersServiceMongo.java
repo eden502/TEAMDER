@@ -29,14 +29,14 @@ import iob.logic.UsersService;
 import iob.logic.UsersServiceEnhanced;
 
 @Service
-public class UsersServiceJpa implements UsersServiceEnhanced {
+public class UsersServiceMongo implements UsersServiceEnhanced {
 	private UserDao userDao;
 	private UserConverter userConverter;
 	private IdConverter idConverter;
 	private String domain;
 
 	@Autowired
-	public UsersServiceJpa(UserDao userDao, UserConverter userConverter,IdConverter idConverter) {
+	public UsersServiceMongo(UserDao userDao, UserConverter userConverter,IdConverter idConverter) {
 		this.userDao = userDao;
 		this.userConverter = userConverter;
 		this.idConverter = idConverter;
@@ -48,7 +48,6 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 	}
 
 	@Override
-	@Transactional
 	public UserBoundary createUser(UserBoundary userBoundary) {
 
 		
@@ -65,7 +64,6 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public UserBoundary login(String userDomain, String userEmail) {
 		
 		
@@ -83,7 +81,6 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 	}
 
 	@Override
-	@Transactional
 	public UserBoundary updateUser(String userDomain, String userEmail, UserBoundary update) {
 		
 		UserEntity userEntity = this.getUserEntityById(userEmail,userDomain);
@@ -104,7 +101,6 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	@Deprecated
 	public List<UserBoundary> getAllUsers() {
 		
@@ -137,14 +133,12 @@ public class UsersServiceJpa implements UsersServiceEnhanced {
 	}
 
 	@Override
-	@Transactional
 	@Deprecated
 	public void deleteAllUsers() {
 		//this.userDao.deleteAll();
 		throw new RuntimeException("Deprecated Method");
 	}
 	@Override
-	@Transactional
 	public void deleteAllUsers(String domain, String email) {
 		UserEntity ue = getUserEntityById(email, domain);
 		if (ue.getRole() != UserRole.ADMIN)

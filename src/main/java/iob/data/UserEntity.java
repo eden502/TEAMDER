@@ -26,7 +26,6 @@ public class UserEntity {
 		this.id = id;
 	}
 	
-	@Enumerated(EnumType.STRING)
 	public UserRole getRole() {
 		return role;
 	}

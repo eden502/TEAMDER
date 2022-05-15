@@ -4,26 +4,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mongodb.client.MongoClients;
-
-import static org.mockito.ArgumentMatchers.anyString;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -32,7 +22,6 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
-import iob.bounderies.InstanceBoundary;
 import iob.data.ActivityEntity;
 import iob.data.ActivityType;
 import iob.data.InstanceEntity;
@@ -41,14 +30,12 @@ import iob.data.UserEntity;
 import iob.data.UserRole;
 import iob.exceptions.NoPermissionException;
 import iob.exceptions.NotFoundException;
-import iob.logic.ActivitiesService;
 import iob.logic.ActivitiesServiceEnhanced;
 import iob.logic.ActivityConverter;
 import iob.logic.IdConverter;
-import iob.logic.UserConverter;
 
 @Service
-public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
+public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 
 	private final String ACTIVITY_PENDING_USER_MAP_KEY = "PendingUser";
 	private final String ACTIVITY_USER_TO_DELETE_MAP_KEY = "UserToDelete";
@@ -64,7 +51,7 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 	private String domain;
 
 	@Autowired
-	public ActivitiesServiceJpa(ActivityConverter activityConverter, ActivityDao activityDao, UserDao userDao,
+	public ActivitiesServiceMongo(ActivityConverter activityConverter, ActivityDao activityDao, UserDao userDao,
 			InstanceDao instanceDao, IdConverter idConverter) {
 		this.activityConverter = activityConverter;
 		this.activityDao = activityDao;
@@ -80,7 +67,6 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 	}
 
 	@Override
-	@Transactional
 	public Object invokeActivity(ActivityBoundary activity) {
 		validateActivityBoundary(activity);
 
@@ -374,7 +360,6 @@ public class ActivitiesServiceJpa implements ActivitiesServiceEnhanced {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	@Deprecated
 	public List<ActivityBoundary> getAllActivities() {
 //		Iterable<ActivityEntity> iterable = this.activityDao

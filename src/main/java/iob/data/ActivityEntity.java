@@ -14,7 +14,6 @@ import javax.persistence.TemporalType;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import iob.service.dao.AttributesFieldConverter;
 @Document
 public class ActivityEntity {
 
@@ -68,7 +67,6 @@ public class ActivityEntity {
 
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreatedTimestamp() {
 		return createdTimestamp;
 	}
@@ -78,8 +76,6 @@ public class ActivityEntity {
 
 	}
 
-	@Convert(converter = AttributesFieldConverter.class)
-	@Lob
 	public Map<String, Object> getActivityAttributes() {
 		return activityAttributes;
 	}

@@ -15,8 +15,6 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import iob.service.dao.AttributesFieldConverter;
-
 
 @Document
 public class InstanceEntity {
@@ -76,7 +74,6 @@ public class InstanceEntity {
 
 	}
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreatedTimestamp() {
 		return createdTimestamp;
 	}
@@ -122,8 +119,6 @@ public class InstanceEntity {
 		this.location = location;
 	}
 	
-	@Convert(converter = AttributesFieldConverter.class)
-	@Lob
 	public Map<String, Object> getInstanceAttributes() {
 		return instanceAttributes;
 	}
