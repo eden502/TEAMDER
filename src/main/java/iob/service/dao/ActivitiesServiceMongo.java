@@ -4,6 +4,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mongodb.client.MongoClients;
+
+import MongoDBConfig.MongoDBConfig;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +15,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -22,6 +31,8 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.GeneralId;
+import iob.bounderies.InstanceBoundary;
+import iob.bounderies.UserBoundary;
 import iob.data.ActivityEntity;
 import iob.data.ActivityType;
 import iob.data.InstanceEntity;
@@ -33,6 +44,8 @@ import iob.exceptions.NotFoundException;
 import iob.logic.ActivitiesServiceEnhanced;
 import iob.logic.ActivityConverter;
 import iob.logic.IdConverter;
+import iob.logic.InstanceConverter;
+import iob.logic.UserConverter;
 
 @Service
 public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
@@ -47,18 +60,21 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 	private UserDao userDao;
 	private InstanceDao instanceDao;
 	private ActivityConverter activityConverter;
+	private InstanceConverter instanceConverter;
+	private UserConverter userConverter;
 	private IdConverter idConverter;
 	private String domain;
 
 	@Autowired
 	public ActivitiesServiceMongo(ActivityConverter activityConverter, ActivityDao activityDao, UserDao userDao,
-			InstanceDao instanceDao, IdConverter idConverter) {
+			InstanceDao instanceDao, IdConverter idConverter,InstanceConverter instanceConverter,UserConverter userConverter) {
 		this.activityConverter = activityConverter;
+		this.userConverter = userConverter;
 		this.activityDao = activityDao;
 		this.userDao = userDao;
 		this.instanceDao = instanceDao;
 		this.idConverter = idConverter;
-
+		this.instanceConverter = instanceConverter;
 	}
 
 	@Value("${spring.application.name:null}")
@@ -129,12 +145,79 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		case EXIT_GROUP:
 			executeExitGroup(activity, instanceEntity);
 			break;
-
+			
+		case GET_GROUPS_OF_USER:
+			executeGetGroupsOfUser(activity, instanceEntity, userEntity);
+			break;
+		
+		case GET_USERS_IN_GROUP:
+			executeGetUsersInGroup(activity, instanceEntity, userEntity);
+			break;
+			
 		case OTHER:
 			// No implementation for OTHER type for now, just save the activity to data.
 			break;
 		}
 
+	}
+
+	private List<UserBoundary> executeGetUsersInGroup(ActivityBoundary activity, InstanceEntity instanceEntity, UserEntity userEntity) {
+		Optional<InstanceEntity> optional = instanceDao.findById(instanceEntity.getId());
+		if (optional.isPresent()) {
+			InstanceEntity userInstance = optional.get();
+			Map<String, Object> attr =  userInstance.getInstanceAttributes();
+
+			ArrayList<String> users = (ArrayList<String>) attr.get("Members");
+			if(users == null ) return new ArrayList<UserBoundary>();
+			
+			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+			ctx.register(MongoDBConfig.class);
+			ctx.refresh();
+			MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
+			List<Criteria> criteria = new ArrayList<>();
+			Query query = new Query();
+			criteria.add(Criteria.where("id").in(users));
+			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
+			ArrayList<UserEntity> allUsersInGroup = (ArrayList<UserEntity>) mongoOps.find(query, UserEntity.class);
+
+			Stream<UserEntity> stream = StreamSupport.stream(allUsersInGroup.spliterator(), false);
+			return stream.map(this.userConverter::toBoundary).collect(Collectors.toList());
+			
+		} else {
+			throw new NotFoundException("Cannot find user instance with id: " + userEntity.getId());
+		}
+		
+	}
+
+	private List<InstanceBoundary> executeGetGroupsOfUser(ActivityBoundary activity, InstanceEntity instanceEntity, UserEntity userEntity) {
+		
+		Optional<InstanceEntity> optional = instanceDao.findById(instanceEntity.getId());
+		if (optional.isPresent()) {
+			InstanceEntity userInstance = optional.get();
+			Map<String, Object> attr =  userInstance.getInstanceAttributes();
+			
+			ArrayList<String> groups = (ArrayList<String>) attr.get("Groups");
+			
+			if(groups == null ) return new ArrayList<InstanceBoundary>();
+			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+			ctx.register(MongoDBConfig.class);
+			ctx.refresh();
+			MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
+			List<Criteria> criteria = new ArrayList<>();
+			Query query = new Query();
+			criteria.add(Criteria.where("id").in(groups));
+			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
+			ArrayList<InstanceEntity> allGroups = (ArrayList<InstanceEntity>) mongoOps.find(query, InstanceEntity.class);
+			Stream<InstanceEntity> stream = StreamSupport.stream(allGroups.spliterator(), false);
+			return stream.map(this.instanceConverter::toBoundary).collect(Collectors.toList());
+			
+		} else {
+			throw new NotFoundException("Cannot find user instance with id: " + userEntity.getId());
+		}
+		
+		
+		
+		
 	}
 
 	private void executeDeleteGroup(ActivityBoundary deleteGroupActivity, InstanceEntity groupInstance,

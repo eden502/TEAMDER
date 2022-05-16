@@ -1,7 +1,7 @@
 package iob.data;
 
 public enum ActivityType {
-	JOIN_GROUP, EXIT_GROUP, ACCEPT_NEW_MEMBER, DELETE_GROUP, DELETE_MEMBER,OTHER;
+	JOIN_GROUP, EXIT_GROUP, ACCEPT_NEW_MEMBER, DELETE_GROUP, DELETE_MEMBER, GET_GROUPS_OF_USER, GET_USERS_IN_GROUP, OTHER;
 
 
 	public static ActivityType getType(String type) {
@@ -20,6 +20,12 @@ public enum ActivityType {
 		
 		if(type.equalsIgnoreCase(ActivityType.DELETE_MEMBER.name()))
 			return ActivityType.DELETE_MEMBER;
+		
+		if(type.equalsIgnoreCase(ActivityType.GET_GROUPS_OF_USER.name()))
+			return ActivityType.GET_GROUPS_OF_USER;
+		
+		if(type.equalsIgnoreCase(ActivityType.GET_USERS_IN_GROUP.name()))
+			return ActivityType.GET_USERS_IN_GROUP;
 		
 		return OTHER;
 	}
