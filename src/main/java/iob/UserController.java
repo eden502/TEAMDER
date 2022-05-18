@@ -42,7 +42,7 @@ public class UserController {
 	public UserBoundary getUser(
 			@PathVariable("userDomain") String userDomain,
 			@PathVariable("userEmail") String userEmail) {
-		System.err.println("User email: "+userEmail);
+		
 		return userService.login(userDomain, userEmail);
 	}
 

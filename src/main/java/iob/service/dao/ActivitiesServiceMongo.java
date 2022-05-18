@@ -94,7 +94,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 
 		validateUserAndInstance(userEntity, instanceEntity);
 
-		executeActivity(activity, userEntity, instanceEntity);
+		Object rv = executeActivity(activity, userEntity, instanceEntity);
 
 		GeneralId activityId = new GeneralId();
 		activityId.setDomain(this.domain);
@@ -107,10 +107,10 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		ActivityEntity entity = this.activityConverter.toEntity(activity);
 
 		// save
-		entity = this.activityDao.save(entity);
+		activityDao.save(entity);
 
 		// return boundary
-		return this.activityConverter.toBoundary(entity);
+		return rv;
 	}
 
 	// Only Player user can invoke activity on an active instance
@@ -122,42 +122,44 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 			throw new NotFoundException("instance with id " + instanceEntity.getId() + " not found");
 	}
 
-	private void executeActivity(ActivityBoundary activity, UserEntity userEntity, InstanceEntity instanceEntity) {
+	private Object executeActivity(ActivityBoundary activity, UserEntity userEntity, InstanceEntity instanceEntity) {
 
 		ActivityType activityType = ActivityType.getType(activity.getType());
 		switch (activityType) {
 		case JOIN_GROUP:
-			executeJoinGroup(activity, instanceEntity);
-			break;
+			InstanceEntity joiningMember = executeJoinGroup(activity, instanceEntity);
+			return instanceConverter.toBoundary(joiningMember);
 
 		case DELETE_GROUP:
-			executeDeleteGroup(activity, instanceEntity, userEntity);
-			break;
+			InstanceEntity deletedGroup = executeDeleteGroup(activity, instanceEntity, userEntity);
+			return instanceConverter.toBoundary(deletedGroup);
 
 		case ACCEPT_NEW_MEMBER:
-			executeAcceptNewMember(activity, instanceEntity, userEntity);
-			break;
+			InstanceEntity pendingMember = executeAcceptNewMember(activity, instanceEntity, userEntity);
+			return instanceConverter.toBoundary(pendingMember);
 
 		case DELETE_MEMBER:
-			executeDeleteMember(activity, instanceEntity, userEntity);
-			break;
+			InstanceEntity deletedMember =  executeDeleteMember(activity, instanceEntity, userEntity);
+			return instanceConverter.toBoundary(deletedMember);
 
 		case EXIT_GROUP:
-			executeExitGroup(activity, instanceEntity);
-			break;
+			InstanceEntity leavingMember = executeExitGroup(activity, instanceEntity);
+			return instanceConverter.toBoundary(leavingMember);
 			
 		case GET_GROUPS_OF_USER:
-			executeGetGroupsOfUser(activity, instanceEntity, userEntity);
-			break;
+			return executeGetGroupsOfUser(activity, instanceEntity, userEntity);
+			
 		
 		case GET_USERS_IN_GROUP:
-			executeGetUsersInGroup(activity, instanceEntity, userEntity);
-			break;
+			return executeGetUsersInGroup(activity, instanceEntity, userEntity);
+			
 			
 		case OTHER:
 			// No implementation for OTHER type for now, just save the activity to data.
-			break;
+			return activity;
+		
 		}
+		return null;
 
 	}
 
@@ -167,7 +169,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 			InstanceEntity userInstance = optional.get();
 			Map<String, Object> attr =  userInstance.getInstanceAttributes();
 
-			ArrayList<String> users = (ArrayList<String>) attr.get("Members");
+			ArrayList<String> users = (ArrayList<String>) attr.get(INSTANCE_MEMBERS_MAP_KEY);
 			if(users == null ) return new ArrayList<UserBoundary>();
 			
 			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
@@ -196,7 +198,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 			InstanceEntity userInstance = optional.get();
 			Map<String, Object> attr =  userInstance.getInstanceAttributes();
 			
-			ArrayList<String> groups = (ArrayList<String>) attr.get("Groups");
+			ArrayList<String> groups = (ArrayList<String>) attr.get(INSTANCE_GROUPS_MAP_KEY);
 			
 			if(groups == null ) return new ArrayList<InstanceBoundary>();
 			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
@@ -220,7 +222,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		
 	}
 
-	private void executeDeleteGroup(ActivityBoundary deleteGroupActivity, InstanceEntity groupInstance,
+	private InstanceEntity executeDeleteGroup(ActivityBoundary deleteGroupActivity, InstanceEntity groupInstance,
 			UserEntity groupManagerUser) {
 
 		// check if the invoked instance is from GROUP type
@@ -241,7 +243,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		
 		groupInstance.setActive(false);
 		instanceDao.save(groupInstance);
-
+		return groupInstance;
 	}
 
 	private void deleteGroupFromMemberGroupsList(String userId, String groupId) {
@@ -259,7 +261,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		
 	}
 
-	private void executeJoinGroup(ActivityBoundary joinGroupActivity, InstanceEntity groupInstance) {
+	private InstanceEntity executeJoinGroup(ActivityBoundary joinGroupActivity, InstanceEntity groupInstance) {
 		// check if the invoked instance is from GROUP type
 		if (!isGroupInstance(groupInstance)) {
 			throw new RuntimeException("Invoked Instance is not GROUP type");
@@ -286,10 +288,10 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 
 		// update the group in the database
 		instanceDao.save(groupInstance);
-
+		return memberToAdd;	
 	}
 
-	private void executeExitGroup(ActivityBoundary exitGroupActivity, InstanceEntity groupInstance) {
+	private InstanceEntity executeExitGroup(ActivityBoundary exitGroupActivity, InstanceEntity groupInstance) {
 		// check if the invoked instance is from GROUP type
 		if (!isGroupInstance(groupInstance)) {
 			throw new RuntimeException("Invoked Instance is not GROUP type");
@@ -324,10 +326,11 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		// update the group and the user in the database
 		instanceDao.save(memberToDelete);
 		instanceDao.save(groupInstance);
+		return groupInstance;
 
 	}
 
-	private void executeDeleteMember(ActivityBoundary deleteMemberActivity, InstanceEntity groupInstance,
+	private InstanceEntity executeDeleteMember(ActivityBoundary deleteMemberActivity, InstanceEntity groupInstance,
 			UserEntity groupManagerUser) {
 
 		// check if the invoked instance is from GROUP type
@@ -365,6 +368,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		// update the group and the user in the database
 		instanceDao.save(memberToDelete);
 		instanceDao.save(groupInstance);
+		return memberToDelete;
 	}
 
 	private boolean isCreatorOfTheGroup(InstanceEntity groupInstance, UserEntity groupManagerUser) {
@@ -372,7 +376,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		return groupInstance.getCreatedByUserId().equals(groupManagerUser.getId());
 	}
 
-	private void executeAcceptNewMember(ActivityBoundary acceptNewMemberActivity, InstanceEntity groupInstance,
+	private InstanceEntity executeAcceptNewMember(ActivityBoundary acceptNewMemberActivity, InstanceEntity groupInstance,
 			UserEntity groupManagerUser) {
 
 		// check if the invoked instance is from GROUP type
@@ -415,6 +419,7 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 		// update the group and the user in the database
 		instanceDao.save(pendingMember);
 		instanceDao.save(groupInstance);
+		return pendingMember;
 
 	}
 
@@ -545,9 +550,10 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 
 	public List<InstanceEntity> getInstancesByCreatedUserId(String createdByUserId) {
 
-		MongoOperations mongoOps = new MongoTemplate(MongoClients.create(
-				"mongodb+srv://kerenrachev:123123Kk@integrativit.djvrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"),
-				"myFirstDatabase");
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+		ctx.register(MongoDBConfig.class);
+		ctx.refresh();
+		MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
 
 		Query query = new Query(Criteria.where("createdByUserId").is(createdByUserId));
 		List<InstanceEntity> res = mongoOps.find(query, InstanceEntity.class);
