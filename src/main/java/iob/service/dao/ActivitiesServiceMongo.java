@@ -163,27 +163,30 @@ public class ActivitiesServiceMongo implements ActivitiesServiceEnhanced {
 
 	}
 
-	private List<UserBoundary> executeGetUsersInGroup(ActivityBoundary activity, InstanceEntity instanceEntity, UserEntity userEntity) {
+	private List<InstanceBoundary> executeGetUsersInGroup(ActivityBoundary activity, InstanceEntity instanceEntity, UserEntity userEntity) {
 		Optional<InstanceEntity> optional = instanceDao.findById(instanceEntity.getId());
 		if (optional.isPresent()) {
 			InstanceEntity userInstance = optional.get();
 			Map<String, Object> attr =  userInstance.getInstanceAttributes();
 
 			ArrayList<String> users = (ArrayList<String>) attr.get(INSTANCE_MEMBERS_MAP_KEY);
-			if(users == null ) return new ArrayList<UserBoundary>();
+			if(users == null ) return new ArrayList<InstanceBoundary>();
 			
 			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 			ctx.register(MongoDBConfig.class);
 			ctx.refresh();
 			MongoOperations mongoOps = ctx.getBean(MongoTemplate.class);
+			
+			
 			List<Criteria> criteria = new ArrayList<>();
 			Query query = new Query();
-			criteria.add(Criteria.where("id").in(users));
+			criteria.add(Criteria.where("createdByUserId").in(users));
+			criteria.add(Criteria.where("type").is("User"));
 			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
-			ArrayList<UserEntity> allUsersInGroup = (ArrayList<UserEntity>) mongoOps.find(query, UserEntity.class);
-
-			Stream<UserEntity> stream = StreamSupport.stream(allUsersInGroup.spliterator(), false);
-			return stream.map(this.userConverter::toBoundary).collect(Collectors.toList());
+			ArrayList<InstanceEntity> allUsersInGroup = (ArrayList<InstanceEntity>) mongoOps.find(query, InstanceEntity.class);
+			
+			Stream<InstanceEntity> stream = StreamSupport.stream(allUsersInGroup.spliterator(), false);
+			return stream.map(this.instanceConverter::toBoundary).collect(Collectors.toList());
 			
 		} else {
 			throw new NotFoundException("Cannot find user instance with id: " + userEntity.getId());
