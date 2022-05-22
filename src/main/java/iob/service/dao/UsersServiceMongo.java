@@ -5,17 +5,16 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import javax.management.RuntimeErrorException;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import iob.bounderies.UserBoundary;
 
@@ -25,7 +24,7 @@ import iob.exceptions.NoPermissionException;
 import iob.exceptions.NotFoundException;
 import iob.logic.IdConverter;
 import iob.logic.UserConverter;
-import iob.logic.UsersService;
+
 import iob.logic.UsersServiceEnhanced;
 
 @Service

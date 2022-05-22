@@ -15,20 +15,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.geo.Circle;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.GeoResult;
-import org.springframework.data.geo.GeoResults;
-import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.PageRequest;
-import com.mongodb.client.MongoClients;
+
 
 import MongoDBConfig.MongoDBConfig;
 import iob.bounderies.GeneralId;
@@ -41,8 +34,7 @@ import iob.exceptions.NotFoundException;
 import iob.logic.IdConverter;
 import iob.logic.InstanceConverter;
 import iob.logic.InstanceServiceEnhanced;
-import iob.logic.InstancesService;
-import iob.logic.UserConverter;
+
 
 @Service
 public class InstancesServiceMongo implements InstanceServiceEnhanced {
@@ -200,7 +192,7 @@ public class InstancesServiceMongo implements InstanceServiceEnhanced {
 						.map(this.instanceConverter::toBoundary).collect(Collectors.toList());
 			}
 				
-
+					
 			return this.instanceDao.findAll(PageRequest.of(page, size, Direction.DESC, "createdTimestamp", "id"))
 					.getContent().stream().map(this.instanceConverter::toBoundary).collect(Collectors.toList());
 		} else {

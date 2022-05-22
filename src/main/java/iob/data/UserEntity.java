@@ -1,10 +1,8 @@
 package iob.data;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+
 import javax.persistence.Id;
-import javax.persistence.Table;
+
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

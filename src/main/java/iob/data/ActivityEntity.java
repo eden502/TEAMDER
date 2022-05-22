@@ -2,16 +2,7 @@ package iob.data;
 
 import java.util.Date;
 import java.util.Map;
-
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document

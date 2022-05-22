@@ -2,13 +2,7 @@ package iob.data;
 
 import java.util.Date;
 import java.util.Map;
-
-import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
@@ -91,24 +85,6 @@ public class InstanceEntity {
 		this.createdByUserId = createdByUserId;
 
 	}
-	/*
-	public double getLocationLat() {
-		return locationLat;
-	}
-
-	public void setLocationLat(double locationLat) {
-		this.locationLat = locationLat;
-
-	}
-
-	public double getLocationLng() {
-		return locationLng;
-	}
-
-	public void setLocationLng(double locationLng) {
-		this.locationLng = locationLng;
-
-	}*/
 	
 	public GeoJsonPoint getLocation() {
 		return location;

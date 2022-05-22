@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import iob.bounderies.ActivityBoundary;
 import iob.bounderies.UserBoundary;
-import iob.logic.ActivitiesService;
 import iob.logic.ActivitiesServiceEnhanced;
 import iob.logic.InstanceServiceEnhanced;
-import iob.logic.InstancesService;
-import iob.logic.UsersService;
 import iob.logic.UsersServiceEnhanced;
 
 @RestController

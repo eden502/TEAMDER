@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import iob.bounderies.InstanceBoundary;
 import iob.logic.InstanceServiceEnhanced;
-import iob.logic.InstancesService;
 
 @RestController
 public class InstanceController {

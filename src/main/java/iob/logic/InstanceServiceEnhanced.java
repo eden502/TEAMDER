@@ -3,8 +3,7 @@ package iob.logic;
 import java.util.List;
 
 import iob.bounderies.InstanceBoundary;
-import iob.bounderies.UserBoundary;
-import iob.data.InstanceEntity;
+
 
 
 public interface InstanceServiceEnhanced extends InstancesService{
