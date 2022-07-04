@@ -3,7 +3,7 @@
 ### Integrative Software Engineering Project ###
 
 
-#### 1. Introduction ###
+### 1. Introduction ###
 
 Teamder is a social platform that allows its users to connect with each other based on shared interests.\
 The app strives to bring people together so they can meet, share projects and communicate in a way they were not able to before.\
